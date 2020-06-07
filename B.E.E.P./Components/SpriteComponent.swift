@@ -1,25 +1,25 @@
-// 1
 import SpriteKit
 import GameplayKit
 
-// 2
 class SpriteComponent: GKComponent {
-    
-    // 3
+    // criamos uma variável que receberá o sprite
     let node: SKSpriteNode
     
-    // 4
-    init(texture: SKTexture) {
+    // criamos um construtor caso o tmanho da imagem seja o mesmo em que ele deva aparecer na tela
+    init(texture: SKTexture, name: String) {
         node = SKSpriteNode(texture: texture, color: .white, size: texture.size())
+        node.name = name
         super.init()
     }
     
-    init(texture: SKTexture, size: CGSize) {
+    // criamos um contrutor que também recebe um tamanho, caso precisemos redimensionar o sprite
+    init(texture: SKTexture, size: CGSize, name: String) {
         node = SKSpriteNode(texture: texture, color: .white, size: size)
+        node.name = name
         super.init()
     }
     
-    // 5
+    // construtor padrão de erro
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

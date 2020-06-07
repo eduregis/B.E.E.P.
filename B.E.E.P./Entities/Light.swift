@@ -12,29 +12,29 @@ class Light: GKEntity {
         case 1:
             switch xPosition {
             case 1:
-                spriteComponent = SpriteComponent(texture: SKTexture(imageNamed: "light (1 - 1)"))
+                spriteComponent = SpriteComponent(texture: SKTexture(imageNamed: "light (1 - 1)"), name: "light")
             case maxX:
-                spriteComponent = SpriteComponent(texture: SKTexture(imageNamed: "light (1 - 3)"))
+                spriteComponent = SpriteComponent(texture: SKTexture(imageNamed: "light (1 - 3)"), name: "light")
             default:
-                spriteComponent = SpriteComponent(texture: SKTexture(imageNamed: "light (1 - 2)"))
+                spriteComponent = SpriteComponent(texture: SKTexture(imageNamed: "light (1 - 2)"), name: "light")
             }
         case maxY:
             switch xPosition {
             case 1:
-                spriteComponent = SpriteComponent(texture: SKTexture(imageNamed: "light (3 - 1)"))
+                spriteComponent = SpriteComponent(texture: SKTexture(imageNamed: "light (3 - 1)"), name: "light")
             case maxX:
-                spriteComponent = SpriteComponent(texture: SKTexture(imageNamed: "light (3 - 3)"))
+                spriteComponent = SpriteComponent(texture: SKTexture(imageNamed: "light (3 - 3)"), name: "light")
             default:
-                spriteComponent = SpriteComponent(texture: SKTexture(imageNamed: "light (3 - 2)"))
+                spriteComponent = SpriteComponent(texture: SKTexture(imageNamed: "light (3 - 2)"), name: "light")
             }
         default:
             switch xPosition {
             case 1:
-                spriteComponent = SpriteComponent(texture: SKTexture(imageNamed: "light (2 - 1)"))
+                spriteComponent = SpriteComponent(texture: SKTexture(imageNamed: "light (2 - 1)"), name: "light")
             case maxX:
-                spriteComponent = SpriteComponent(texture: SKTexture(imageNamed: "light (2 - 3)"))
+                spriteComponent = SpriteComponent(texture: SKTexture(imageNamed: "light (2 - 3)"), name: "light")
             default:
-                spriteComponent = SpriteComponent(texture: SKTexture(imageNamed: "light (2 - 2)"))
+                spriteComponent = SpriteComponent(texture: SKTexture(imageNamed: "light (2 - 2)"), name: "light")
             }
         }
         
