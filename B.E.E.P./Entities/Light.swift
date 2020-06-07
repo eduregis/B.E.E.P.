@@ -8,6 +8,7 @@ class Light: GKEntity {
         super.init()
         
         let spriteComponent: SpriteComponent
+        // escolhe o sprite de acordo com a posição do tileset na matriz
         switch yPosition {
         case 1:
             switch xPosition {

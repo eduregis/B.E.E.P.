@@ -8,3 +8,5 @@
 
 import Foundation
 import SpriteKit
+
+var blockTypes = ["walk-block","turn-left-block","turn-right-block","grab-block","save-block"]
