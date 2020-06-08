@@ -15,6 +15,8 @@ class GameScene: SKScene {
     // instanciamos esse aqui fora porque precisamos deles depois que são desenhados
     let robot = Robot()
     let lightFloor = LightFloor()
+    var emptyBlocks: [EmptyBlock] = []
+    var commandBlocks: [DroppedBlock] = []
     
     // variáveis de controle
     var selectedItem: SKSpriteNode? {
@@ -120,7 +122,7 @@ class GameScene: SKScene {
         for i in 1...6 {
             let block = EmptyBlock(name: "white-block-command-\(i)")
             if let spriteComponent = block.component(ofType: SpriteComponent.self) {
-                spriteComponent.node.position = CGPoint(x: gameplayAnchor.x - 172 + CGFloat(i - 1)*54, y: gameplayAnchor.y - 115)
+                spriteComponent.node.position = CGPoint(x: gameplayAnchor.x - 172 + CGFloat(i - 1)*53, y: gameplayAnchor.y - 115)
                 spriteComponent.node.zPosition = 15
                 spriteComponent.node.alpha = 0.1
                 spriteComponent.node.size = CGSize(width: 60, height: 50)
@@ -128,6 +130,14 @@ class GameScene: SKScene {
             entityManager.add(block)
             print(i)
         }
+        
+        // botão de play
+        let playButton = PlayButton()
+        if let spriteComponent = playButton.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = CGPoint(x: gameplayAnchor.x + 170, y: gameplayAnchor.y - 115)
+            spriteComponent.node.zPosition = 3
+        }
+        entityManager.add(playButton)
         
         // adiciona a aba de ações
         let actionTab = ActionTab()
@@ -242,6 +252,9 @@ class GameScene: SKScene {
             } else {
                 // caso não seja o objeto que queremos, esvaziamos o selectedItem
                 selectedItem = nil
+                if (self.atPoint(location).name == "play-button") {
+                   // moveRobot()
+                }
             }
         }
     }
@@ -261,14 +274,16 @@ class GameScene: SKScene {
         if let location = touches.first?.location(in: self) {
             if ((self.atPoint(location).name?.starts(with: "white-block-command-")) != nil) {
                 if let draggingItem = draggingItem {
-                    let droppedItem = SKSpriteNode()
-                    droppedItem.name = draggingItem.name
-                    droppedItem.texture = SKTexture(imageNamed: "\(droppedItem.name ?? "")")
-                    // voltamos seu tamanho ao normal
-                    droppedItem.size = CGSize(width: draggingItem.size.width / 1.5, height: draggingItem.size.height / 1.5)
-                    droppedItem.position = CGPoint(x: location.x, y: location.y)
-                    droppedItem.zPosition = 20
-                    addChild(droppedItem)
+                    if commandBlocks.count < 6 {
+                        let block = DroppedBlock(name: draggingItem.name ?? "")
+                        if let spriteComponent = block.component(ofType: SpriteComponent.self) {
+                            spriteComponent.node.size = CGSize(width: draggingItem.size.width / 1.5, height: draggingItem.size.height / 1.5)
+                            spriteComponent.node.position = CGPoint(x: gameplayAnchor.x - 172 + CGFloat(commandBlocks.count)*53, y: gameplayAnchor.y - 115)
+                            spriteComponent.node.zPosition = 20
+                        }
+                        commandBlocks.append(block)
+                        entityManager.add(block)
+                    }
                 }
             }
             draggingItem = nil
