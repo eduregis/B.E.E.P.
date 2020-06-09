@@ -120,13 +120,14 @@ class GameScene: SKScene {
         
         // drop zones individuais
         for i in 1...6 {
-            let block = EmptyBlock(name: "white-block-command-\(i)")
+            let block = EmptyBlock(name: "white-block")
             if let spriteComponent = block.component(ofType: SpriteComponent.self) {
                 spriteComponent.node.position = CGPoint(x: gameplayAnchor.x - 172 + CGFloat(i - 1)*53, y: gameplayAnchor.y - 115)
                 spriteComponent.node.zPosition = 15
                 spriteComponent.node.alpha = 0.1
                 spriteComponent.node.size = CGSize(width: 60, height: 50)
             }
+            emptyBlocks.append(block)
             entityManager.add(block)
             print(i)
         }
@@ -253,7 +254,7 @@ class GameScene: SKScene {
                 // caso não seja o objeto que queremos, esvaziamos o selectedItem
                 selectedItem = nil
                 if (self.atPoint(location).name == "play-button") {
-                   // moveRobot()
+                    // moveRobot()
                 }
             }
         }
@@ -265,6 +266,17 @@ class GameScene: SKScene {
                 let location = touch.location(in: self)
                 draggingItem?.position.x = location.x
                 draggingItem?.position.y = location.y
+                if(commandBlocks.count < 6) {
+                    if (location.y > gameplayAnchor.y - 143) && (location.y < gameplayAnchor.y - 93) && (location.x > gameplayAnchor.x - 200) && (location.x < gameplayAnchor.x + 120){
+                        if let spriteComponent = emptyBlocks[commandBlocks.count].component(ofType: SpriteComponent.self) {
+                            spriteComponent.node.alpha = 0.6
+                        }
+                    } else {
+                        if let spriteComponent = emptyBlocks[commandBlocks.count].component(ofType: SpriteComponent.self) {
+                            spriteComponent.node.alpha = 0.1
+                        }
+                    }
+                }
             }
         }
     }
@@ -272,10 +284,10 @@ class GameScene: SKScene {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         draggingItem?.removeFromParent()
         if let location = touches.first?.location(in: self) {
-            if ((self.atPoint(location).name?.starts(with: "white-block-command-")) != nil) {
+            if (self.atPoint(location).name == "white-block") {
                 if let draggingItem = draggingItem {
                     if commandBlocks.count < 6 {
-                        let block = DroppedBlock(name: draggingItem.name ?? "")
+                        let block = DroppedBlock(name: "\(draggingItem.name ?? "")-dropped" , spriteName: draggingItem.name ?? "")
                         if let spriteComponent = block.component(ofType: SpriteComponent.self) {
                             spriteComponent.node.size = CGSize(width: draggingItem.size.width / 1.5, height: draggingItem.size.height / 1.5)
                             spriteComponent.node.position = CGPoint(x: gameplayAnchor.x - 172 + CGFloat(commandBlocks.count)*53, y: gameplayAnchor.y - 115)

@@ -5,9 +5,9 @@ import GameplayKit
 class DroppedBlock: GKEntity {
     var actionName: String!
     
-    init(name: String) {
+    init(name: String, spriteName: String) {
         super.init()
-        let spriteComponent = SpriteComponent(texture: SKTexture(imageNamed: "\(name)"), name: name)
+        let spriteComponent = SpriteComponent(texture: SKTexture(imageNamed: "\(spriteName)"), name: name)
         actionName = name
         addComponent(spriteComponent)
     }
