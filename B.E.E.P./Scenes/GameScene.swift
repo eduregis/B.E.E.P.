@@ -47,6 +47,8 @@ class GameScene: SKScene {
         // cria uma instância do gerenciador de entidades
         entityManager = EntityManager(scene: self)
         
+        drawnReturnButton()
+        
         drawTilesets(width: Int(stageDimensions.width), height: Int(stageDimensions.height))
         drawRobot(xPosition: Int(actualPosition.x), yPosition: Int(actualPosition.y))
         drawTabs()
@@ -288,5 +290,30 @@ class GameScene: SKScene {
             }
             draggingItem = nil
         }
+        //verfica se clicou no botão voltar
+        for touch in touches {
+            let nodes = self.nodes(at: touch.location(in: self))
+            let returnButtonOptional = self.childNode(withName: "return-button")
+            
+            if let returnButton = returnButtonOptional {
+                if nodes.contains(returnButton) {
+                    returnToMap()
+                }
+            }
+        }
+    }
+    
+    func drawnReturnButton() {
+        let returnButton = ReturnButton()
+        if let spriteComponent = returnButton.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = CGPoint(x: frame.minX+50, y: frame.maxY-50)
+            spriteComponent.node.zPosition = 2
+        }
+        entityManager.add(returnButton)
+    }
+    
+    func returnToMap() {
+        let mapScene = MapScene(size: view!.bounds.size)
+        view!.presentScene(mapScene)
     }
 }
