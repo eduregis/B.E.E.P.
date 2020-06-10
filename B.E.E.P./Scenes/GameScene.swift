@@ -250,7 +250,18 @@ class GameScene: SKScene {
             if (self.atPoint(location).name == "walk-block") || (self.atPoint(location).name == "turn-left-block") || (self.atPoint(location).name == "turn-right-block") || (self.atPoint(location).name == "grab-block") || (self.atPoint(location).name == "save-block") {
                 // passamos o objeto detectado para dentro do selectedItem
                 selectedItem = self.atPoint(location) as? SKSpriteNode
-            } else {
+            }
+//            else if (self.atPoint(location).name == "walk-block-dropped") || (self.atPoint(location).name == "turn-left-block-dropped") || (self.atPoint(location).name == "turn-right-block-dropped") || (self.atPoint(location).name == "grab-block-dropped") || (self.atPoint(location).name == "save-block-dropped") {
+//                // passamos o objeto detectado para dentro do selectedItem
+//                
+//                let newName = self.atPoint(location).name?.components(separatedBy: "-dropped")
+//                let newBlock = self.atPoint(location) as? SKSpriteNode
+//                self.atPoint(location).removeFromParent()
+//                newBlock?.name = newName![0]
+//                selectedItem = newBlock
+//                
+//            }
+            else {
                 // caso não seja o objeto que queremos, esvaziamos o selectedItem
                 selectedItem = nil
                 if (self.atPoint(location).name == "play-button") {
