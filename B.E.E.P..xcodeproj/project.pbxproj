@@ -30,6 +30,9 @@
 		2EF6C52C248C14FE0040F927 /* EntityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF6C52B248C14FE0040F927 /* EntityManager.swift */; };
 		5632E8E9248ED9C50011B5ED /* B_E_E_P_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5632E8E8248ED9C50011B5ED /* B_E_E_P_Tests.swift */; };
 		5632E8F7248EDA1A0011B5ED /* B_E_E_P_UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5632E8F6248EDA1A0011B5ED /* B_E_E_P_UITests.swift */; };
+		56C9EE84249043A7007924BA /* MapScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C9EE83249043A7007924BA /* MapScene.swift */; };
+		56C9EE862490459A007924BA /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C9EE852490459A007924BA /* MapViewController.swift */; };
+		56C9EE8824906479007924BA /* ReturnButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C9EE8724906479007924BA /* ReturnButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +82,9 @@
 		5632E8F4248EDA1A0011B5ED /* B.E.E.P.UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = B.E.E.P.UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5632E8F6248EDA1A0011B5ED /* B_E_E_P_UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = B_E_E_P_UITests.swift; sourceTree = "<group>"; };
 		5632E8F8248EDA1A0011B5ED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		56C9EE83249043A7007924BA /* MapScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapScene.swift; sourceTree = "<group>"; };
+		56C9EE852490459A007924BA /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		56C9EE8724906479007924BA /* ReturnButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReturnButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -175,6 +181,7 @@
 				2EEA8E30248D6D24008FE216 /* EmptyBlock.swift */,
 				2EEFC46E248DB74B00D182CF /* DroppedBlock.swift */,
 				2EEFC470248DC07D00D182CF /* PlayButton.swift */,
+				56C9EE8724906479007924BA /* ReturnButton.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -183,6 +190,7 @@
 			isa = PBXGroup;
 			children = (
 				2EF6C513248C0DE00040F927 /* GameScene.swift */,
+				56C9EE83249043A7007924BA /* MapScene.swift */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -191,6 +199,7 @@
 			isa = PBXGroup;
 			children = (
 				2EF6C515248C0DE00040F927 /* GameViewController.swift */,
+				56C9EE852490459A007924BA /* MapViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -348,6 +357,7 @@
 				2EE8AAC8248C70F300B652E3 /* Constants.swift in Sources */,
 				2EEA8E2D248D5F57008FE216 /* CommandTabDropZone.swift in Sources */,
 				2EF6C516248C0DE00040F927 /* GameViewController.swift in Sources */,
+				56C9EE84249043A7007924BA /* MapScene.swift in Sources */,
 				2EEA8E2F248D6098008FE216 /* DraggableBlock.swift in Sources */,
 				2EF6C52C248C14FE0040F927 /* EntityManager.swift in Sources */,
 				2EE9C142248CAFA9002E6A14 /* CommandTab.swift in Sources */,
@@ -355,11 +365,13 @@
 				2EEA8E31248D6D24008FE216 /* EmptyBlock.swift in Sources */,
 				2EF6C527248C12B40040F927 /* SpriteComponent.swift in Sources */,
 				2EE8AABA248C5B9A00B652E3 /* Robot.swift in Sources */,
+				56C9EE862490459A007924BA /* MapViewController.swift in Sources */,
 				2EF6C52A248C13EB0040F927 /* Tileset.swift in Sources */,
 				2EE8AAC5248C6CE100B652E3 /* RobotMoveComponent.swift in Sources */,
 				2EE9C13D248C93F3002E6A14 /* LightFloorMoveComponent.swift in Sources */,
 				2EEFC46F248DB74B00D182CF /* DroppedBlock.swift in Sources */,
 				2EE8AAB8248C523A00B652E3 /* Light.swift in Sources */,
+				56C9EE8824906479007924BA /* ReturnButton.swift in Sources */,
 				2EF6C50E248C0DE00040F927 /* AppDelegate.swift in Sources */,
 				2EE8AABC248C61A200B652E3 /* LightFloor.swift in Sources */,
 			);
