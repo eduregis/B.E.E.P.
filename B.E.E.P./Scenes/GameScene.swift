@@ -47,6 +47,8 @@ class GameScene: SKScene {
         // cria uma instância do gerenciador de entidades
         entityManager = EntityManager(scene: self)
         
+        drawnReturnButton()
+        
         drawTilesets(width: Int(stageDimensions.width), height: Int(stageDimensions.height))
         drawRobot(xPosition: Int(actualPosition.x), yPosition: Int(actualPosition.y))
         drawTabs()
@@ -110,6 +112,14 @@ class GameScene: SKScene {
         }
         entityManager.add(commandTab)
         
+        // adiciona a aba de limpar
+        let clearTab = ClearTab(name: "command-clear-tab", spriteName: "clear-tab")
+        if let spriteComponent = clearTab.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = CGPoint(x: gameplayAnchor.x - 20, y: gameplayAnchor.y - 65)
+            spriteComponent.node.zPosition = 3
+        }
+        entityManager.add(clearTab)
+        
         // container de drop
         let commandTabDropZone = CommandTabDropZone()
         if let spriteComponent = commandTabDropZone.component(ofType: SpriteComponent.self) {
@@ -129,7 +139,6 @@ class GameScene: SKScene {
             }
             emptyBlocks.append(block)
             entityManager.add(block)
-            print(i)
         }
         
         // botão de play
@@ -157,8 +166,16 @@ class GameScene: SKScene {
                 spriteComponent.node.size = CGSize(width: 60, height: 50)
             }
             entityManager.add(block)
-            print(i)
         }
+    }
+    
+    func clearCommandTab () {
+        for block in commandBlocks {
+            if let spriteComponent = block.component(ofType: SpriteComponent.self) {
+                spriteComponent.node.removeFromParent()
+            }
+        }
+        commandBlocks.removeAll()
     }
     
     func turnRobot(direction: String) {
@@ -266,6 +283,8 @@ class GameScene: SKScene {
                 selectedItem = nil
                 if (self.atPoint(location).name == "play-button") {
                     // moveRobot()
+                } else if (self.atPoint(location).name == "command-clear-tab") {
+                    clearCommandTab()
                 }
             }
         }
@@ -304,6 +323,9 @@ class GameScene: SKScene {
                             spriteComponent.node.position = CGPoint(x: gameplayAnchor.x - 172 + CGFloat(commandBlocks.count)*53, y: gameplayAnchor.y - 115)
                             spriteComponent.node.zPosition = 20
                         }
+                        if let whiteBlock = emptyBlocks[commandBlocks.count].component(ofType: SpriteComponent.self) {
+                            whiteBlock.node.alpha = 0.1
+                        }
                         commandBlocks.append(block)
                         entityManager.add(block)
                     }
@@ -311,5 +333,30 @@ class GameScene: SKScene {
             }
             draggingItem = nil
         }
+        //verfica se clicou no botão voltar
+        for touch in touches {
+            let nodes = self.nodes(at: touch.location(in: self))
+            let returnButtonOptional = self.childNode(withName: "return-button")
+            
+            if let returnButton = returnButtonOptional {
+                if nodes.contains(returnButton) {
+                    returnToMap()
+                }
+            }
+        }
+    }
+    
+    func drawnReturnButton() {
+        let returnButton = ReturnButton()
+        if let spriteComponent = returnButton.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = CGPoint(x: frame.minX+50, y: frame.maxY-50)
+            spriteComponent.node.zPosition = 2
+        }
+        entityManager.add(returnButton)
+    }
+    
+    func returnToMap() {
+        let mapScene = MapScene(size: view!.bounds.size)
+        view!.presentScene(mapScene)
     }
 }
