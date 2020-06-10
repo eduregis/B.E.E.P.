@@ -15,6 +15,7 @@
 		2EE9C13D248C93F3002E6A14 /* LightFloorMoveComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE9C13C248C93F3002E6A14 /* LightFloorMoveComponent.swift */; };
 		2EE9C140248CACF5002E6A14 /* ActionTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE9C13F248CACF5002E6A14 /* ActionTab.swift */; };
 		2EE9C142248CAFA9002E6A14 /* CommandTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE9C141248CAFA9002E6A14 /* CommandTab.swift */; };
+		2EEA5F6724911BAC006452ED /* ClearTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEA5F6624911BAC006452ED /* ClearTab.swift */; };
 		2EEA8E2D248D5F57008FE216 /* CommandTabDropZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEA8E2C248D5F57008FE216 /* CommandTabDropZone.swift */; };
 		2EEA8E2F248D6098008FE216 /* DraggableBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEA8E2E248D6098008FE216 /* DraggableBlock.swift */; };
 		2EEA8E31248D6D24008FE216 /* EmptyBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEA8E30248D6D24008FE216 /* EmptyBlock.swift */; };
@@ -61,6 +62,7 @@
 		2EE9C13C248C93F3002E6A14 /* LightFloorMoveComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightFloorMoveComponent.swift; sourceTree = "<group>"; };
 		2EE9C13F248CACF5002E6A14 /* ActionTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionTab.swift; sourceTree = "<group>"; };
 		2EE9C141248CAFA9002E6A14 /* CommandTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandTab.swift; sourceTree = "<group>"; };
+		2EEA5F6624911BAC006452ED /* ClearTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearTab.swift; sourceTree = "<group>"; };
 		2EEA8E2C248D5F57008FE216 /* CommandTabDropZone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandTabDropZone.swift; sourceTree = "<group>"; };
 		2EEA8E2E248D6098008FE216 /* DraggableBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraggableBlock.swift; sourceTree = "<group>"; };
 		2EEA8E30248D6D24008FE216 /* EmptyBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyBlock.swift; sourceTree = "<group>"; };
@@ -182,6 +184,7 @@
 				2EEFC46E248DB74B00D182CF /* DroppedBlock.swift */,
 				2EEFC470248DC07D00D182CF /* PlayButton.swift */,
 				56C9EE8724906479007924BA /* ReturnButton.swift */,
+				2EEA5F6624911BAC006452ED /* ClearTab.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -354,6 +357,7 @@
 			files = (
 				2EE9C140248CACF5002E6A14 /* ActionTab.swift in Sources */,
 				2EF6C514248C0DE00040F927 /* GameScene.swift in Sources */,
+				2EEA5F6724911BAC006452ED /* ClearTab.swift in Sources */,
 				2EE8AAC8248C70F300B652E3 /* Constants.swift in Sources */,
 				2EEA8E2D248D5F57008FE216 /* CommandTabDropZone.swift in Sources */,
 				2EF6C516248C0DE00040F927 /* GameViewController.swift in Sources */,

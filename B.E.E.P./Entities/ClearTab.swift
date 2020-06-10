@@ -2,7 +2,7 @@ import SpriteKit
 import GameplayKit
 
 // Cria a entidade Tileset, herdando de GKEntity
-class DroppedBlock: GKEntity {
+class ClearTab: GKEntity {
     var actionName: String!
     
     init(name: String, spriteName: String) {
