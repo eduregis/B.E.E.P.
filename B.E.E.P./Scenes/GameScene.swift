@@ -52,6 +52,9 @@ class GameScene: SKScene {
         drawTilesets(width: Int(stageDimensions.width), height: Int(stageDimensions.height))
         drawRobot(xPosition: Int(actualPosition.x), yPosition: Int(actualPosition.y))
         drawTabs()
+        drawnConfigButton()
+        drawnHintButton()
+        
     }
     
     // desenha o tileset e seu corredor de luz de acordo com sua posição
@@ -371,12 +374,28 @@ class GameScene: SKScene {
     }
     
     func drawnReturnButton() {
-        let returnButton = ReturnButton()
+        let returnButton = HubButton(name: "return-button")
         if let spriteComponent = returnButton.component(ofType: SpriteComponent.self) {
             spriteComponent.node.position = CGPoint(x: frame.minX+50, y: frame.maxY-50)
             spriteComponent.node.zPosition = 2
         }
         entityManager.add(returnButton)
+    }
+    func drawnConfigButton() {
+        let configButton = HubButton(name: "config-button")
+        if let spriteComponent = configButton.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = CGPoint(x: frame.maxX-150, y: frame.maxY-50)
+            spriteComponent.node.zPosition = 2
+        }
+        entityManager.add(configButton)
+    }
+    func drawnHintButton() {
+        let hintButton = HubButton(name: "hint-button")
+        if let spriteComponent = hintButton.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = CGPoint(x: frame.maxX-100, y: frame.maxY-50)
+            spriteComponent.node.zPosition = 2
+        }
+        entityManager.add(hintButton)
     }
     
     func returnToMap() {
