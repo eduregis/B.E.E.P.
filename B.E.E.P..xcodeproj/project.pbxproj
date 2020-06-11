@@ -31,6 +31,8 @@
 		2EF6C52C248C14FE0040F927 /* EntityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF6C52B248C14FE0040F927 /* EntityManager.swift */; };
 		5632E8E9248ED9C50011B5ED /* B_E_E_P_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5632E8E8248ED9C50011B5ED /* B_E_E_P_Tests.swift */; };
 		5632E8F7248EDA1A0011B5ED /* B_E_E_P_UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5632E8F6248EDA1A0011B5ED /* B_E_E_P_UITests.swift */; };
+		56B459D7249148C2007D82D2 /* Filament.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56B459D6249148C2007D82D2 /* Filament.swift */; };
+		56B459DB24925780007D82D2 /* StageUnavailable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56B459DA24925780007D82D2 /* StageUnavailable.swift */; };
 		56C9EE84249043A7007924BA /* MapScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C9EE83249043A7007924BA /* MapScene.swift */; };
 		56C9EE862490459A007924BA /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C9EE852490459A007924BA /* MapViewController.swift */; };
 		56C9EE8824906479007924BA /* ReturnButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C9EE8724906479007924BA /* ReturnButton.swift */; };
@@ -84,6 +86,8 @@
 		5632E8F4248EDA1A0011B5ED /* B.E.E.P.UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = B.E.E.P.UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5632E8F6248EDA1A0011B5ED /* B_E_E_P_UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = B_E_E_P_UITests.swift; sourceTree = "<group>"; };
 		5632E8F8248EDA1A0011B5ED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		56B459D6249148C2007D82D2 /* Filament.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filament.swift; sourceTree = "<group>"; };
+		56B459DA24925780007D82D2 /* StageUnavailable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StageUnavailable.swift; sourceTree = "<group>"; };
 		56C9EE83249043A7007924BA /* MapScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapScene.swift; sourceTree = "<group>"; };
 		56C9EE852490459A007924BA /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		56C9EE8724906479007924BA /* ReturnButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReturnButton.swift; sourceTree = "<group>"; };
@@ -185,6 +189,8 @@
 				2EEFC470248DC07D00D182CF /* PlayButton.swift */,
 				56C9EE8724906479007924BA /* ReturnButton.swift */,
 				2EEA5F6624911BAC006452ED /* ClearTab.swift */,
+				56B459D6249148C2007D82D2 /* Filament.swift */,
+				56B459DA24925780007D82D2 /* StageUnavailable.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -356,6 +362,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2EE9C140248CACF5002E6A14 /* ActionTab.swift in Sources */,
+				56B459D7249148C2007D82D2 /* Filament.swift in Sources */,
 				2EF6C514248C0DE00040F927 /* GameScene.swift in Sources */,
 				2EEA5F6724911BAC006452ED /* ClearTab.swift in Sources */,
 				2EE8AAC8248C70F300B652E3 /* Constants.swift in Sources */,
@@ -371,6 +378,7 @@
 				2EE8AABA248C5B9A00B652E3 /* Robot.swift in Sources */,
 				56C9EE862490459A007924BA /* MapViewController.swift in Sources */,
 				2EF6C52A248C13EB0040F927 /* Tileset.swift in Sources */,
+				56B459DB24925780007D82D2 /* StageUnavailable.swift in Sources */,
 				2EE8AAC5248C6CE100B652E3 /* RobotMoveComponent.swift in Sources */,
 				2EE9C13D248C93F3002E6A14 /* LightFloorMoveComponent.swift in Sources */,
 				2EEFC46F248DB74B00D182CF /* DroppedBlock.swift in Sources */,

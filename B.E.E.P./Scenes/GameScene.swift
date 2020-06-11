@@ -6,7 +6,7 @@ class GameScene: SKScene {
     // variáveis que irão receber os valores da API
     var actualPosition = CGPoint(x: 1, y: 1)
     var stageDimensions = CGSize(width: 5, height: 6)
-    var gameplayAnchor: CGPoint!
+    var gameplayAnchor:CGPoint!
     var actualDirection = "right"
     
     // criamos a referência o gerenciador de entidades
