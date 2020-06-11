@@ -19,7 +19,7 @@
 		2EEA8E2D248D5F57008FE216 /* CommandTabDropZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEA8E2C248D5F57008FE216 /* CommandTabDropZone.swift */; };
 		2EEA8E2F248D6098008FE216 /* DraggableBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEA8E2E248D6098008FE216 /* DraggableBlock.swift */; };
 		2EEA8E31248D6D24008FE216 /* EmptyBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEA8E30248D6D24008FE216 /* EmptyBlock.swift */; };
-		2EEFC46F248DB74B00D182CF /* DroppedBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEFC46E248DB74B00D182CF /* DroppedBlock.swift */; };
+		2EEF855A2492EBE300C10CB2 /* AuxiliaryTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEF85592492EBE300C10CB2 /* AuxiliaryTab.swift */; };
 		2EEFC471248DC07D00D182CF /* PlayButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEFC470248DC07D00D182CF /* PlayButton.swift */; };
 		2EF6C50E248C0DE00040F927 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF6C50D248C0DE00040F927 /* AppDelegate.swift */; };
 		2EF6C514248C0DE00040F927 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF6C513248C0DE00040F927 /* GameScene.swift */; };
@@ -68,7 +68,7 @@
 		2EEA8E2C248D5F57008FE216 /* CommandTabDropZone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandTabDropZone.swift; sourceTree = "<group>"; };
 		2EEA8E2E248D6098008FE216 /* DraggableBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraggableBlock.swift; sourceTree = "<group>"; };
 		2EEA8E30248D6D24008FE216 /* EmptyBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyBlock.swift; sourceTree = "<group>"; };
-		2EEFC46E248DB74B00D182CF /* DroppedBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DroppedBlock.swift; sourceTree = "<group>"; };
+		2EEF85592492EBE300C10CB2 /* AuxiliaryTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuxiliaryTab.swift; sourceTree = "<group>"; };
 		2EEFC470248DC07D00D182CF /* PlayButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayButton.swift; sourceTree = "<group>"; };
 		2EF6C50A248C0DE00040F927 /* B.E.E.P..app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = B.E.E.P..app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2EF6C50D248C0DE00040F927 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -185,12 +185,12 @@
 				2EEA8E2C248D5F57008FE216 /* CommandTabDropZone.swift */,
 				2EEA8E2E248D6098008FE216 /* DraggableBlock.swift */,
 				2EEA8E30248D6D24008FE216 /* EmptyBlock.swift */,
-				2EEFC46E248DB74B00D182CF /* DroppedBlock.swift */,
 				2EEFC470248DC07D00D182CF /* PlayButton.swift */,
 				56C9EE8724906479007924BA /* HudButton.swift */,
 				2EEA5F6624911BAC006452ED /* ClearTab.swift */,
 				56B459D6249148C2007D82D2 /* Filament.swift */,
 				56B459DA24925780007D82D2 /* StageUnavailable.swift */,
+				2EEF85592492EBE300C10CB2 /* AuxiliaryTab.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -361,6 +361,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2EEF855A2492EBE300C10CB2 /* AuxiliaryTab.swift in Sources */,
 				2EE9C140248CACF5002E6A14 /* ActionTab.swift in Sources */,
 				56B459D7249148C2007D82D2 /* Filament.swift in Sources */,
 				2EF6C514248C0DE00040F927 /* GameScene.swift in Sources */,
@@ -381,7 +382,6 @@
 				56B459DB24925780007D82D2 /* StageUnavailable.swift in Sources */,
 				2EE8AAC5248C6CE100B652E3 /* RobotMoveComponent.swift in Sources */,
 				2EE9C13D248C93F3002E6A14 /* LightFloorMoveComponent.swift in Sources */,
-				2EEFC46F248DB74B00D182CF /* DroppedBlock.swift in Sources */,
 				2EE8AAB8248C523A00B652E3 /* Light.swift in Sources */,
 				56C9EE8824906479007924BA /* HudButton.swift in Sources */,
 				2EF6C50E248C0DE00040F927 /* AppDelegate.swift in Sources */,

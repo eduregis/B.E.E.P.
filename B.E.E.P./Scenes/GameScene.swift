@@ -6,8 +6,10 @@ class GameScene: SKScene {
     // variáveis que irão receber os valores da API
     var actualPosition = CGPoint(x: 1, y: 1)
     var stageDimensions = CGSize(width: 5, height: 6)
-    var gameplayAnchor:CGPoint!
+    var gameplayAnchor: CGPoint!
+    var auxiliaryAnchor: CGPoint!
     var actualDirection = "right"
+    var tabStyle = "loop"
     
     // criamos a referência o gerenciador de entidades
     var entityManager: EntityManager!
@@ -35,7 +37,18 @@ class GameScene: SKScene {
     var draggingItem: SKSpriteNode?
     
     override func didMove(to view: SKView) {
-        gameplayAnchor = CGPoint(x: size.width/2, y: size.height/2)
+        // posiciona os elementos de acordo como tipo de fase
+        switch tabStyle {
+        case "default":
+            gameplayAnchor = CGPoint(x: size.width/2, y: size.height/2)
+            auxiliaryAnchor = CGPoint(x: size.width/2, y: size.height/2)
+        case "function", "antivirus", "loop", "conditional":
+            gameplayAnchor = CGPoint(x: size.width/3, y: size.height/2)
+            auxiliaryAnchor = CGPoint(x: 3*size.width/4, y: size.height/2)
+        default:
+            gameplayAnchor = CGPoint(x: size.width/2, y: size.height/2)
+            auxiliaryAnchor = CGPoint(x: size.width/2, y: size.height/2)
+        }
         
         // adiciona o background
         let background = SKSpriteNode(imageNamed: "background")
@@ -52,6 +65,7 @@ class GameScene: SKScene {
         drawTilesets(width: Int(stageDimensions.width), height: Int(stageDimensions.height))
         drawRobot(xPosition: Int(actualPosition.x), yPosition: Int(actualPosition.y))
         drawTabs()
+        drawAuxiliaryTab()
         drawnConfigButton()
         drawnHintButton()
         
@@ -170,6 +184,57 @@ class GameScene: SKScene {
             }
             entityManager.add(block)
         }
+    }
+    
+    func drawAuxiliaryTab() {
+        let size: Int
+        let yAjust: CGFloat
+        if tabStyle != "default" {
+            switch tabStyle {
+            case "function","antivirus":
+                size = 1
+                yAjust = 240
+            case "loop":
+                size = 2
+                yAjust = 148
+            default:
+                size = 3
+                yAjust = 0
+            }
+            let auxiliaryTab = AuxiliaryTab(size: size)
+            if let spriteComponent = auxiliaryTab.component(ofType: SpriteComponent.self) {
+                spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x, y: auxiliaryAnchor.y + yAjust)
+                spriteComponent.node.zPosition = 1
+            }
+            entityManager.add(auxiliaryTab)
+            drawFunctionTab()
+        }
+    }
+    
+    func drawFunctionTab() {
+        // adiciona a aba de comandos
+        let commandTab = CommandTab()
+        if let spriteComponent = commandTab.component(ofType: SpriteComponent.self) {
+           spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x, y: auxiliaryAnchor.y + 240)
+           spriteComponent.node.zPosition = 1
+        }
+        entityManager.add(commandTab)
+        
+        // adiciona a aba de limpar
+        let clearTab = ClearTab(name: "command-clear-tab", spriteName: "clear-tab")
+        if let spriteComponent = clearTab.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = CGPoint(x: gameplayAnchor.x - 20, y: gameplayAnchor.y - 65)
+            spriteComponent.node.zPosition = 3
+        }
+        entityManager.add(clearTab)
+        
+        // container de drop
+        let commandTabDropZone = CommandTabDropZone()
+        if let spriteComponent = commandTabDropZone.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = CGPoint(x: gameplayAnchor.x - 50, y: gameplayAnchor.y - 115)
+            spriteComponent.node.zPosition = 2
+        }
+        entityManager.add(commandTabDropZone)
     }
     
     func clearCommandTab () {
