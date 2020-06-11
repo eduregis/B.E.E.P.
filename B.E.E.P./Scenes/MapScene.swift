@@ -24,6 +24,8 @@ class MapScene:SKScene {
     override func didMove(to view: SKView) {
         entityManager = EntityManager(scene: self)
         drawBackground()
+        drawnHintButton()
+        drawnConfigButton()
         
         let tilesetReference1 = CGPoint(x: frame.midX-280, y: frame.midY+90+40+40)
         let filamentReference1 = CGPoint(x: frame.midX-69, y: frame.midY+16)
@@ -219,6 +221,22 @@ class MapScene:SKScene {
             }))
             
         }
+    func drawnHintButton() {
+        let hintButton = SKSpriteNode(imageNamed: "hint-button")
+    
+        hintButton.name = "hint-button"
+        hintButton.position = CGPoint(x: frame.maxX-100, y: frame.maxY-50)
+        hintButton.zPosition = 2
+        addChild(hintButton)
+    }
+    func drawnConfigButton() {
+        let configButton = SKSpriteNode(imageNamed: "config-button")
+    
+        configButton.name = "config-button"
+        configButton.position = CGPoint(x: frame.maxX-150, y: frame.maxY-50)
+        configButton.zPosition = 2
+        addChild(configButton)
+    }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {

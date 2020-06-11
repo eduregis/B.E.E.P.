@@ -9,13 +9,13 @@
 import SpriteKit
 import GameplayKit
 
-class ReturnButton:GKEntity {
+class HubButton:GKEntity {
     
-    override init() {
+    init(name: String) {
           super.init()
 
           // Utiliza o componente SpriteComponent para gerar o sprite da entidade
-          let spriteComponent = SpriteComponent(texture: SKTexture(imageNamed: "return-button"), name: "return-button")
+          let spriteComponent = SpriteComponent(texture: SKTexture(imageNamed: name), name: name)
           
           addComponent(spriteComponent)
       }

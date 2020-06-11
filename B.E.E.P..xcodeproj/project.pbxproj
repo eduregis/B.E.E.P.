@@ -35,7 +35,7 @@
 		56B459DB24925780007D82D2 /* StageUnavailable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56B459DA24925780007D82D2 /* StageUnavailable.swift */; };
 		56C9EE84249043A7007924BA /* MapScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C9EE83249043A7007924BA /* MapScene.swift */; };
 		56C9EE862490459A007924BA /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C9EE852490459A007924BA /* MapViewController.swift */; };
-		56C9EE8824906479007924BA /* ReturnButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C9EE8724906479007924BA /* ReturnButton.swift */; };
+		56C9EE8824906479007924BA /* HudButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C9EE8724906479007924BA /* HudButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -90,7 +90,7 @@
 		56B459DA24925780007D82D2 /* StageUnavailable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StageUnavailable.swift; sourceTree = "<group>"; };
 		56C9EE83249043A7007924BA /* MapScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapScene.swift; sourceTree = "<group>"; };
 		56C9EE852490459A007924BA /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
-		56C9EE8724906479007924BA /* ReturnButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReturnButton.swift; sourceTree = "<group>"; };
+		56C9EE8724906479007924BA /* HudButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HudButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,7 +187,7 @@
 				2EEA8E30248D6D24008FE216 /* EmptyBlock.swift */,
 				2EEFC46E248DB74B00D182CF /* DroppedBlock.swift */,
 				2EEFC470248DC07D00D182CF /* PlayButton.swift */,
-				56C9EE8724906479007924BA /* ReturnButton.swift */,
+				56C9EE8724906479007924BA /* HudButton.swift */,
 				2EEA5F6624911BAC006452ED /* ClearTab.swift */,
 				56B459D6249148C2007D82D2 /* Filament.swift */,
 				56B459DA24925780007D82D2 /* StageUnavailable.swift */,
@@ -383,7 +383,7 @@
 				2EE9C13D248C93F3002E6A14 /* LightFloorMoveComponent.swift in Sources */,
 				2EEFC46F248DB74B00D182CF /* DroppedBlock.swift in Sources */,
 				2EE8AAB8248C523A00B652E3 /* Light.swift in Sources */,
-				56C9EE8824906479007924BA /* ReturnButton.swift in Sources */,
+				56C9EE8824906479007924BA /* HudButton.swift in Sources */,
 				2EF6C50E248C0DE00040F927 /* AppDelegate.swift in Sources */,
 				2EE8AABC248C61A200B652E3 /* LightFloor.swift in Sources */,
 			);
