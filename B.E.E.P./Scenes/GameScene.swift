@@ -315,13 +315,17 @@ class GameScene: SKScene {
                 draggingItem?.position.x = location.x
                 draggingItem?.position.y = location.y
                 if(commandBlocks.count < 6) {
-                    if (location.y > gameplayAnchor.y - 143) && (location.y < gameplayAnchor.y - 93) && (location.x > gameplayAnchor.x - 200) && (location.x < gameplayAnchor.x + 120){
-                        if let spriteComponent = emptyBlocks[commandBlocks.count].component(ofType: SpriteComponent.self) {
-                            spriteComponent.node.alpha = 0.6
+                    if (location.y > gameplayAnchor.y - 143) && (location.y < gameplayAnchor.y - 93) && (location.x > gameplayAnchor.x - 200 + 53*CGFloat(commandBlocks.count)) && (location.x < gameplayAnchor.x + 120){
+                        for i in 0...commandBlocks.count {
+                            if let spriteComponent = emptyBlocks[i].component(ofType: SpriteComponent.self) {
+                                spriteComponent.node.alpha = 0.6
+                            }
                         }
                     } else {
-                        if let spriteComponent = emptyBlocks[commandBlocks.count].component(ofType: SpriteComponent.self) {
-                            spriteComponent.node.alpha = 0.1
+                        for i in 0...commandBlocks.count {
+                            if let spriteComponent = emptyBlocks[i].component(ofType: SpriteComponent.self) {
+                                spriteComponent.node.alpha = 0.1
+                            }
                         }
                     }
                 }
@@ -345,7 +349,7 @@ class GameScene: SKScene {
                         entityManager.add(block)
                     }
                 }
-            } 
+            }
             for i in 0..<emptyBlocks.count {
                 if let whiteBlock = emptyBlocks[i].component(ofType: SpriteComponent.self) {
                     whiteBlock.node.alpha = 0.1
