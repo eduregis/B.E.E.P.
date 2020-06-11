@@ -16,7 +16,7 @@ class GameScene: SKScene {
     let robot = Robot()
     let lightFloor = LightFloor()
     var emptyBlocks: [EmptyBlock] = []
-    var commandBlocks: [DroppedBlock] = []
+    var commandBlocks: [DraggableBlock] = []
     
     // variáveis de controle
     var selectedItem: SKSpriteNode? {
@@ -268,16 +268,6 @@ class GameScene: SKScene {
                 // passamos o objeto detectado para dentro do selectedItem
                 selectedItem = self.atPoint(location) as? SKSpriteNode
             }
-//            else if (self.atPoint(location).name == "walk-block-dropped") || (self.atPoint(location).name == "turn-left-block-dropped") || (self.atPoint(location).name == "turn-right-block-dropped") || (self.atPoint(location).name == "grab-block-dropped") || (self.atPoint(location).name == "save-block-dropped") {
-//                // passamos o objeto detectado para dentro do selectedItem
-//                
-//                let newName = self.atPoint(location).name?.components(separatedBy: "-dropped")
-//                let newBlock = self.atPoint(location) as? SKSpriteNode
-//                self.atPoint(location).removeFromParent()
-//                newBlock?.name = newName![0]
-//                selectedItem = newBlock
-//                
-//            }
             else {
                 // caso não seja o objeto que queremos, esvaziamos o selectedItem
                 selectedItem = nil
@@ -285,6 +275,34 @@ class GameScene: SKScene {
                     // moveRobot()
                 } else if (self.atPoint(location).name == "command-clear-tab") {
                     clearCommandTab()
+                }
+            }
+            if let oldName = self.atPoint(location).name {
+                // testa se selecionamos um bloco dentro da aba de comandos
+                if oldName.contains("-dropped-") {
+                    // se sim, ituilizamos o trecho "-dropped-" para separar obtermos o nome original e seu índice
+                    let newName = self.atPoint(location).name?.components(separatedBy: "-dropped-")
+                    let newBlock = self.atPoint(location) as? SKSpriteNode
+                    // removemos o sprite do bloco na tela, este passando a existir apenas no selectedItem à seguir
+                    self.atPoint(location).removeFromParent()
+                    // passamos apenas o nome original para o selectedItem
+                    newBlock?.name = newName![0]
+                    selectedItem = newBlock
+                    // caso ele não seja o último da fila, precisamos trazer tudo à direita dele um passo para a esquerda.
+                    if let indexToRemove = Int(newName![1]) {
+                        // removemos o o bloco do array
+                        commandBlocks.remove(at: indexToRemove)
+                        // trazemos os blocos para a esquerda, ajustando tanto a posição do sprite quanto seu índice no final do nome
+                        for index in indexToRemove..<commandBlocks.count {
+                            if let spriteComponent = commandBlocks[index].component(ofType: SpriteComponent.self) {
+                                spriteComponent.node.position = CGPoint(x: spriteComponent.node.position.x - 53, y: spriteComponent.node.position.y)
+                                // a partir do nome antigo, remontamos dessa forma
+                                let oldIndex = spriteComponent.node.name?.components(separatedBy: "-dropped-")
+                                let newIndex = Int(oldIndex![1])! - 1
+                                spriteComponent.node.name = "\(oldIndex![0])-dropped-\(newIndex)"
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -297,13 +315,17 @@ class GameScene: SKScene {
                 draggingItem?.position.x = location.x
                 draggingItem?.position.y = location.y
                 if(commandBlocks.count < 6) {
-                    if (location.y > gameplayAnchor.y - 143) && (location.y < gameplayAnchor.y - 93) && (location.x > gameplayAnchor.x - 200) && (location.x < gameplayAnchor.x + 120){
-                        if let spriteComponent = emptyBlocks[commandBlocks.count].component(ofType: SpriteComponent.self) {
-                            spriteComponent.node.alpha = 0.6
+                    if (location.y > gameplayAnchor.y - 143) && (location.y < gameplayAnchor.y - 93) && (location.x > gameplayAnchor.x - 200 + 53*CGFloat(commandBlocks.count)) && (location.x < gameplayAnchor.x + 120){
+                        for i in 0...commandBlocks.count {
+                            if let spriteComponent = emptyBlocks[i].component(ofType: SpriteComponent.self) {
+                                spriteComponent.node.alpha = 0.6
+                            }
                         }
                     } else {
-                        if let spriteComponent = emptyBlocks[commandBlocks.count].component(ofType: SpriteComponent.self) {
-                            spriteComponent.node.alpha = 0.1
+                        for i in 0...commandBlocks.count {
+                            if let spriteComponent = emptyBlocks[i].component(ofType: SpriteComponent.self) {
+                                spriteComponent.node.alpha = 0.1
+                            }
                         }
                     }
                 }
@@ -317,18 +339,20 @@ class GameScene: SKScene {
             if (self.atPoint(location).name == "white-block") {
                 if let draggingItem = draggingItem {
                     if commandBlocks.count < 6 {
-                        let block = DroppedBlock(name: "\(draggingItem.name ?? "")-dropped" , spriteName: draggingItem.name ?? "")
+                        let block = DraggableBlock(name: "\(draggingItem.name ?? "")-dropped-\(commandBlocks.count)" , spriteName: draggingItem.name ?? "")
                         if let spriteComponent = block.component(ofType: SpriteComponent.self) {
                             spriteComponent.node.size = CGSize(width: draggingItem.size.width / 1.5, height: draggingItem.size.height / 1.5)
                             spriteComponent.node.position = CGPoint(x: gameplayAnchor.x - 172 + CGFloat(commandBlocks.count)*53, y: gameplayAnchor.y - 115)
                             spriteComponent.node.zPosition = 20
                         }
-                        if let whiteBlock = emptyBlocks[commandBlocks.count].component(ofType: SpriteComponent.self) {
-                            whiteBlock.node.alpha = 0.1
-                        }
                         commandBlocks.append(block)
                         entityManager.add(block)
                     }
+                }
+            }
+            for i in 0..<emptyBlocks.count {
+                if let whiteBlock = emptyBlocks[i].component(ofType: SpriteComponent.self) {
+                    whiteBlock.node.alpha = 0.1
                 }
             }
             draggingItem = nil
