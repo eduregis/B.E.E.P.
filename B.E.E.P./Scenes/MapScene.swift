@@ -26,22 +26,23 @@ class MapScene:SKScene {
         drawBackground()
         
         let tilesetReference1 = CGPoint(x: frame.midX-280, y: frame.midY+90+40+40)
-        let filamentReference1 = CGPoint(x: 378+65, y: 435-35)
+        let filamentReference1 = CGPoint(x: frame.midX-69, y: frame.midY+16)
         
-        let tilesetReference2 = CGPoint(x: 613.5, y: 356)
-        let filamentReference2 = CGPoint(x: 790, y: 400)
+        let tilesetReference2 = CGPoint(x: frame.midX+101.5, y: frame.midY-28)
+        let filamentReference2 = CGPoint(x: frame.midX+278, y: frame.midY+16)
         
-        let tilesetReference3 = CGPoint(x: 905, y: 604-50-15)
-        let filamentReference3 = CGPoint(x: 1019+95, y: 386)
+        let tilesetReference3 = CGPoint(x: frame.midX+393, y: frame.midY+155)
+        let filamentReference3 = CGPoint(x: frame.midX+602, y: frame.midY+2)
         
-        let tilesetReference4 = CGPoint(x: 1000+200+88-35, y: 325)
-        let filamentReference4 = CGPoint(x: 1219+95+60+55-3, y: 418+15-60-3)
         
-        let tilesetReference5 = CGPoint(x: 1000+200+88+270-18, y: 508)
+        let tilesetReference4 = CGPoint(x: frame.midX+741, y: frame.midY-59)
+        let filamentReference4 = CGPoint(x: frame.midX+914, y: frame.midY-14)
+        
+        let tilesetReference5 = CGPoint(x: frame.midX+1028, y: frame.midY+124)
         
         
         drawnMaps(height: 3, width: 5, tilesetReference: tilesetReference1, status: "available", showRobot:true)
-        //drawnTileset()
+        
         drawnFilament(filamentReference: filamentReference1, status: "unavailable")
         
         drawnMaps(height: 5, width: 5, tilesetReference: tilesetReference2, status: "unavailable", showRobot:false)
