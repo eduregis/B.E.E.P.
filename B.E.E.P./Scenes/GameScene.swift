@@ -123,7 +123,7 @@ class GameScene: SKScene {
         // container de drop
         let commandTabDropZone = CommandTabDropZone()
         if let spriteComponent = commandTabDropZone.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: gameplayAnchor.x - 40, y: gameplayAnchor.y - 115)
+            spriteComponent.node.position = CGPoint(x: gameplayAnchor.x - 50, y: gameplayAnchor.y - 115)
             spriteComponent.node.zPosition = 2
         }
         entityManager.add(commandTabDropZone)
@@ -132,7 +132,7 @@ class GameScene: SKScene {
         for i in 1...6 {
             let block = EmptyBlock(name: "white-block")
             if let spriteComponent = block.component(ofType: SpriteComponent.self) {
-                spriteComponent.node.position = CGPoint(x: gameplayAnchor.x - 172 + CGFloat(i - 1)*53, y: gameplayAnchor.y - 115)
+                spriteComponent.node.position = CGPoint(x: gameplayAnchor.x - 175 + CGFloat(i - 1)*50, y: gameplayAnchor.y - 115)
                 spriteComponent.node.zPosition = 15
                 spriteComponent.node.alpha = 0.1
                 spriteComponent.node.size = CGSize(width: 60, height: 50)
@@ -295,7 +295,7 @@ class GameScene: SKScene {
                         // trazemos os blocos para a esquerda, ajustando tanto a posição do sprite quanto seu índice no final do nome
                         for index in indexToRemove..<commandBlocks.count {
                             if let spriteComponent = commandBlocks[index].component(ofType: SpriteComponent.self) {
-                                spriteComponent.node.position = CGPoint(x: spriteComponent.node.position.x - 53, y: spriteComponent.node.position.y)
+                                spriteComponent.node.position = CGPoint(x: spriteComponent.node.position.x - 50, y: spriteComponent.node.position.y)
                                 // a partir do nome antigo, remontamos dessa forma
                                 let oldIndex = spriteComponent.node.name?.components(separatedBy: "-dropped-")
                                 let newIndex = Int(oldIndex![1])! - 1
@@ -315,7 +315,7 @@ class GameScene: SKScene {
                 draggingItem?.position.x = location.x
                 draggingItem?.position.y = location.y
                 if(commandBlocks.count < 6) {
-                    if (location.y > gameplayAnchor.y - 143) && (location.y < gameplayAnchor.y - 93) && (location.x > gameplayAnchor.x - 200 + 53*CGFloat(commandBlocks.count)) && (location.x < gameplayAnchor.x + 120){
+                    if (location.y > gameplayAnchor.y - 143) && (location.y < gameplayAnchor.y - 93) && (location.x > gameplayAnchor.x - 200 + 50*CGFloat(commandBlocks.count)) && (location.x < gameplayAnchor.x + 120){
                         for i in 0...commandBlocks.count {
                             if let spriteComponent = emptyBlocks[i].component(ofType: SpriteComponent.self) {
                                 spriteComponent.node.alpha = 0.6
@@ -342,7 +342,7 @@ class GameScene: SKScene {
                         let block = DraggableBlock(name: "\(draggingItem.name ?? "")-dropped-\(commandBlocks.count)" , spriteName: draggingItem.name ?? "")
                         if let spriteComponent = block.component(ofType: SpriteComponent.self) {
                             spriteComponent.node.size = CGSize(width: draggingItem.size.width / 1.5, height: draggingItem.size.height / 1.5)
-                            spriteComponent.node.position = CGPoint(x: gameplayAnchor.x - 172 + CGFloat(commandBlocks.count)*53, y: gameplayAnchor.y - 115)
+                            spriteComponent.node.position = CGPoint(x: gameplayAnchor.x - 175 + CGFloat(commandBlocks.count)*50, y: gameplayAnchor.y - 115)
                             spriteComponent.node.zPosition = 20
                         }
                         commandBlocks.append(block)
