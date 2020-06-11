@@ -40,20 +40,20 @@ class MapScene:SKScene {
         let tilesetReference5 = CGPoint(x: 1000+200+88+270-18, y: 508)
         
         
-        drawnMaps(height: 3, width: 5, tilesetReference: tilesetReference1, status: "available")
+        drawnMaps(height: 3, width: 5, tilesetReference: tilesetReference1, status: "available", showRobot:true)
         //drawnTileset()
         drawnFilament(filamentReference: filamentReference1, status: "unavailable")
         
-        drawnMaps(height: 5, width: 5, tilesetReference: tilesetReference2, status: "unavailable")
+        drawnMaps(height: 5, width: 5, tilesetReference: tilesetReference2, status: "unavailable", showRobot:false)
         drawnFilament(filamentReference: filamentReference2, status: "unavailable")
         
-        drawnMaps(height: 3, width: 5, tilesetReference: tilesetReference3, status: "unavailable")
+        drawnMaps(height: 3, width: 5, tilesetReference: tilesetReference3, status: "unavailable", showRobot:false)
         drawnFilament(filamentReference: filamentReference3, status: "unavailable")
         
-        drawnMaps(height: 3, width: 5, tilesetReference: tilesetReference4, status: "unavailable")
+        drawnMaps(height: 3, width: 5, tilesetReference: tilesetReference4, status: "unavailable", showRobot:false)
         drawnFilament(filamentReference: filamentReference4, status: "unavailable")
         
-        drawnMaps(height: 3, width: 5, tilesetReference: tilesetReference5, status: "unavailable")
+        drawnMaps(height: 3, width: 5, tilesetReference: tilesetReference5, status: "unavailable", showRobot:false)
         
 //        self.playButton = self.childNode(withName: "//starButton") as? SKSpriteNode
     }
@@ -66,8 +66,8 @@ class MapScene:SKScene {
         addChild(background)
     }
     
-    func drawnMaps(height:Int, width:Int, tilesetReference: CGPoint, status:String) {
-        
+    func drawnMaps(height:Int, width:Int, tilesetReference: CGPoint, status:String, showRobot:Bool) {
+        var lightFloorPosition = CGPoint(x: 0, y: 0)
         for i in 1...width {
             for j in 1...height {
                 // desenha o tileset
@@ -78,11 +78,42 @@ class MapScene:SKScene {
                     spriteComponent.node.name = "stage-\(status)"
                     spriteComponent.node.position = CGPoint(x: x, y: y)
                     spriteComponent.node.zPosition = CGFloat(i + j)
-            }
+                    if showRobot, (i-1) == (width-1)/2 && (j-1) == (height-1)/2 {
+                        print("\(i), \(j)")
+                        lightFloorPosition = CGPoint(x: x, y: y)
+                        drawnLightFloor(position: lightFloorPosition)
+                        drawnRobot(position: CGPoint(x: lightFloorPosition.x, y: lightFloorPosition.y+31))
+                    }
+                }
             entityManager.add(tileset)
             }
         }
+
     }
+    func drawnLightFloor(position:CGPoint){
+        let lightFloor = LightFloor()
+        if let spriteComponent = lightFloor.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = position
+            spriteComponent.node.alpha = 0.7
+            spriteComponent.node.zPosition = 100
+            spriteComponent.node.name = "stage-available"
+        }
+        entityManager.add(lightFloor)
+    }
+    
+    func drawnRobot(position:CGPoint) {
+        let robot = Robot()
+        if let spriteComponent = robot.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = position
+            spriteComponent.node.zPosition = 101
+            spriteComponent.node.name = "stage-available"
+        }
+        entityManager.add(robot)
+    }
+    
+//    func drawnStageUnavailable(position:CGPoint) {
+//
+//    }
     
     func drawnFilament(filamentReference: CGPoint, status:String) {
         let filament = Filament(status: status)
