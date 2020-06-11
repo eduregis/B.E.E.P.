@@ -9,7 +9,7 @@ class GameScene: SKScene {
     var gameplayAnchor: CGPoint!
     var auxiliaryAnchor: CGPoint!
     var actualDirection = "right"
-    var tabStyle = "loop"
+    var tabStyle = "function"
     
     // criamos a referência o gerenciador de entidades
     var entityManager: EntityManager!
@@ -28,7 +28,7 @@ class GameScene: SKScene {
                 draggingItem?.name = selectedPlayer.name
                 draggingItem?.position = CGPoint(x: selectedPlayer.position.x, y: selectedPlayer.position.y)
                 draggingItem?.size = CGSize(width: selectedPlayer.size.width * 1.5, height: selectedPlayer.size.height * 1.5)
-                draggingItem?.zPosition = 20
+                draggingItem?.zPosition = ZPositionsCategories.draggableBlock
                 draggingItem?.alpha = 0.5
                 addChild(draggingItem!)
             }
@@ -54,7 +54,7 @@ class GameScene: SKScene {
         let background = SKSpriteNode(imageNamed: "background")
         background.position = CGPoint(x: size.width/2, y: size.height/2)
         background.size = CGSize(width: size.width, height: size.height)
-        background.zPosition = -1
+        background.zPosition = ZPositionsCategories.background
         addChild(background)
         
         // cria uma instância do gerenciador de entidades
@@ -122,10 +122,10 @@ class GameScene: SKScene {
     
     func drawTabs () {
         // adiciona a aba de comandos
-        let commandTab = CommandTab()
+        let commandTab = DefaultObject(name: "command-tab")
         if let spriteComponent = commandTab.component(ofType: SpriteComponent.self) {
             spriteComponent.node.position = CGPoint(x: gameplayAnchor.x, y: gameplayAnchor.y - 100)
-            spriteComponent.node.zPosition = 1
+            spriteComponent.node.zPosition = ZPositionsCategories.tab
         }
         entityManager.add(commandTab)
         
@@ -133,15 +133,15 @@ class GameScene: SKScene {
         let clearTab = ClearTab(name: "command-clear-tab", spriteName: "clear-tab")
         if let spriteComponent = clearTab.component(ofType: SpriteComponent.self) {
             spriteComponent.node.position = CGPoint(x: gameplayAnchor.x - 20, y: gameplayAnchor.y - 65)
-            spriteComponent.node.zPosition = 3
+            spriteComponent.node.zPosition = ZPositionsCategories.clearTabButton
         }
         entityManager.add(clearTab)
         
         // container de drop
-        let commandTabDropZone = CommandTabDropZone()
+        let commandTabDropZone = DefaultObject(name: "command-tab-drop-zone")
         if let spriteComponent = commandTabDropZone.component(ofType: SpriteComponent.self) {
             spriteComponent.node.position = CGPoint(x: gameplayAnchor.x - 50, y: gameplayAnchor.y - 115)
-            spriteComponent.node.zPosition = 2
+            spriteComponent.node.zPosition = ZPositionsCategories.dropZone
         }
         entityManager.add(commandTabDropZone)
         
@@ -150,7 +150,7 @@ class GameScene: SKScene {
             let block = EmptyBlock(name: "white-block")
             if let spriteComponent = block.component(ofType: SpriteComponent.self) {
                 spriteComponent.node.position = CGPoint(x: gameplayAnchor.x - 175 + CGFloat(i - 1)*50, y: gameplayAnchor.y - 115)
-                spriteComponent.node.zPosition = 15
+                spriteComponent.node.zPosition = ZPositionsCategories.emptyBlock
                 spriteComponent.node.alpha = 0.1
                 spriteComponent.node.size = CGSize(width: 60, height: 50)
             }
@@ -159,18 +159,18 @@ class GameScene: SKScene {
         }
         
         // botão de play
-        let playButton = PlayButton()
+        let playButton = DefaultObject(name: "play-button")
         if let spriteComponent = playButton.component(ofType: SpriteComponent.self) {
             spriteComponent.node.position = CGPoint(x: gameplayAnchor.x + 170, y: gameplayAnchor.y - 115)
-            spriteComponent.node.zPosition = 3
+            spriteComponent.node.zPosition = ZPositionsCategories.button
         }
         entityManager.add(playButton)
         
         // adiciona a aba de ações
-        let actionTab = ActionTab()
+        let actionTab = DefaultObject(name: "action-tab")
         if let spriteComponent = actionTab.component(ofType: SpriteComponent.self) {
             spriteComponent.node.position = CGPoint(x: gameplayAnchor.x, y: gameplayAnchor.y - 240)
-            spriteComponent.node.zPosition = 1
+            spriteComponent.node.zPosition = ZPositionsCategories.tab
         }
         entityManager.add(actionTab)
         
@@ -179,7 +179,7 @@ class GameScene: SKScene {
             let block = DraggableBlock(name: blockTypes[i - 1])
             if let spriteComponent = block.component(ofType: SpriteComponent.self) {
                 spriteComponent.node.position = CGPoint(x: gameplayAnchor.x - 150 + CGFloat(i - 1)*75, y: gameplayAnchor.y - 255)
-                spriteComponent.node.zPosition = 20
+                spriteComponent.node.zPosition = ZPositionsCategories.draggableBlock
                 spriteComponent.node.size = CGSize(width: 60, height: 50)
             }
             entityManager.add(block)
@@ -204,7 +204,7 @@ class GameScene: SKScene {
             let auxiliaryTab = AuxiliaryTab(size: size)
             if let spriteComponent = auxiliaryTab.component(ofType: SpriteComponent.self) {
                 spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x, y: auxiliaryAnchor.y + yAjust)
-                spriteComponent.node.zPosition = 1
+                spriteComponent.node.zPosition = ZPositionsCategories.tab
             }
             entityManager.add(auxiliaryTab)
             drawFunctionTab()
@@ -213,26 +213,26 @@ class GameScene: SKScene {
     
     func drawFunctionTab() {
         // adiciona a aba de comandos
-        let commandTab = CommandTab()
-        if let spriteComponent = commandTab.component(ofType: SpriteComponent.self) {
-           spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x, y: auxiliaryAnchor.y + 240)
-           spriteComponent.node.zPosition = 1
+        let functionTab = DefaultObject(name: "function-tab")
+        if let spriteComponent = functionTab.component(ofType: SpriteComponent.self) {
+           spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x, y: auxiliaryAnchor.y + 225)
+            spriteComponent.node.zPosition = ZPositionsCategories.subTab
         }
-        entityManager.add(commandTab)
+        entityManager.add(functionTab)
         
         // adiciona a aba de limpar
         let clearTab = ClearTab(name: "command-clear-tab", spriteName: "clear-tab")
         if let spriteComponent = clearTab.component(ofType: SpriteComponent.self) {
             spriteComponent.node.position = CGPoint(x: gameplayAnchor.x - 20, y: gameplayAnchor.y - 65)
-            spriteComponent.node.zPosition = 3
+            spriteComponent.node.zPosition = ZPositionsCategories.clearTabButton
         }
         entityManager.add(clearTab)
         
         // container de drop
-        let commandTabDropZone = CommandTabDropZone()
+        let commandTabDropZone = DefaultObject(name: "command-tab-drop-zone")
         if let spriteComponent = commandTabDropZone.component(ofType: SpriteComponent.self) {
             spriteComponent.node.position = CGPoint(x: gameplayAnchor.x - 50, y: gameplayAnchor.y - 115)
-            spriteComponent.node.zPosition = 2
+            spriteComponent.node.zPosition = ZPositionsCategories.dropZone
         }
         entityManager.add(commandTabDropZone)
     }
@@ -411,7 +411,7 @@ class GameScene: SKScene {
                         if let spriteComponent = block.component(ofType: SpriteComponent.self) {
                             spriteComponent.node.size = CGSize(width: draggingItem.size.width / 1.5, height: draggingItem.size.height / 1.5)
                             spriteComponent.node.position = CGPoint(x: gameplayAnchor.x - 175 + CGFloat(commandBlocks.count)*50, y: gameplayAnchor.y - 115)
-                            spriteComponent.node.zPosition = 20
+                            spriteComponent.node.zPosition = ZPositionsCategories.draggableBlock
                         }
                         commandBlocks.append(block)
                         entityManager.add(block)
@@ -441,24 +441,24 @@ class GameScene: SKScene {
     func drawnReturnButton() {
         let returnButton = HubButton(name: "return-button")
         if let spriteComponent = returnButton.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: frame.minX+50, y: frame.maxY-50)
-            spriteComponent.node.zPosition = 2
+            spriteComponent.node.position = CGPoint(x: frame.minX + 50, y: frame.maxY - 50)
+            spriteComponent.node.zPosition = ZPositionsCategories.button
         }
         entityManager.add(returnButton)
     }
     func drawnConfigButton() {
         let configButton = HubButton(name: "config-button")
         if let spriteComponent = configButton.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: frame.maxX-150, y: frame.maxY-50)
-            spriteComponent.node.zPosition = 2
+            spriteComponent.node.position = CGPoint(x: frame.maxX - 150, y: frame.maxY - 50)
+            spriteComponent.node.zPosition = ZPositionsCategories.button
         }
         entityManager.add(configButton)
     }
     func drawnHintButton() {
         let hintButton = HubButton(name: "hint-button")
         if let spriteComponent = hintButton.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: frame.maxX-100, y: frame.maxY-50)
-            spriteComponent.node.zPosition = 2
+            spriteComponent.node.position = CGPoint(x: frame.maxX - 100, y: frame.maxY - 50)
+            spriteComponent.node.zPosition = ZPositionsCategories.button
         }
         entityManager.add(hintButton)
     }
