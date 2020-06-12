@@ -221,7 +221,7 @@ class GameScene: SKScene {
         // adiciona a aba de comandos
         let functionTab = DefaultObject(name: "function-tab")
         if let spriteComponent = functionTab.component(ofType: SpriteComponent.self) {
-           spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x, y: auxiliaryAnchor.y + 225)
+            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x, y: auxiliaryAnchor.y + 225)
             spriteComponent.node.zPosition = ZPositionsCategories.subTab
         }
         entityManager.add(functionTab)
@@ -368,27 +368,53 @@ class GameScene: SKScene {
                 // testa se selecionamos um bloco dentro da aba de comandos
                 if oldName.contains("-dropped-") {
                     // se sim, ituilizamos o trecho "-dropped-" para separar obtermos o nome original e seu índice
-                    let newName = self.atPoint(location).name?.components(separatedBy: "-dropped-")
+                    var newName: [String] = []
+                    var arrayName: String = ""
+                    if oldName.contains("-dropped-command-") {
+                        newName = self.atPoint(location).name!.components(separatedBy: "-dropped-command-")
+                        arrayName = "command-"
+                    } else if oldName.contains("-dropped-function-") {
+                        newName = self.atPoint(location).name!.components(separatedBy: "-dropped-function-")
+                        arrayName = "function-"
+                    }
                     let newBlock = self.atPoint(location) as? SKSpriteNode
                     // removemos o sprite do bloco na tela, este passando a existir apenas no selectedItem à seguir
                     self.atPoint(location).removeFromParent()
                     // passamos apenas o nome original para o selectedItem
-                    newBlock?.name = newName![0]
+                    newBlock?.name = newName[0]
                     selectedItem = newBlock
                     // caso ele não seja o último da fila, precisamos trazer tudo à direita dele um passo para a esquerda.
-                    if let indexToRemove = Int(newName![1]) {
+                    if let indexToRemove = Int(newName[1]) {
                         // removemos o o bloco do array
-                        commandBlocks.remove(at: indexToRemove)
-                        // trazemos os blocos para a esquerda, ajustando tanto a posição do sprite quanto seu índice no final do nome
-                        for index in indexToRemove..<commandBlocks.count {
-                            if let spriteComponent = commandBlocks[index].component(ofType: SpriteComponent.self) {
-                                spriteComponent.node.position = CGPoint(x: spriteComponent.node.position.x - 50, y: spriteComponent.node.position.y)
-                                // a partir do nome antigo, remontamos dessa forma
-                                let oldIndex = spriteComponent.node.name?.components(separatedBy: "-dropped-")
-                                let newIndex = Int(oldIndex![1])! - 1
-                                spriteComponent.node.name = "\(oldIndex![0])-dropped-\(newIndex)"
+                        switch arrayName {
+                        case "command-":
+                            commandBlocks.remove(at: indexToRemove)
+                            // trazemos os blocos para a esquerda, ajustando tanto a posição do sprite quanto seu índice no final do nome
+                            for index in indexToRemove..<commandBlocks.count {
+                                if let spriteComponent = commandBlocks[index].component(ofType: SpriteComponent.self) {
+                                    spriteComponent.node.position = CGPoint(x: spriteComponent.node.position.x - 50, y: spriteComponent.node.position.y)
+                                    // a partir do nome antigo, remontamos dessa forma
+                                    let oldIndex = spriteComponent.node.name?.components(separatedBy: "-dropped-command-")
+                                    let newIndex = Int(oldIndex![1])! - 1
+                                    spriteComponent.node.name = "\(oldIndex![0])-dropped-command-\(newIndex)"
+                                }
                             }
+                        case "function-":
+                            functionBlocks.remove(at: indexToRemove)
+                            // trazemos os blocos para a esquerda, ajustando tanto a posição do sprite quanto seu índice no final do nome
+                            for index in indexToRemove..<functionBlocks.count {
+                                if let spriteComponent = functionBlocks[index].component(ofType: SpriteComponent.self) {
+                                    spriteComponent.node.position = CGPoint(x: spriteComponent.node.position.x - 50, y: spriteComponent.node.position.y)
+                                    // a partir do nome antigo, remontamos dessa forma
+                                    let oldIndex = spriteComponent.node.name?.components(separatedBy: "-dropped-function-")
+                                    let newIndex = Int(oldIndex![1])! - 1
+                                    spriteComponent.node.name = "\(oldIndex![0])-dropped-function-\(newIndex)"
+                                }
+                            }
+                        default:
+                            break
                         }
+                        
                     }
                 }
             }
@@ -424,7 +450,6 @@ class GameScene: SKScene {
                 if(functionBlocks.count < 4) && (emptyFunctionBlocks.count > 0) {
                     
                     if (location.y > auxiliaryAnchor.y + 183) && (location.y < auxiliaryAnchor.y + 233) && (location.x > auxiliaryAnchor.x - 55 + 50*CGFloat(functionBlocks.count)) && (location.x < auxiliaryAnchor.x + 155){
-                        print(location.x, location.y)
                         for i in 0...functionBlocks.count {
                             if let spriteComponent = emptyFunctionBlocks[i].component(ofType: SpriteComponent.self) {
                                 spriteComponent.node.alpha = 0.6
@@ -450,7 +475,7 @@ class GameScene: SKScene {
             if (self.atPoint(location).name == "white-block") {
                 if let draggingItem = draggingItem {
                     if (commandBlocks.count < 6) && commandDropZoneIsTouched {
-                        let block = DraggableBlock(name: "\(draggingItem.name ?? "")-dropped-\(commandBlocks.count)" , spriteName: draggingItem.name ?? "")
+                        let block = DraggableBlock(name: "\(draggingItem.name ?? "")-dropped-command-\(commandBlocks.count)" , spriteName: draggingItem.name ?? "")
                         if let spriteComponent = block.component(ofType: SpriteComponent.self) {
                             spriteComponent.node.size = CGSize(width: draggingItem.size.width / 1.5, height: draggingItem.size.height / 1.5)
                             spriteComponent.node.position = CGPoint(x: gameplayAnchor.x - 175 + CGFloat(commandBlocks.count)*50, y: gameplayAnchor.y - 115)
@@ -460,7 +485,7 @@ class GameScene: SKScene {
                         entityManager.add(block)
                     }
                     if (functionBlocks.count < 4) && functionDropZoneIsTouched {
-                        let block = DraggableBlock(name: "\(draggingItem.name ?? "")-dropped-\(functionBlocks.count)" , spriteName: draggingItem.name ?? "")
+                        let block = DraggableBlock(name: "\(draggingItem.name ?? "")-dropped-function-\(functionBlocks.count)" , spriteName: draggingItem.name ?? "")
                         if let spriteComponent = block.component(ofType: SpriteComponent.self) {
                             spriteComponent.node.size = CGSize(width: draggingItem.size.width / 1.5, height: draggingItem.size.height / 1.5)
                             spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 25 + CGFloat(functionBlocks.count)*50, y: auxiliaryAnchor.y + 210)
