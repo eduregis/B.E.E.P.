@@ -256,13 +256,26 @@ class GameScene: SKScene {
         }
     }
     
-    func clearCommandTab () {
-        for block in commandBlocks {
-            if let spriteComponent = block.component(ofType: SpriteComponent.self) {
-                spriteComponent.node.removeFromParent()
+    func clearTab (tabName: String) {
+        switch tabName {
+        case "command":
+            for block in commandBlocks {
+                if let spriteComponent = block.component(ofType: SpriteComponent.self) {
+                    spriteComponent.node.removeFromParent()
+                }
             }
+            commandBlocks.removeAll()
+        case "function":
+            for block in functionBlocks {
+                if let spriteComponent = block.component(ofType: SpriteComponent.self) {
+                    spriteComponent.node.removeFromParent()
+                }
+            }
+            functionBlocks.removeAll()
+        default:
+            break
         }
-        commandBlocks.removeAll()
+        
     }
     
     func turnRobot(direction: String) {
@@ -361,7 +374,9 @@ class GameScene: SKScene {
                 if (self.atPoint(location).name == "play-button") {
                     // moveRobot()
                 } else if (self.atPoint(location).name == "command-clear-tab") {
-                    clearCommandTab()
+                    clearTab(tabName: "command")
+                } else if (self.atPoint(location).name == "function-clear-tab") {
+                    clearTab(tabName: "function")
                 }
             }
             if let oldName = self.atPoint(location).name {
