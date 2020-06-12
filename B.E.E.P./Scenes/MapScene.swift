@@ -16,6 +16,10 @@ class MapScene:SKScene {
     var posicao:Int = 0
     var locationAnterior:CGPoint = CGPoint(x: 0, y: 0)
     
+    var touchesBeganLocation = CGPoint(x: 0, y: 0)
+    
+    var map = ["stage-available","stage-unavailable","filament-available","filament-unavailable","light-floor-stage-available","robot-stage-available"]
+    
     enum Direction {
         case backward
         case forward
@@ -43,11 +47,11 @@ class MapScene:SKScene {
         let tilesetReference5 = CGPoint(x: frame.midX+1028, y: frame.midY+124)
         
         
-        drawnMaps(height: 3, width: 5, tilesetReference: tilesetReference1, status: "available", showRobot:true)
+        drawnMaps(height: 3, width: 5, tilesetReference: tilesetReference1, status: "available", showRobot:false)
         
-        drawnFilament(filamentReference: filamentReference1, status: "unavailable")
+        drawnFilament(filamentReference: filamentReference1, status: "available")
         
-        drawnMaps(height: 5, width: 5, tilesetReference: tilesetReference2, status: "unavailable", showRobot:false)
+        drawnMaps(height: 5, width: 5, tilesetReference: tilesetReference2, status: "available", showRobot:true)
         drawnFilament(filamentReference: filamentReference2, status: "unavailable")
         
         drawnMaps(height: 3, width: 5, tilesetReference: tilesetReference3, status: "unavailable", showRobot:false)
@@ -107,7 +111,7 @@ class MapScene:SKScene {
             spriteComponent.node.position = position
             spriteComponent.node.alpha = 0.7
             spriteComponent.node.zPosition = 100
-            spriteComponent.node.name = "stage-available"
+            spriteComponent.node.name = "light-floor-stage-available"
         }
         entityManager.add(lightFloor)
     }
@@ -117,7 +121,7 @@ class MapScene:SKScene {
         if let spriteComponent = robot.component(ofType: SpriteComponent.self) {
             spriteComponent.node.position = position
             spriteComponent.node.zPosition = 101
-            spriteComponent.node.name = "stage-available"
+            spriteComponent.node.name = "robot-stage-available"
         }
         entityManager.add(robot)
     }
@@ -148,79 +152,19 @@ class MapScene:SKScene {
     }
     
     func moveMap(direction: Direction) {
-            self.enumerateChildNodes(withName: "stage-available", using: ({
+        for item in map {
+            self.enumerateChildNodes(withName: item, using: ({
                 (node,error) in
                 if direction == Direction.backward {
-                    if self.posicao > 0 {
-                        node.position.x += 5
-                        self.posicao -= 1
-                    }
-                    
+                    node.position.x += 5
                 } else {
-                    if self.posicao < 15160 {
-                        node.position.x -= 5
-                        self.posicao += 1
-                        
-                    }
-            
+                    node.position.x -= 5
                 }
             }))
-        
-            self.enumerateChildNodes(withName: "filament-available", using: ({
-                (node,error) in
-                if direction == Direction.backward {
-                    if self.posicao > 0 {
-                        node.position.x += 5
-                        self.posicao -= 1
-                    }
-                    
-                } else {
-                    if self.posicao < 15160 {
-                        node.position.x -= 5
-                        self.posicao += 1
-                        
-                    }
-            
-                }
-            }))
-        
-            self.enumerateChildNodes(withName: "stage-unavailable", using: ({
-                (node,error) in
-                if direction == Direction.backward {
-                    if self.posicao > 0 {
-                        node.position.x += 5
-                        self.posicao -= 1
-                    }
-                    
-                } else {
-                    if self.posicao < 15160 {
-                        node.position.x -= 5
-                        self.posicao += 1
-                        
-                    }
-            
-                }
-            }))
-        
-            self.enumerateChildNodes(withName: "filament-unavailable", using: ({
-                (node,error) in
-                if direction == Direction.backward {
-                    if self.posicao > 0 {
-                        node.position.x += 5
-                        self.posicao -= 1
-                    }
-                    
-                } else {
-                    if self.posicao < 15160 {
-                        node.position.x -= 5
-                        self.posicao += 1
-                        
-                    }
-            
-                }
-            }))
-            
         }
+        
+    }
+        
     func drawnHintButton() {
         let hintButton = SKSpriteNode(imageNamed: "hint-button")
     
@@ -241,6 +185,7 @@ class MapScene:SKScene {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
             let location = touch.location(in: self)
+            touchesBeganLocation = location
             print(location)
         }
     }
@@ -249,9 +194,15 @@ class MapScene:SKScene {
         for touch in touches {
             let location = touch.location(in: self)
             if locationAnterior.x < location.x {
-                moveMap(direction: Direction.backward)
+                if self.posicao > 0 {
+                    moveMap(direction: Direction.backward)
+                    self.posicao -= 1
+                }
             } else {
-                moveMap(direction: Direction.forward)
+                if self.posicao < 150 {
+                    moveMap(direction: Direction.forward)
+                    self.posicao += 1
+                }
             }
             locationAnterior = location
         }
@@ -259,12 +210,14 @@ class MapScene:SKScene {
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
-            let nodes = self.nodes(at: touch.location(in: self))
-            if nodes[0].name == "stage-available" {
-                let gameScene = GameScene(size: view!.bounds.size)
-                view!.presentScene(gameScene)
+            let location = touch.location(in: self)
+            if location == touchesBeganLocation {
+                let nodes = self.nodes(at: location)
+                if nodes[0].name?.contains("stage-available") ?? false {
+                    let gameScene = GameScene(size: view!.bounds.size)
+                    view!.presentScene(gameScene)
+                }
             }
-
         }
         
     }
