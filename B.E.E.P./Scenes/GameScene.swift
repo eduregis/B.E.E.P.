@@ -227,7 +227,7 @@ class GameScene: SKScene {
         entityManager.add(functionTab)
         
         // adiciona a aba de limpar
-        let clearTab = ClearTab(name: "function-clear-tab", spriteName: "clear-tab")
+        let clearTab = ClearTab(name: "function-clear-tab", spriteName: "clear-auxiliary-tab")
         if let spriteComponent = clearTab.component(ofType: SpriteComponent.self) {
             spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 10, y: auxiliaryAnchor.y + 260)
             spriteComponent.node.zPosition = ZPositionsCategories.clearTabButton
@@ -254,6 +254,14 @@ class GameScene: SKScene {
             emptyFunctionBlocks.append(block)
             entityManager.add(block)
         }
+        
+        let block = DraggableBlock(name: "function-block")
+        if let spriteComponent = block.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 127, y: auxiliaryAnchor.y + 210)
+            spriteComponent.node.zPosition = ZPositionsCategories.draggableBlock
+            spriteComponent.node.size = CGSize(width: 60, height: 50)
+        }
+        entityManager.add(block)
     }
     
     func clearTab (tabName: String) {
@@ -364,7 +372,7 @@ class GameScene: SKScene {
         // turnRobot(direction: "left")
         if let location = touches.first?.location(in: self) {
             // Checamos o nome do SpriteNode que foi detectado pela função
-            if (self.atPoint(location).name == "walk-block") || (self.atPoint(location).name == "turn-left-block") || (self.atPoint(location).name == "turn-right-block") || (self.atPoint(location).name == "grab-block") || (self.atPoint(location).name == "save-block") {
+            if (self.atPoint(location).name == "walk-block") || (self.atPoint(location).name == "turn-left-block") || (self.atPoint(location).name == "turn-right-block") || (self.atPoint(location).name == "grab-block") || (self.atPoint(location).name == "save-block") || (self.atPoint(location).name == "function-block") {
                 // passamos o objeto detectado para dentro do selectedItem
                 selectedItem = self.atPoint(location) as? SKSpriteNode
             }
@@ -499,7 +507,7 @@ class GameScene: SKScene {
                         commandBlocks.append(block)
                         entityManager.add(block)
                     }
-                    if (functionBlocks.count < 4) && functionDropZoneIsTouched {
+                    if (functionBlocks.count < 4) && functionDropZoneIsTouched && draggingItem.name != "function-block" {
                         let block = DraggableBlock(name: "\(draggingItem.name ?? "")-dropped-function-\(functionBlocks.count)" , spriteName: draggingItem.name ?? "")
                         if let spriteComponent = block.component(ofType: SpriteComponent.self) {
                             spriteComponent.node.size = CGSize(width: draggingItem.size.width / 1.5, height: draggingItem.size.height / 1.5)
@@ -523,7 +531,7 @@ class GameScene: SKScene {
             }
             draggingItem = nil
         }
-        //verfica se clicou no botão voltar
+        //verifica se clicou no botão voltar
         for touch in touches {
             let nodes = self.nodes(at: touch.location(in: self))
             let returnButtonOptional = self.childNode(withName: "return-button")
