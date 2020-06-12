@@ -16,6 +16,8 @@ class MapScene:SKScene {
     var posicao:Int = 0
     var locationAnterior:CGPoint = CGPoint(x: 0, y: 0)
     
+    var touchesBeganLocation = CGPoint(x: 0, y: 0)
+    
     var map = ["stage-available","stage-unavailable","filament-available","filament-unavailable","light-floor-stage-available","robot-stage-available"]
     
     enum Direction {
@@ -183,6 +185,7 @@ class MapScene:SKScene {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
             let location = touch.location(in: self)
+            touchesBeganLocation = location
             print(location)
         }
     }
@@ -207,12 +210,14 @@ class MapScene:SKScene {
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
-            let nodes = self.nodes(at: touch.location(in: self))
-            if nodes[0].name?.contains("stage-available") ?? false {
-                let gameScene = GameScene(size: view!.bounds.size)
-                view!.presentScene(gameScene)
+            let location = touch.location(in: self)
+            if location == touchesBeganLocation {
+                let nodes = self.nodes(at: location)
+                if nodes[0].name?.contains("stage-available") ?? false {
+                    let gameScene = GameScene(size: view!.bounds.size)
+                    view!.presentScene(gameScene)
+                }
             }
-
         }
         
     }
