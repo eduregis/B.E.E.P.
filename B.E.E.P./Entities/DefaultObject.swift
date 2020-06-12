@@ -1,14 +1,18 @@
 import SpriteKit
 import GameplayKit
 
-// Cria a entidade Tileset, herdando de GKEntity
-class DroppedBlock: GKEntity {
-    var actionName: String!
+// Cria a entidade ActionTab, herdando de GKEntity
+class DefaultObject: GKEntity {
+    
+    init(name: String) {
+        super.init()
+        let spriteComponent = SpriteComponent(texture: SKTexture(imageNamed: "\(name)"), name: name)
+        addComponent(spriteComponent)
+    }
     
     init(name: String, spriteName: String) {
         super.init()
         let spriteComponent = SpriteComponent(texture: SKTexture(imageNamed: "\(spriteName)"), name: name)
-        actionName = name
         addComponent(spriteComponent)
     }
     

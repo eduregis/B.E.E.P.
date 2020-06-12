@@ -1,14 +1,14 @@
 import SpriteKit
 import GameplayKit
 
-// Cria a entidade CommandTab, herdando de GKEntity
-class CommandTabDropZone: GKEntity {
+// Cria a entidade ActionTab, herdando de GKEntity
+class AuxiliaryTab: GKEntity {
 
-    override init() {
+    init(size: Int) {
     super.init()
 
     // Utiliza o componente SpriteComponent para gerar o sprite da entidade
-        let spriteComponent = SpriteComponent(texture: SKTexture(imageNamed: "command-tab-drop-zone"), name: "command-tab-drop-zone")
+        let spriteComponent = SpriteComponent(texture: SKTexture(imageNamed: "aux-tab-\(size)"), name: "aux-tab-\(size)")
         
     addComponent(spriteComponent)
   }
