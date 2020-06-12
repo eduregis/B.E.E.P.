@@ -17,8 +17,14 @@ class GameScene: SKScene {
     // instanciamos esse aqui fora porque precisamos deles depois que são desenhados
     let robot = Robot()
     let lightFloor = LightFloor()
-    var emptyBlocks: [EmptyBlock] = []
+    
+    var functionBlocks: [DraggableBlock] = []
+    var emptyFunctionBlocks: [EmptyBlock] = []
+    var functionDropZoneIsTouched: Bool = false
+    
     var commandBlocks: [DraggableBlock] = []
+    var emptyBlocks: [EmptyBlock] = []
+    var commandDropZoneIsTouched: Bool = false
     
     // variáveis de controle
     var selectedItem: SKSpriteNode? {
@@ -221,20 +227,33 @@ class GameScene: SKScene {
         entityManager.add(functionTab)
         
         // adiciona a aba de limpar
-        let clearTab = ClearTab(name: "command-clear-tab", spriteName: "clear-tab")
+        let clearTab = ClearTab(name: "function-clear-tab", spriteName: "clear-tab")
         if let spriteComponent = clearTab.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: gameplayAnchor.x - 20, y: gameplayAnchor.y - 65)
+            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 10, y: auxiliaryAnchor.y + 260)
             spriteComponent.node.zPosition = ZPositionsCategories.clearTabButton
         }
         entityManager.add(clearTab)
         
         // container de drop
-        let commandTabDropZone = DefaultObject(name: "command-tab-drop-zone")
-        if let spriteComponent = commandTabDropZone.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: gameplayAnchor.x - 50, y: gameplayAnchor.y - 115)
+        let functionTabDropZone = DefaultObject(name: "auxiliary-tab-drop-zone")
+        if let spriteComponent = functionTabDropZone.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x + 50, y: auxiliaryAnchor.y + 210)
             spriteComponent.node.zPosition = ZPositionsCategories.dropZone
         }
-        entityManager.add(commandTabDropZone)
+        entityManager.add(functionTabDropZone)
+        
+        // drop zones individuais
+        for i in 1...4 {
+            let block = EmptyBlock(name: "white-block")
+            if let spriteComponent = block.component(ofType: SpriteComponent.self) {
+                spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 25 + CGFloat(i - 1)*50, y: auxiliaryAnchor.y + 210)
+                spriteComponent.node.zPosition = ZPositionsCategories.emptyBlock
+                spriteComponent.node.alpha = 0.1
+                spriteComponent.node.size = CGSize(width: 60, height: 50)
+            }
+            emptyFunctionBlocks.append(block)
+            entityManager.add(block)
+        }
     }
     
     func clearCommandTab () {
@@ -382,6 +401,7 @@ class GameScene: SKScene {
                 let location = touch.location(in: self)
                 draggingItem?.position.x = location.x
                 draggingItem?.position.y = location.y
+                // detecta a dropzone da aba de comandos
                 if(commandBlocks.count < 6) {
                     if (location.y > gameplayAnchor.y - 143) && (location.y < gameplayAnchor.y - 93) && (location.x > gameplayAnchor.x - 200 + 50*CGFloat(commandBlocks.count)) && (location.x < gameplayAnchor.x + 120){
                         for i in 0...commandBlocks.count {
@@ -389,12 +409,35 @@ class GameScene: SKScene {
                                 spriteComponent.node.alpha = 0.6
                             }
                         }
+                        commandDropZoneIsTouched = true
                     } else {
                         for i in 0...commandBlocks.count {
                             if let spriteComponent = emptyBlocks[i].component(ofType: SpriteComponent.self) {
                                 spriteComponent.node.alpha = 0.1
                             }
                         }
+                        commandDropZoneIsTouched = false
+                    }
+                }
+                // detecta a dropzone da aba de comandos
+                
+                if(functionBlocks.count < 4) && (emptyFunctionBlocks.count > 0) {
+                    
+                    if (location.y > auxiliaryAnchor.y + 183) && (location.y < auxiliaryAnchor.y + 233) && (location.x > auxiliaryAnchor.x - 55 + 50*CGFloat(functionBlocks.count)) && (location.x < auxiliaryAnchor.x + 155){
+                        print(location.x, location.y)
+                        for i in 0...functionBlocks.count {
+                            if let spriteComponent = emptyFunctionBlocks[i].component(ofType: SpriteComponent.self) {
+                                spriteComponent.node.alpha = 0.6
+                            }
+                        }
+                        functionDropZoneIsTouched = true
+                    } else {
+                        for i in 0...functionBlocks.count {
+                            if let spriteComponent = emptyFunctionBlocks[i].component(ofType: SpriteComponent.self) {
+                                spriteComponent.node.alpha = 0.1
+                            }
+                        }
+                        functionDropZoneIsTouched = false
                     }
                 }
             }
@@ -406,7 +449,7 @@ class GameScene: SKScene {
         if let location = touches.first?.location(in: self) {
             if (self.atPoint(location).name == "white-block") {
                 if let draggingItem = draggingItem {
-                    if commandBlocks.count < 6 {
+                    if (commandBlocks.count < 6) && commandDropZoneIsTouched {
                         let block = DraggableBlock(name: "\(draggingItem.name ?? "")-dropped-\(commandBlocks.count)" , spriteName: draggingItem.name ?? "")
                         if let spriteComponent = block.component(ofType: SpriteComponent.self) {
                             spriteComponent.node.size = CGSize(width: draggingItem.size.width / 1.5, height: draggingItem.size.height / 1.5)
@@ -416,10 +459,25 @@ class GameScene: SKScene {
                         commandBlocks.append(block)
                         entityManager.add(block)
                     }
+                    if (functionBlocks.count < 4) && functionDropZoneIsTouched {
+                        let block = DraggableBlock(name: "\(draggingItem.name ?? "")-dropped-\(functionBlocks.count)" , spriteName: draggingItem.name ?? "")
+                        if let spriteComponent = block.component(ofType: SpriteComponent.self) {
+                            spriteComponent.node.size = CGSize(width: draggingItem.size.width / 1.5, height: draggingItem.size.height / 1.5)
+                            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 25 + CGFloat(functionBlocks.count)*50, y: auxiliaryAnchor.y + 210)
+                            spriteComponent.node.zPosition = ZPositionsCategories.draggableBlock
+                        }
+                        functionBlocks.append(block)
+                        entityManager.add(block)
+                    }
                 }
             }
             for i in 0..<emptyBlocks.count {
                 if let whiteBlock = emptyBlocks[i].component(ofType: SpriteComponent.self) {
+                    whiteBlock.node.alpha = 0.1
+                }
+            }
+            for i in 0..<emptyFunctionBlocks.count {
+                if let whiteBlock = emptyFunctionBlocks[i].component(ofType: SpriteComponent.self) {
                     whiteBlock.node.alpha = 0.1
                 }
             }
