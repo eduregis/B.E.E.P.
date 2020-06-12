@@ -13,7 +13,6 @@ import GameplayKit
 class GameViewController: UIViewController {
     
     override func loadView() {
-        
         let view = SKView(frame: UIScreen.main.bounds) //cria uma sk view
         
         let scene = GameScene(size: view.bounds.size) //cria a scene que vai ser apresentada
@@ -31,6 +30,7 @@ class GameViewController: UIViewController {
     }
     
     override func viewDidLoad() {
+       
         super.viewDidLoad()
         
     }
