@@ -49,7 +49,6 @@ class GameScene: SKScene {
     }
     var draggingItem: SKSpriteNode?
     override func didMove(to view: SKView) {
-
         // posiciona os elementos de acordo como tipo de fase
         switch tabStyle {
         case "default":
@@ -332,7 +331,6 @@ class GameScene: SKScene {
             spriteComponent.node.position = CGPoint(x: x, y: y)
             spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(actualPosition.x + actualPosition.y + 1)
         }
-
     }
     
     func turnRobot(direction: String) -> SKAction {
