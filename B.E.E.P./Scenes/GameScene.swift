@@ -10,6 +10,13 @@ class GameScene: SKScene {
     var auxiliaryAnchor: CGPoint!
     var actualDirection = "right"
     var tabStyle = "function"
+    var boxes: [CGPoint] = [
+        CGPoint(x: 3, y: 1)
+    ]
+    var boxDropZones: [CGPoint] = [
+        CGPoint(x: 4, y: 1)
+    ]
+    var infectedRobot: [CGPoint] = []
     
     // criamos a referência o gerenciador de entidades
     var entityManager: EntityManager!

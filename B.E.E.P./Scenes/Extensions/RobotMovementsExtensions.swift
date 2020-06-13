@@ -26,18 +26,18 @@ extension GameScene {
          
          // redesenhar o lightFloor
          if let spriteComponent = lightFloor.component(ofType: SpriteComponent.self) {
-             let x = gameplayAnchor.x + CGFloat(32 * (actualPosition.x - 1)) - CGFloat(32 * (actualPosition.y - 1))
-             let y = gameplayAnchor.y + 200 - CGFloat(16 * (actualPosition.x - 1)) - CGFloat(16 * (actualPosition.y - 1))
+             let x = gameplayAnchor.x + CGFloat(32 * (actualPosition.x)) - CGFloat(32 * (actualPosition.y))
+             let y = gameplayAnchor.y + 200 - CGFloat(16 * (actualPosition.x)) - CGFloat(16 * (actualPosition.y))
              spriteComponent.node.position = CGPoint(x: x, y: y)
              //spriteComponent.node.zPosition = CGFloat(actualPosition.x + actualPosition.y + 1)
-             spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(actualPosition.x + actualPosition.y)
+             spriteComponent.node.zPosition = CGFloat(actualPosition.x + actualPosition.y) + 3
      }
          
          // redesenhar o robot
          if let spriteComponent = robot.component(ofType: SpriteComponent.self) {
              spriteComponent.node.texture = SKTexture(imageNamed: "robot-idle-\(actualDirection)-2")
-             let x = gameplayAnchor.x + CGFloat(32 * (actualPosition.x - 1)) - CGFloat(32 * (actualPosition.y - 1))
-             let y = gameplayAnchor.y + 236 - CGFloat(16 * (actualPosition.x - 1)) - CGFloat(16 * (actualPosition.y - 1))
+             let x = gameplayAnchor.x + CGFloat(32 * (actualPosition.x)) - CGFloat(32 * (actualPosition.y))
+             let y = gameplayAnchor.y + 236 - CGFloat(16 * (actualPosition.x)) - CGFloat(16 * (actualPosition.y))
              spriteComponent.node.position = CGPoint(x: x, y: y)
              spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(actualPosition.x + actualPosition.y + 1)
          }
@@ -87,48 +87,63 @@ extension GameScene {
      }
     
      func moveRobot() -> Bool {
+        var newZPosition: CGFloat = 0
          // checa se o robô pode andar para a posição apontada
          switch actualDirection {
          case "up":
-             if (actualPosition.y == 1) {
+             if (actualPosition.y == 0) {
                  return false
                  
              } else {
                  actualPosition = CGPoint(x: actualPosition.x, y: actualPosition.y - 1)
+                 newZPosition = -1
              }
          case "left":
-             if (actualPosition.x == 1) {
+             if (actualPosition.x == 0) {
                  return false
              } else {
                  actualPosition = CGPoint(x: actualPosition.x - 1, y: actualPosition.y)
+                 newZPosition = -1
              }
          case "down":
-             if (actualPosition.y == stageDimensions.height) {
+             if (actualPosition.y == stageDimensions.height - 1) {
                  return false
              } else {
                  actualPosition = CGPoint(x: actualPosition.x, y: actualPosition.y + 1)
+                 newZPosition = 1
              }
          case "right":
-             if (actualPosition.x == stageDimensions.width) {
+             if (actualPosition.x == stageDimensions.width - 1) {
                 return false
              } else {
                  actualPosition = CGPoint(x: actualPosition.x + 1, y: actualPosition.y)
+                 newZPosition = 1
              }
          default:
              actualPosition = CGPoint(x: actualPosition.x, y: actualPosition.y)
          }
          
          //Caso ele possa andar
-         // adiconamos a SKAction referente a direção atual no arrayMoveRobot
+         // adicIonamos a SKAction referente a direção atual no arrayMoveRobot
          if let robotMoveComponent = robot.component(ofType: RobotMoveComponent.self) {
              arrayMoveRobot.append(robotMoveComponent.move(direction: actualDirection))
          }
+        
+        // ajustamos sua zPosition
+        if let spriteComponent = robot.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.zPosition = spriteComponent.node.zPosition + newZPosition
+        }
          
-         // adiconamos a SKAction referente a direção atual no arrayMoveLightFLoor
+         // adicionamos a SKAction referente a direção atual no arrayMoveLightFLoor
          if let lightFloorMoveComponent = lightFloor.component(ofType: LightFloorMoveComponent.self) {
              arrayMovelightFloor.append(lightFloorMoveComponent.move(direction: actualDirection))
          }
-         
+        
+        // ajustamos sua zPosition
+        if let spriteComponent = lightFloor.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.zPosition = spriteComponent.node.zPosition + newZPosition
+        }
+        print(actualPosition.x, actualPosition.y)
          return true
      }
      

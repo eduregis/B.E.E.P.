@@ -42,18 +42,19 @@ extension GameScene {
     func drawRobot (xPosition: Int, yPosition: Int) {
         // desenha o chão iluminado embaixo do robô
         if let spriteComponent = lightFloor.component(ofType: SpriteComponent.self) {
-            let x = gameplayAnchor.x + CGFloat(32 * (xPosition - 1)) - CGFloat(32 * (yPosition - 1))
-            let y = gameplayAnchor.y + 200 - CGFloat(16 * (xPosition - 1)) - CGFloat(16 * (yPosition - 1))
+            let x = gameplayAnchor.x + CGFloat(32 * (xPosition)) - CGFloat(32 * (yPosition))
+            let y = gameplayAnchor.y + 200 - CGFloat(16 * (xPosition)) - CGFloat(16 * (yPosition))
             spriteComponent.node.position = CGPoint(x: x, y: y)
-            spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(xPosition + yPosition)
+            spriteComponent.node.zPosition = CGFloat(xPosition + yPosition) + 3
+            print(CGFloat(xPosition + yPosition) + 3)
             spriteComponent.node.alpha = 0.6
         }
         entityManager.add(lightFloor)
         
         // desenha o robô
         if let spriteComponent = robot.component(ofType: SpriteComponent.self) {
-            let x = gameplayAnchor.x + CGFloat(32 * (xPosition - 1)) - CGFloat(32 * (yPosition - 1))
-            let y = gameplayAnchor.y + 236 - CGFloat(16 * (xPosition - 1)) - CGFloat(16 * (yPosition - 1))
+            let x = gameplayAnchor.x + CGFloat(32 * (xPosition)) - CGFloat(32 * (yPosition))
+            let y = gameplayAnchor.y + 236 - CGFloat(16 * (xPosition)) - CGFloat(16 * (yPosition))
             spriteComponent.node.position = CGPoint(x: x, y: y)
             spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(xPosition + yPosition + 1)
         }

@@ -186,7 +186,6 @@ class MapScene:SKScene {
         for touch in touches {
             let location = touch.location(in: self)
             touchesBeganLocation = location
-            print(location)
         }
     }
     
