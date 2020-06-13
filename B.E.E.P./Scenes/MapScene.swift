@@ -15,53 +15,22 @@ class MapScene:SKScene {
     var filamentScale:CGFloat = -1
     var posicao:Int = 0
     var locationAnterior:CGPoint = CGPoint(x: 0, y: 0)
-    
     var touchesBeganLocation = CGPoint(x: 0, y: 0)
     
     var map = ["stage-available","stage-unavailable","filament-available","filament-unavailable","light-floor-stage-available","robot-stage-available"]
     
-    enum Direction {
-        case backward
-        case forward
-    }
-    
     override func didMove(to view: SKView) {
+        
         entityManager = EntityManager(scene: self)
+        
         drawBackground()
-        drawnHintButton()
-        drawnConfigButton()
         
-        let tilesetReference1 = CGPoint(x: frame.midX-280, y: frame.midY+90+40+40)
-        let filamentReference1 = CGPoint(x: frame.midX-69, y: frame.midY+16)
+        //drawn hint button
+        addEntity(entity: HudButton(name: "hint-button"), nodeName: "hint-button", position: CGPoint(x: frame.maxX-100, y: frame.maxY-50), zPosition: 2, alpha: 1.0)
+        //drawn config button
+        addEntity(entity: HudButton(name: "config-button"), nodeName: "config-button", position: CGPoint(x: frame.maxX-150, y: frame.maxY-50), zPosition: 2, alpha: 1.0)
         
-        let tilesetReference2 = CGPoint(x: frame.midX+101.5, y: frame.midY-28)
-        let filamentReference2 = CGPoint(x: frame.midX+278, y: frame.midY+16)
-        
-        let tilesetReference3 = CGPoint(x: frame.midX+393, y: frame.midY+155)
-        let filamentReference3 = CGPoint(x: frame.midX+602, y: frame.midY+2)
-        
-        
-        let tilesetReference4 = CGPoint(x: frame.midX+741, y: frame.midY-59)
-        let filamentReference4 = CGPoint(x: frame.midX+914, y: frame.midY-14)
-        
-        let tilesetReference5 = CGPoint(x: frame.midX+1028, y: frame.midY+124)
-        
-        
-        drawnMaps(height: 3, width: 5, tilesetReference: tilesetReference1, status: "available", showRobot:false)
-        
-        drawnFilament(filamentReference: filamentReference1, status: "available")
-        
-        drawnMaps(height: 5, width: 5, tilesetReference: tilesetReference2, status: "available", showRobot:true)
-        drawnFilament(filamentReference: filamentReference2, status: "unavailable")
-        
-        drawnMaps(height: 3, width: 5, tilesetReference: tilesetReference3, status: "unavailable", showRobot:false)
-        drawnFilament(filamentReference: filamentReference3, status: "unavailable")
-        
-        drawnMaps(height: 3, width: 5, tilesetReference: tilesetReference4, status: "unavailable", showRobot:false)
-        drawnFilament(filamentReference: filamentReference4, status: "unavailable")
-        
-        drawnMaps(height: 3, width: 5, tilesetReference: tilesetReference5, status: "unavailable", showRobot:false)
-
+        buildMap()
     }
     
     func drawBackground() {
@@ -77,78 +46,86 @@ class MapScene:SKScene {
         var stageUnavailablePosition = CGPoint(x: 0, y: 0)
         for i in 1...width {
             for j in 1...height {
-                // desenha o tileset
-                let tileset = Tileset(status: status)
-                if let spriteComponent = tileset.component(ofType: SpriteComponent.self) {
-                    let x = (CGFloat(32*(i - 1)) - CGFloat(32*(j - 1))) + tilesetReference.x
-                    let y = (CGFloat(-16*(i - 1)) - CGFloat(16*(j - 1))) + tilesetReference.y
-                    spriteComponent.node.name = "stage-\(status)"
-                    spriteComponent.node.position = CGPoint(x: x, y: y)
-                    spriteComponent.node.zPosition = CGFloat(i + j)
-                    if (i-1) == (width-1)/2 && (j-1) == (height-1)/2 {
-                        if showRobot {
-                            lightFloorPosition = CGPoint(x: x, y: y)
-                            drawnLightFloor(position: lightFloorPosition)
-                            drawnRobot(position: CGPoint(x: lightFloorPosition.x, y: lightFloorPosition.y+31))
-                        } else {
-                            stageUnavailablePosition = CGPoint(x: x, y: y+21)
-                        }
-                        
-                    }
+                // posição do tileset
+                let x = (CGFloat(32*(i - 1)) - CGFloat(32*(j - 1))) + tilesetReference.x
+                let y = (CGFloat(-16*(i - 1)) - CGFloat(16*(j - 1))) + tilesetReference.y
+                
+                addEntity(entity:Tileset(status: status), nodeName: "stage-\(status)", position: CGPoint(x: x, y: y), zPosition: CGFloat(i + j), alpha: 1.0)
+    
+                if (i-1) == (width-1)/2 && (j-1) == (height-1)/2 {
+                    if showRobot {
+                        lightFloorPosition = CGPoint(x: x, y: y)
+                        //desenhando o robo
+                        addEntity(entity:Robot(), nodeName: "robot-stage-available", position: CGPoint(x: lightFloorPosition.x, y: lightFloorPosition.y+31), zPosition: 101, alpha: 1.0)
+                        //desenhando o light floor
+                        addEntity(entity: LightFloor(), nodeName: "light-floor-stage-available", position: lightFloorPosition, zPosition: 100, alpha: 0.7)
+                    } else {
+                        stageUnavailablePosition = CGPoint(x: x, y: y+21)
+                      }
                 }
-            entityManager.add(tileset)
             }
+        }
+        if status == "unavailable" {
+            addEntity(entity: StageUnavailable(), nodeName: "stage-unavailable", position: stageUnavailablePosition, zPosition: 100, alpha: 1.0)
+        }
+    }
+    
+    func addEntity(entity:GKEntity, nodeName:String, position:CGPoint, zPosition:CGFloat, alpha: CGFloat) {
+        
+        if let spriteComponent = entity.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = position
+            spriteComponent.node.zPosition = zPosition
+            spriteComponent.node.name = nodeName
+            spriteComponent.node.alpha = alpha
+            
+            if nodeName.contains("filament") {
+                filamentScale *= -1
+                spriteComponent.node.xScale = filamentScale
+            }
+            
         }
         
-        if status == "unavailable" {
-            drawnStageUnavailable(position: stageUnavailablePosition)
-        }
-
-    }
-    func drawnLightFloor(position:CGPoint){
-        let lightFloor = LightFloor()
-        if let spriteComponent = lightFloor.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = position
-            spriteComponent.node.alpha = 0.7
-            spriteComponent.node.zPosition = 100
-            spriteComponent.node.name = "light-floor-stage-available"
-        }
-        entityManager.add(lightFloor)
+        entityManager.add(entity)
     }
     
-    func drawnRobot(position:CGPoint) {
-        let robot = Robot()
-        if let spriteComponent = robot.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = position
-            spriteComponent.node.zPosition = 101
-            spriteComponent.node.name = "robot-stage-available"
-        }
-        entityManager.add(robot)
-    }
-    
-    func drawnStageUnavailable(position:CGPoint) {
-        let stageUnavailable = StageUnavailable()
-        if let spriteComponent = stageUnavailable.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = position
-            spriteComponent.node.zPosition = 100
-            spriteComponent.node.name = "stage-unavailable"
-        }
-        entityManager.add(stageUnavailable)
-    }
-    
-    func drawnFilament(filamentReference: CGPoint, status:String) {
-        let filament = Filament(status: status)
-        if let spriteComponent = filament.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.name = "filament-\(status)"
-            if status == "unavailable" {
-                spriteComponent.node.alpha = 0.35
-            }
-            filamentScale *= -1
-            spriteComponent.node.xScale = filamentScale
-            spriteComponent.node.position = filamentReference
-            spriteComponent.node.zPosition = 100
-        }
-        entityManager.add(filament)
+    func buildMap() {
+        let tilesetReference1 = CGPoint(x: frame.midX-280, y: frame.midY+170)
+        let filamentReference1 = CGPoint(x: frame.midX-69, y: frame.midY+16)
+        
+        let tilesetReference2 = CGPoint(x: frame.midX+101.5, y: frame.midY-28)
+        let filamentReference2 = CGPoint(x: frame.midX+278, y: frame.midY+16)
+        
+        let tilesetReference3 = CGPoint(x: frame.midX+393, y: frame.midY+155)
+        let filamentReference3 = CGPoint(x: frame.midX+602, y: frame.midY+2)
+        
+        
+        let tilesetReference4 = CGPoint(x: frame.midX+741, y: frame.midY-59)
+        let filamentReference4 = CGPoint(x: frame.midX+914, y: frame.midY-14)
+        
+        let tilesetReference5 = CGPoint(x: frame.midX+1028, y: frame.midY+124)
+        
+        //drawn stage 1
+        drawnMaps(height: 3, width: 5, tilesetReference: tilesetReference1, status: "available", showRobot:false)
+        //drawn filament
+        addEntity(entity: Filament(status: "available"), nodeName: "filament-available", position: filamentReference1, zPosition: 2, alpha: 1.0)
+        
+        //drawn stage 2
+        drawnMaps(height: 5, width: 5, tilesetReference: tilesetReference2, status: "available", showRobot:true)
+        //drawn filament
+        addEntity(entity: Filament(status: "unavailable"), nodeName: "filament-unavailable", position: filamentReference2, zPosition: 2, alpha: 0.35)
+        
+        //drawn stage 3
+        drawnMaps(height: 3, width: 5, tilesetReference: tilesetReference3, status: "unavailable", showRobot:false)
+        //drawn filament
+        addEntity(entity: Filament(status: "unavailable"), nodeName: "filament-unavailable", position: filamentReference3, zPosition: 2, alpha: 0.35)
+        
+        //drawn stage 4
+        drawnMaps(height: 3, width: 5, tilesetReference: tilesetReference4, status: "unavailable", showRobot:false)
+        //drawn filament
+        addEntity(entity: Filament(status: "unavailable"), nodeName: "filament-unavailable", position: filamentReference4, zPosition: 2, alpha: 0.35)
+        
+        //drawn stage 5
+        drawnMaps(height: 3, width: 5, tilesetReference: tilesetReference5, status: "unavailable", showRobot:false)
     }
     
     func moveMap(direction: Direction) {
@@ -163,23 +140,6 @@ class MapScene:SKScene {
             }))
         }
         
-    }
-        
-    func drawnHintButton() {
-        let hintButton = SKSpriteNode(imageNamed: "hint-button")
-    
-        hintButton.name = "hint-button"
-        hintButton.position = CGPoint(x: frame.maxX-100, y: frame.maxY-50)
-        hintButton.zPosition = 2
-        addChild(hintButton)
-    }
-    func drawnConfigButton() {
-        let configButton = SKSpriteNode(imageNamed: "config-button")
-    
-        configButton.name = "config-button"
-        configButton.position = CGPoint(x: frame.maxX-150, y: frame.maxY-50)
-        configButton.zPosition = 2
-        addChild(configButton)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

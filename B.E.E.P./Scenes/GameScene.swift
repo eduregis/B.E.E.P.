@@ -545,7 +545,7 @@ class GameScene: SKScene {
     }
     
     func drawnReturnButton() {
-        let returnButton = HubButton(name: "return-button")
+        let returnButton = HudButton(name: "return-button")
         if let spriteComponent = returnButton.component(ofType: SpriteComponent.self) {
             spriteComponent.node.position = CGPoint(x: frame.minX + 50, y: frame.maxY - 50)
             spriteComponent.node.zPosition = ZPositionsCategories.button
@@ -553,7 +553,7 @@ class GameScene: SKScene {
         entityManager.add(returnButton)
     }
     func drawnConfigButton() {
-        let configButton = HubButton(name: "config-button")
+        let configButton = HudButton(name: "config-button")
         if let spriteComponent = configButton.component(ofType: SpriteComponent.self) {
             spriteComponent.node.position = CGPoint(x: frame.maxX - 150, y: frame.maxY - 50)
             spriteComponent.node.zPosition = ZPositionsCategories.button
@@ -561,7 +561,7 @@ class GameScene: SKScene {
         entityManager.add(configButton)
     }
     func drawnHintButton() {
-        let hintButton = HubButton(name: "hint-button")
+        let hintButton = HudButton(name: "hint-button")
         if let spriteComponent = hintButton.component(ofType: SpriteComponent.self) {
             spriteComponent.node.position = CGPoint(x: frame.maxX - 100, y: frame.maxY - 50)
             spriteComponent.node.zPosition = ZPositionsCategories.button
