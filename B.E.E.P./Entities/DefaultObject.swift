@@ -16,6 +16,12 @@ class DefaultObject: GKEntity {
         addComponent(spriteComponent)
     }
     
+    init(name: String, spriteName: String, size: CGSize) {
+        super.init()
+        let spriteComponent = SpriteComponent(texture: SKTexture(imageNamed: "\(spriteName)"),size: size ,name: name)
+        addComponent(spriteComponent)
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
