@@ -91,29 +91,28 @@ extension GameScene {
          // checa se o robô pode andar para a posição apontada
          switch actualDirection {
          case "up":
-             if (actualPosition.y == 0) {
+            if (actualPosition.y == 0) || boxes.contains(CGPoint(x: actualPosition.x, y: actualPosition.y - 1)) || boxDropZones.contains(CGPoint(x: actualPosition.x, y: actualPosition.y - 1)) || infectedRobots.contains(CGPoint(x: actualPosition.x, y: actualPosition.y - 1)) {
                  return false
-                 
              } else {
                  actualPosition = CGPoint(x: actualPosition.x, y: actualPosition.y - 1)
                  newZPosition = -1
              }
          case "left":
-             if (actualPosition.x == 0) {
+             if (actualPosition.x == 0) || boxes.contains(CGPoint(x: actualPosition.x - 1, y: actualPosition.y)) || boxDropZones.contains(CGPoint(x: actualPosition.x - 1, y: actualPosition.y)) || infectedRobots.contains(CGPoint(x: actualPosition.x - 1, y: actualPosition.y)) {
                  return false
              } else {
                  actualPosition = CGPoint(x: actualPosition.x - 1, y: actualPosition.y)
                  newZPosition = -1
              }
          case "down":
-             if (actualPosition.y == stageDimensions.height - 1) {
+             if (actualPosition.y == stageDimensions.height - 1) || boxes.contains(CGPoint(x: actualPosition.x, y: actualPosition.y + 1)) || boxDropZones.contains(CGPoint(x: actualPosition.x, y: actualPosition.y + 1)) || infectedRobots.contains(CGPoint(x: actualPosition.x, y: actualPosition.y + 1)){
                  return false
              } else {
                  actualPosition = CGPoint(x: actualPosition.x, y: actualPosition.y + 1)
                  newZPosition = 1
              }
          case "right":
-             if (actualPosition.x == stageDimensions.width - 1) {
+             if (actualPosition.x == stageDimensions.width - 1) || boxes.contains(CGPoint(x: actualPosition.x + 1, y: actualPosition.y)) || boxDropZones.contains(CGPoint(x: actualPosition.x + 1, y: actualPosition.y)) || infectedRobots.contains(CGPoint(x: actualPosition.x + 1, y: actualPosition.y)) {
                 return false
              } else {
                  actualPosition = CGPoint(x: actualPosition.x + 1, y: actualPosition.y)
@@ -124,7 +123,7 @@ extension GameScene {
          }
          
          //Caso ele possa andar
-         // adicIonamos a SKAction referente a direção atual no arrayMoveRobot
+         // adicionamos a SKAction referente a direção atual no arrayMoveRobot
          if let robotMoveComponent = robot.component(ofType: RobotMoveComponent.self) {
              arrayMoveRobot.append(robotMoveComponent.move(direction: actualDirection))
          }

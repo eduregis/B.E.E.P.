@@ -16,7 +16,7 @@ class GameScene: SKScene {
     var boxDropZones: [CGPoint] = [
         CGPoint(x: 4, y: 1)
     ]
-    var infectedRobot: [CGPoint] = []
+    var infectedRobots: [CGPoint] = []
     
     // criamos a referência o gerenciador de entidades
     var entityManager: EntityManager!
