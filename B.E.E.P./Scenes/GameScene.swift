@@ -5,7 +5,7 @@ class GameScene: SKScene {
     
     // variáveis que irão receber os valores da API
     var actualPosition = CGPoint(x: 1, y: 1)
-    var stageDimensions = CGSize(width: 5, height: 6)
+    var stageDimensions = CGSize(width: 5, height: 3)
     var gameplayAnchor: CGPoint!
     var auxiliaryAnchor: CGPoint!
     var actualDirection = "right"
@@ -83,10 +83,15 @@ class GameScene: SKScene {
         
         drawTilesets(width: Int(stageDimensions.width), height: Int(stageDimensions.height))
         drawRobot(xPosition: Int(actualPosition.x), yPosition: Int(actualPosition.y))
+        
         drawTabs()
         drawAuxiliaryTab()
+        
         drawnConfigButton()
         drawnHintButton()
+        
+        if (boxes.count > 0){ drawBoxes() }
+        if (boxDropZones.count > 0){ drawBoxDropZones() }
     }
     
     func addElementFunc(){

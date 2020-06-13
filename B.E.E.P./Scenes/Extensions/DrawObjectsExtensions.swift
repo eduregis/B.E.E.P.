@@ -252,4 +252,30 @@ extension GameScene {
         }
         entityManager.add(hintButton)
     }
+    
+    func drawBoxes () {
+        for i in 0..<boxes.count {
+            let box = DefaultObject(name: "box (\(boxes[i].x) - \(boxes[i].y)", spriteName: "box")
+            if let spriteComponent = box.component(ofType: SpriteComponent.self) {
+                let x = gameplayAnchor.x + CGFloat(32 * (boxes[i].x - 1)) - CGFloat(32 * (boxes[i].y - 1))
+                let y = gameplayAnchor.y + 182 - CGFloat(16 * (boxes[i].x - 1)) - CGFloat(16 * (boxes[i].y - 1))
+                spriteComponent.node.position = CGPoint(x: x, y: y)
+                spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(boxes[i].x + boxes[i].y) + 1
+            }
+            entityManager.add(box)
+        }
+    }
+    
+    func drawBoxDropZones () {
+        for i in 0..<boxDropZones.count {
+            let boxDropZone = DefaultObject(name: "box-drop-zone (\(boxDropZones[i].x) - \(boxDropZones[i].y)", spriteName: "box-empty-floor")
+            if let spriteComponent = boxDropZone.component(ofType: SpriteComponent.self) {
+                let x = gameplayAnchor.x + CGFloat(32 * (boxDropZones[i].x - 1)) - CGFloat(32 * (boxDropZones[i].y - 1))
+                let y = gameplayAnchor.y + 168 - CGFloat(16 * (boxDropZones[i].x - 1)) - CGFloat(16 * (boxDropZones[i].y - 1))
+                spriteComponent.node.position = CGPoint(x: x, y: y)
+                spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(boxDropZones[i].x + boxDropZones[i].y) + 1
+            }
+            entityManager.add(boxDropZone)
+        }
+    }
 }
