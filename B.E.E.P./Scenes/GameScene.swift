@@ -23,6 +23,13 @@ class GameScene: SKScene {
     var functionDropZoneIsTouched: Bool = false
     
     var commandBlocks: [DraggableBlock] = []
+    var stopButton = HubButton(name: "stop-button")
+    
+    // arrays que vão permitir uma movimentação linear do robot e do lightFloor
+    var arrayMoveRobot: [SKAction] = []
+    var arrayMovelightFloor: [SKAction] = []
+    var elementArrayMove: SKAction?
+
     var emptyBlocks: [EmptyBlock] = []
     var commandDropZoneIsTouched: Bool = false
     
@@ -41,7 +48,6 @@ class GameScene: SKScene {
         }
     }
     var draggingItem: SKSpriteNode?
-    
     override func didMove(to view: SKView) {
         // posiciona os elementos de acordo como tipo de fase
         switch tabStyle {
@@ -74,7 +80,6 @@ class GameScene: SKScene {
         drawAuxiliaryTab()
         drawnConfigButton()
         drawnHintButton()
-        
     }
     
     // desenha o tileset e seu corredor de luz de acordo com sua posição
@@ -111,8 +116,8 @@ class GameScene: SKScene {
             let x = gameplayAnchor.x + CGFloat(32 * (xPosition - 1)) - CGFloat(32 * (yPosition - 1))
             let y = gameplayAnchor.y + 200 - CGFloat(16 * (xPosition - 1)) - CGFloat(16 * (yPosition - 1))
             spriteComponent.node.position = CGPoint(x: x, y: y)
-            spriteComponent.node.zPosition = CGFloat(actualPosition.x + actualPosition.y + 1)
-            spriteComponent.node.alpha = 0.7
+            spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(xPosition + yPosition)
+            spriteComponent.node.alpha = 0.6
         }
         entityManager.add(lightFloor)
         
@@ -171,6 +176,13 @@ class GameScene: SKScene {
             spriteComponent.node.zPosition = ZPositionsCategories.button
         }
         entityManager.add(playButton)
+        
+        // botão de stop
+        if let spriteComponent = stopButton.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = CGPoint(x: gameplayAnchor.x + 170, y: gameplayAnchor.y - 115)
+            spriteComponent.node.zPosition = 0
+        }
+        entityManager.add(stopButton)
         
         // adiciona a aba de ações
         let actionTab = DefaultObject(name: "action-tab")
@@ -273,6 +285,7 @@ class GameScene: SKScene {
                 }
             }
             commandBlocks.removeAll()
+            resetMoveRobot()
         case "function":
             for block in functionBlocks {
                 if let spriteComponent = block.component(ofType: SpriteComponent.self) {
@@ -283,10 +296,44 @@ class GameScene: SKScene {
         default:
             break
         }
+    
         
     }
     
-    func turnRobot(direction: String) {
+    func resetMoveRobot(){
+        // remover todos os elementos de todos os arrays referentes ao movimento do robot e lightFloor
+        arrayMoveRobot.removeAll()
+        arrayMovelightFloor.removeAll()
+        
+        // resetar os as orientações
+        actualPosition = CGPoint(x: 1, y: 1)
+        actualDirection = "right"
+        
+        //colocando o botão de stop para traz
+        if let stopButton = stopButton.component(ofType: SpriteComponent.self){
+            stopButton.node.zPosition = 0
+        }
+        
+        // redesenhar o lightFloor
+        if let spriteComponent = lightFloor.component(ofType: SpriteComponent.self) {
+            let x = gameplayAnchor.x + CGFloat(32 * (actualPosition.x - 1)) - CGFloat(32 * (actualPosition.y - 1))
+            let y = gameplayAnchor.y + 200 - CGFloat(16 * (actualPosition.x - 1)) - CGFloat(16 * (actualPosition.y - 1))
+            spriteComponent.node.position = CGPoint(x: x, y: y)
+            //spriteComponent.node.zPosition = CGFloat(actualPosition.x + actualPosition.y + 1)
+            spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(actualPosition.x + actualPosition.y)
+    }
+        
+        // redesenhar o robot
+        if let spriteComponent = robot.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.texture = SKTexture(imageNamed: "robot-idle-\(actualDirection)-2")
+            let x = gameplayAnchor.x + CGFloat(32 * (actualPosition.x - 1)) - CGFloat(32 * (actualPosition.y - 1))
+            let y = gameplayAnchor.y + 236 - CGFloat(16 * (actualPosition.x - 1)) - CGFloat(16 * (actualPosition.y - 1))
+            spriteComponent.node.position = CGPoint(x: x, y: y)
+            spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(actualPosition.x + actualPosition.y + 1)
+        }
+    }
+    
+    func turnRobot(direction: String) -> SKAction {
         // checa para qual lado o robô irá girar
         switch direction {
         case "left":
@@ -320,16 +367,22 @@ class GameScene: SKScene {
             break
         }
         if let robotMoveComponent = robot.component(ofType: RobotMoveComponent.self) {
-            robotMoveComponent.turn(direction: actualDirection)
+            elementArrayMove = robotMoveComponent.turn(direction: actualDirection)
         }
+        // adicionamos uma -move da lightFloor default- para igualar o tempo de reação do lightFloor com a do robot
+        if let lightFloorMoveComponent = lightFloor.component(ofType: LightFloorMoveComponent.self) {
+            arrayMovelightFloor.append(lightFloorMoveComponent.move(direction: ""))
+        }
+        return elementArrayMove!
     }
-    
+   
     func moveRobot() -> Bool {
         // checa se o robô pode andar para a posição apontada
         switch actualDirection {
         case "up":
             if (actualPosition.y == 1) {
                 return false
+                
             } else {
                 actualPosition = CGPoint(x: actualPosition.x, y: actualPosition.y - 1)
             }
@@ -347,7 +400,7 @@ class GameScene: SKScene {
             }
         case "right":
             if (actualPosition.x == stageDimensions.width) {
-                return false
+               return false
             } else {
                 actualPosition = CGPoint(x: actualPosition.x + 1, y: actualPosition.y)
             }
@@ -355,21 +408,61 @@ class GameScene: SKScene {
             actualPosition = CGPoint(x: actualPosition.x, y: actualPosition.y)
         }
         
-        // move o robô caso ele possa, fazendo a sua animação também
+        //Caso ele possa andar
+        // adiconamos a SKAction referente a direção atual no arrayMoveRobot
         if let robotMoveComponent = robot.component(ofType: RobotMoveComponent.self) {
-            robotMoveComponent.move(direction: actualDirection)
+            arrayMoveRobot.append(robotMoveComponent.move(direction: actualDirection))
         }
         
-        // move o bloco luminoso embaixo do robô, quando ele termina o movimento
+        // adiconamos a SKAction referente a direção atual no arrayMoveLightFLoor
         if let lightFloorMoveComponent = lightFloor.component(ofType: LightFloorMoveComponent.self) {
-            lightFloorMoveComponent.move(direction: actualDirection)
+            arrayMovelightFloor.append(lightFloorMoveComponent.move(direction: actualDirection))
         }
+        
         return true
     }
     
+    func moveCompleteRobotLightFloor(){
+        if let lightFloorMoveComponent = lightFloor.component(ofType: LightFloorMoveComponent.self) {
+            lightFloorMoveComponent.moveComplete(move: arrayMovelightFloor)
+        }
+        if let robotMoveComponent = robot.component(ofType: RobotMoveComponent.self) {
+            robotMoveComponent.moveComplete(move: arrayMoveRobot, button: stopButton)
+        }
+
+    }
+    
+    func addElementFunc(){
+        for block in functionBlocks{
+           if let spriteComponent = block.component(ofType: SpriteComponent.self) {
+               // usando o trecho "-dropped-" para separar obtermos o nome original e seu índice
+               let name = spriteComponent.node.name?.components(separatedBy: "-dropped-")
+               // com o nome original será escolhido o tipo de movimento que o robot irá fazer
+               switch name![0] {
+               case "walk-block":
+                   if !moveRobot() {
+                       print("nao deu")
+                   }
+               case "turn-right-block":
+                   arrayMoveRobot.append(turnRobot(direction: "right"))
+               case "turn-left-block":
+                   arrayMoveRobot.append(turnRobot(direction: "left"))
+               /*case "grab-block"
+               
+               case "save-block"
+               
+                   */
+               default:
+                   break;
+               }
+              
+           }
+       
+       }
+    }
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        // moveRobot()
-        // turnRobot(direction: "left")
+        
         if let location = touches.first?.location(in: self) {
             // Checamos o nome do SpriteNode que foi detectado pela função
             if (self.atPoint(location).name == "walk-block") || (self.atPoint(location).name == "turn-left-block") || (self.atPoint(location).name == "turn-right-block") || (self.atPoint(location).name == "grab-block") || (self.atPoint(location).name == "save-block") || (self.atPoint(location).name == "function-block") {
@@ -379,8 +472,46 @@ class GameScene: SKScene {
             else {
                 // caso não seja o objeto que queremos, esvaziamos o selectedItem
                 selectedItem = nil
-                if (self.atPoint(location).name == "play-button") {
-                    // moveRobot()
+                if self.atPoint(location).name == "play-button" {
+                    resetMoveRobot()
+                    /*verificar se o array commandBlocks está vazio
+                        - Se tem algum block na dropZone*/
+                    if !commandBlocks.isEmpty {
+                        // rodamos commandBlocks para guardar as SKAction referente a cada block colocado na dropZone
+                        for block in commandBlocks{
+                            if let spriteComponent = block.component(ofType: SpriteComponent.self) {
+                                // usando o trecho "-dropped-" para separar obtermos o nome original e seu índice
+                                let name = spriteComponent.node.name?.components(separatedBy: "-dropped-")
+                                // com o nome original será escolhido o tipo de movimento que o robot irá fazer
+                                switch name![0] {
+                                case "walk-block":
+                                    if !moveRobot() {
+                                        print("nao deu")
+                                    }
+                                case "turn-right-block":
+                                    arrayMoveRobot.append(turnRobot(direction: "right"))
+                                case "turn-left-block":
+                                    arrayMoveRobot.append(turnRobot(direction: "left"))
+                                case "function-block":
+                                    addElementFunc()
+                                /*case "grab-block"
+                                
+                                case "save-block"
+                                
+                                    */
+                                default:
+                                    break;
+                                }
+                               
+                            }
+                        
+                        }
+                        if let stopButton = stopButton.component(ofType: SpriteComponent.self){
+                            stopButton.node.zPosition = ZPositionsCategories.button + 1
+                        }
+                        //execução do array actionMove que permitirar uma movimentação linear sem desvios
+                        moveCompleteRobotLightFloor()
+                    }
                 } else if (self.atPoint(location).name == "command-clear-tab") {
                     clearTab(tabName: "command")
                 } else if (self.atPoint(location).name == "function-clear-tab") {
@@ -390,6 +521,7 @@ class GameScene: SKScene {
             if let oldName = self.atPoint(location).name {
                 // testa se selecionamos um bloco dentro da aba de comandos
                 if oldName.contains("-dropped-") {
+
                     // se sim, ituilizamos o trecho "-dropped-" para separar obtermos o nome original e seu índice
                     var newName: [String] = []
                     var arrayName: String = ""
