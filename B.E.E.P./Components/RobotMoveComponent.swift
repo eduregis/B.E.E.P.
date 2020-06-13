@@ -43,10 +43,14 @@ class RobotMoveComponent: GKComponent {
         return SKAction.group([move, animate])
     }
     
-    func moveComplete(move: [SKAction]){
+    func moveComplete(move: [SKAction], button: GKEntity){
         
         let sequence = SKAction.sequence(move)
-        node.run(sequence)
+        node.run(sequence){
+            if let button = button.component(ofType: SpriteComponent.self){
+                button.node.zPosition = 0
+            }
+        }
     }
     
     func turn(direction: String) -> SKAction{

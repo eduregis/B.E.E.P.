@@ -6,8 +6,10 @@ class GameScene: SKScene {
     // variáveis que irão receber os valores da API
     var actualPosition = CGPoint(x: 1, y: 1)
     var stageDimensions = CGSize(width: 5, height: 6)
-    var gameplayAnchor:CGPoint!
+    var gameplayAnchor: CGPoint!
+    var auxiliaryAnchor: CGPoint!
     var actualDirection = "right"
+    var tabStyle = "function"
     
     // criamos a referência o gerenciador de entidades
     var entityManager: EntityManager!
@@ -15,7 +17,11 @@ class GameScene: SKScene {
     // instanciamos esse aqui fora porque precisamos deles depois que são desenhados
     let robot = Robot()
     let lightFloor = LightFloor()
-    var emptyBlocks: [EmptyBlock] = []
+    
+    var functionBlocks: [DraggableBlock] = []
+    var emptyFunctionBlocks: [EmptyBlock] = []
+    var functionDropZoneIsTouched: Bool = false
+    
     var commandBlocks: [DraggableBlock] = []
     var stopButton = HubButton(name: "stop-button")
     
@@ -23,6 +29,9 @@ class GameScene: SKScene {
     var arrayMoveRobot: [SKAction] = []
     var arrayMovelightFloor: [SKAction] = []
     var elementArrayMove: SKAction?
+
+    var emptyBlocks: [EmptyBlock] = []
+    var commandDropZoneIsTouched: Bool = false
     
     // variáveis de controle
     var selectedItem: SKSpriteNode? {
@@ -32,7 +41,7 @@ class GameScene: SKScene {
                 draggingItem?.name = selectedPlayer.name
                 draggingItem?.position = CGPoint(x: selectedPlayer.position.x, y: selectedPlayer.position.y)
                 draggingItem?.size = CGSize(width: selectedPlayer.size.width * 1.5, height: selectedPlayer.size.height * 1.5)
-                draggingItem?.zPosition = 20
+                draggingItem?.zPosition = ZPositionsCategories.draggableBlock
                 draggingItem?.alpha = 0.5
                 addChild(draggingItem!)
             }
@@ -40,14 +49,25 @@ class GameScene: SKScene {
     }
     var draggingItem: SKSpriteNode?
     override func didMove(to view: SKView) {
-        
-        gameplayAnchor = CGPoint(x: size.width/2, y: size.height/2)
+
+        // posiciona os elementos de acordo como tipo de fase
+        switch tabStyle {
+        case "default":
+            gameplayAnchor = CGPoint(x: size.width/2, y: size.height/2)
+            auxiliaryAnchor = CGPoint(x: size.width/2, y: size.height/2)
+        case "function", "antivirus", "loop", "conditional":
+            gameplayAnchor = CGPoint(x: size.width/3, y: size.height/2)
+            auxiliaryAnchor = CGPoint(x: 3*size.width/4, y: size.height/2)
+        default:
+            gameplayAnchor = CGPoint(x: size.width/2, y: size.height/2)
+            auxiliaryAnchor = CGPoint(x: size.width/2, y: size.height/2)
+        }
         
         // adiciona o background
         let background = SKSpriteNode(imageNamed: "background")
         background.position = CGPoint(x: size.width/2, y: size.height/2)
         background.size = CGSize(width: size.width, height: size.height)
-        background.zPosition = -1
+        background.zPosition = ZPositionsCategories.background
         addChild(background)
         
         // cria uma instância do gerenciador de entidades
@@ -58,6 +78,7 @@ class GameScene: SKScene {
         drawTilesets(width: Int(stageDimensions.width), height: Int(stageDimensions.height))
         drawRobot(xPosition: Int(actualPosition.x), yPosition: Int(actualPosition.y))
         drawTabs()
+        drawAuxiliaryTab()
         drawnConfigButton()
         drawnHintButton()
     }
@@ -113,10 +134,10 @@ class GameScene: SKScene {
     
     func drawTabs () {
         // adiciona a aba de comandos
-        let commandTab = CommandTab()
+        let commandTab = DefaultObject(name: "command-tab")
         if let spriteComponent = commandTab.component(ofType: SpriteComponent.self) {
             spriteComponent.node.position = CGPoint(x: gameplayAnchor.x, y: gameplayAnchor.y - 100)
-            spriteComponent.node.zPosition = 1
+            spriteComponent.node.zPosition = ZPositionsCategories.tab
         }
         entityManager.add(commandTab)
         
@@ -124,15 +145,15 @@ class GameScene: SKScene {
         let clearTab = ClearTab(name: "command-clear-tab", spriteName: "clear-tab")
         if let spriteComponent = clearTab.component(ofType: SpriteComponent.self) {
             spriteComponent.node.position = CGPoint(x: gameplayAnchor.x - 20, y: gameplayAnchor.y - 65)
-            spriteComponent.node.zPosition = 3
+            spriteComponent.node.zPosition = ZPositionsCategories.clearTabButton
         }
         entityManager.add(clearTab)
         
         // container de drop
-        let commandTabDropZone = CommandTabDropZone()
+        let commandTabDropZone = DefaultObject(name: "command-tab-drop-zone")
         if let spriteComponent = commandTabDropZone.component(ofType: SpriteComponent.self) {
             spriteComponent.node.position = CGPoint(x: gameplayAnchor.x - 50, y: gameplayAnchor.y - 115)
-            spriteComponent.node.zPosition = 2
+            spriteComponent.node.zPosition = ZPositionsCategories.dropZone
         }
         entityManager.add(commandTabDropZone)
         
@@ -141,7 +162,7 @@ class GameScene: SKScene {
             let block = EmptyBlock(name: "white-block")
             if let spriteComponent = block.component(ofType: SpriteComponent.self) {
                 spriteComponent.node.position = CGPoint(x: gameplayAnchor.x - 175 + CGFloat(i - 1)*50, y: gameplayAnchor.y - 115)
-                spriteComponent.node.zPosition = 15
+                spriteComponent.node.zPosition = ZPositionsCategories.emptyBlock
                 spriteComponent.node.alpha = 0.1
                 spriteComponent.node.size = CGSize(width: 60, height: 50)
             }
@@ -150,10 +171,10 @@ class GameScene: SKScene {
         }
         
         // botão de play
-        let playButton = PlayButton()
+        let playButton = DefaultObject(name: "play-button")
         if let spriteComponent = playButton.component(ofType: SpriteComponent.self) {
             spriteComponent.node.position = CGPoint(x: gameplayAnchor.x + 170, y: gameplayAnchor.y - 115)
-            spriteComponent.node.zPosition = 3
+            spriteComponent.node.zPosition = ZPositionsCategories.button
         }
         entityManager.add(playButton)
         
@@ -165,10 +186,10 @@ class GameScene: SKScene {
         entityManager.add(stopButton)
         
         // adiciona a aba de ações
-        let actionTab = ActionTab()
+        let actionTab = DefaultObject(name: "action-tab")
         if let spriteComponent = actionTab.component(ofType: SpriteComponent.self) {
             spriteComponent.node.position = CGPoint(x: gameplayAnchor.x, y: gameplayAnchor.y - 240)
-            spriteComponent.node.zPosition = 1
+            spriteComponent.node.zPosition = ZPositionsCategories.tab
         }
         entityManager.add(actionTab)
         
@@ -177,21 +198,107 @@ class GameScene: SKScene {
             let block = DraggableBlock(name: blockTypes[i - 1])
             if let spriteComponent = block.component(ofType: SpriteComponent.self) {
                 spriteComponent.node.position = CGPoint(x: gameplayAnchor.x - 150 + CGFloat(i - 1)*75, y: gameplayAnchor.y - 255)
-                spriteComponent.node.zPosition = 20
+                spriteComponent.node.zPosition = ZPositionsCategories.draggableBlock
                 spriteComponent.node.size = CGSize(width: 60, height: 50)
             }
             entityManager.add(block)
         }
     }
     
-    func clearCommandTab () {
-        for block in commandBlocks {
-            if let spriteComponent = block.component(ofType: SpriteComponent.self) {
-                spriteComponent.node.removeFromParent()
+    func drawAuxiliaryTab() {
+        let size: Int
+        let yAjust: CGFloat
+        if tabStyle != "default" {
+            switch tabStyle {
+            case "function","antivirus":
+                size = 1
+                yAjust = 240
+            case "loop":
+                size = 2
+                yAjust = 148
+            default:
+                size = 3
+                yAjust = 0
             }
+            let auxiliaryTab = AuxiliaryTab(size: size)
+            if let spriteComponent = auxiliaryTab.component(ofType: SpriteComponent.self) {
+                spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x, y: auxiliaryAnchor.y + yAjust)
+                spriteComponent.node.zPosition = ZPositionsCategories.tab
+            }
+            entityManager.add(auxiliaryTab)
+            drawFunctionTab()
         }
-        commandBlocks.removeAll()
-        resetMoveRobot()
+    }
+    
+    func drawFunctionTab() {
+        // adiciona a aba de comandos
+        let functionTab = DefaultObject(name: "function-tab")
+        if let spriteComponent = functionTab.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x, y: auxiliaryAnchor.y + 225)
+            spriteComponent.node.zPosition = ZPositionsCategories.subTab
+        }
+        entityManager.add(functionTab)
+        
+        // adiciona a aba de limpar
+        let clearTab = ClearTab(name: "function-clear-tab", spriteName: "clear-auxiliary-tab")
+        if let spriteComponent = clearTab.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 10, y: auxiliaryAnchor.y + 260)
+            spriteComponent.node.zPosition = ZPositionsCategories.clearTabButton
+        }
+        entityManager.add(clearTab)
+        
+        // container de drop
+        let functionTabDropZone = DefaultObject(name: "auxiliary-tab-drop-zone")
+        if let spriteComponent = functionTabDropZone.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x + 50, y: auxiliaryAnchor.y + 210)
+            spriteComponent.node.zPosition = ZPositionsCategories.dropZone
+        }
+        entityManager.add(functionTabDropZone)
+        
+        // drop zones individuais
+        for i in 1...4 {
+            let block = EmptyBlock(name: "white-block")
+            if let spriteComponent = block.component(ofType: SpriteComponent.self) {
+                spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 25 + CGFloat(i - 1)*50, y: auxiliaryAnchor.y + 210)
+                spriteComponent.node.zPosition = ZPositionsCategories.emptyBlock
+                spriteComponent.node.alpha = 0.1
+                spriteComponent.node.size = CGSize(width: 60, height: 50)
+            }
+            emptyFunctionBlocks.append(block)
+            entityManager.add(block)
+        }
+        
+        let block = DraggableBlock(name: "function-block")
+        if let spriteComponent = block.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 127, y: auxiliaryAnchor.y + 210)
+            spriteComponent.node.zPosition = ZPositionsCategories.draggableBlock
+            spriteComponent.node.size = CGSize(width: 60, height: 50)
+        }
+        entityManager.add(block)
+    }
+    
+    func clearTab (tabName: String) {
+        switch tabName {
+        case "command":
+            for block in commandBlocks {
+                if let spriteComponent = block.component(ofType: SpriteComponent.self) {
+                    spriteComponent.node.removeFromParent()
+                }
+            }
+            commandBlocks.removeAll()
+            resetMoveRobot()
+        case "function":
+            for block in functionBlocks {
+                if let spriteComponent = block.component(ofType: SpriteComponent.self) {
+                    spriteComponent.node.removeFromParent()
+                }
+            }
+            functionBlocks.removeAll()
+        default:
+            break
+        }
+    
+        
     }
     
     func resetMoveRobot(){
@@ -225,6 +332,7 @@ class GameScene: SKScene {
             spriteComponent.node.position = CGPoint(x: x, y: y)
             spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(actualPosition.x + actualPosition.y + 1)
         }
+
     }
     
     func turnRobot(direction: String) -> SKAction {
@@ -321,25 +429,53 @@ class GameScene: SKScene {
             lightFloorMoveComponent.moveComplete(move: arrayMovelightFloor)
         }
         if let robotMoveComponent = robot.component(ofType: RobotMoveComponent.self) {
-            robotMoveComponent.moveComplete(move: arrayMoveRobot)
+            robotMoveComponent.moveComplete(move: arrayMoveRobot, button: stopButton)
         }
 
+    }
+    
+    func addElementFunc(){
+        for block in functionBlocks{
+           if let spriteComponent = block.component(ofType: SpriteComponent.self) {
+               // usando o trecho "-dropped-" para separar obtermos o nome original e seu índice
+               let name = spriteComponent.node.name?.components(separatedBy: "-dropped-")
+               // com o nome original será escolhido o tipo de movimento que o robot irá fazer
+               switch name![0] {
+               case "walk-block":
+                   if !moveRobot() {
+                       print("nao deu")
+                   }
+               case "turn-right-block":
+                   arrayMoveRobot.append(turnRobot(direction: "right"))
+               case "turn-left-block":
+                   arrayMoveRobot.append(turnRobot(direction: "left"))
+               /*case "grab-block"
+               
+               case "save-block"
+               
+                   */
+               default:
+                   break;
+               }
+              
+           }
+       
+       }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         if let location = touches.first?.location(in: self) {
             // Checamos o nome do SpriteNode que foi detectado pela função
-            if (self.atPoint(location).name == "walk-block") || (self.atPoint(location).name == "turn-left-block") || (self.atPoint(location).name == "turn-right-block") || (self.atPoint(location).name == "grab-block") || (self.atPoint(location).name == "save-block") {
+            if (self.atPoint(location).name == "walk-block") || (self.atPoint(location).name == "turn-left-block") || (self.atPoint(location).name == "turn-right-block") || (self.atPoint(location).name == "grab-block") || (self.atPoint(location).name == "save-block") || (self.atPoint(location).name == "function-block") {
                 // passamos o objeto detectado para dentro do selectedItem
                 selectedItem = self.atPoint(location) as? SKSpriteNode
             }
             else {
                 // caso não seja o objeto que queremos, esvaziamos o selectedItem
                 selectedItem = nil
-                if self.atPoint(location).name == "stop-button" {
+                if self.atPoint(location).name == "play-button" {
                     resetMoveRobot()
-                } else if self.atPoint(location).name == "play-button" {
                     /*verificar se o array commandBlocks está vazio
                         - Se tem algum block na dropZone*/
                     if !commandBlocks.isEmpty {
@@ -358,11 +494,12 @@ class GameScene: SKScene {
                                     arrayMoveRobot.append(turnRobot(direction: "right"))
                                 case "turn-left-block":
                                     arrayMoveRobot.append(turnRobot(direction: "left"))
+                                case "function-block":
+                                    addElementFunc()
                                 /*case "grab-block"
                                 
                                 case "save-block"
-                                    
-                                case "function-block"
+                                
                                     */
                                 default:
                                     break;
@@ -372,40 +509,69 @@ class GameScene: SKScene {
                         
                         }
                         if let stopButton = stopButton.component(ofType: SpriteComponent.self){
-                            stopButton.node.zPosition = 4
+                            stopButton.node.zPosition = ZPositionsCategories.button + 1
                         }
                         //execução do array actionMove que permitirar uma movimentação linear sem desvios
                         moveCompleteRobotLightFloor()
                     }
-                } else if self.atPoint(location).name == "command-clear-tab" {
-                    clearCommandTab()
+                } else if (self.atPoint(location).name == "command-clear-tab") {
+                    clearTab(tabName: "command")
+                } else if (self.atPoint(location).name == "function-clear-tab") {
+                    clearTab(tabName: "function")
                 }
             }
             if let oldName = self.atPoint(location).name {
                 // testa se selecionamos um bloco dentro da aba de comandos
                 if oldName.contains("-dropped-") {
-                    // se sim, utilizamos o trecho "-dropped-" para separar obtermos o nome original e seu índice
-                    let newName = self.atPoint(location).name?.components(separatedBy: "-dropped-")
+
+                    // se sim, ituilizamos o trecho "-dropped-" para separar obtermos o nome original e seu índice
+                    var newName: [String] = []
+                    var arrayName: String = ""
+                    if oldName.contains("-dropped-command-") {
+                        newName = self.atPoint(location).name!.components(separatedBy: "-dropped-command-")
+                        arrayName = "command-"
+                    } else if oldName.contains("-dropped-function-") {
+                        newName = self.atPoint(location).name!.components(separatedBy: "-dropped-function-")
+                        arrayName = "function-"
+                    }
                     let newBlock = self.atPoint(location) as? SKSpriteNode
                     // removemos o sprite do bloco na tela, este passando a existir apenas no selectedItem à seguir
                     self.atPoint(location).removeFromParent()
                     // passamos apenas o nome original para o selectedItem
-                    newBlock?.name = newName![0]
+                    newBlock?.name = newName[0]
                     selectedItem = newBlock
                     // caso ele não seja o último da fila, precisamos trazer tudo à direita dele um passo para a esquerda.
-                    if let indexToRemove = Int(newName![1]) {
+                    if let indexToRemove = Int(newName[1]) {
                         // removemos o o bloco do array
-                        commandBlocks.remove(at: indexToRemove)
-                        // trazemos os blocos para a esquerda, ajustando tanto a posição do sprite quanto seu índice no final do nome
-                        for index in indexToRemove..<commandBlocks.count {
-                            if let spriteComponent = commandBlocks[index].component(ofType: SpriteComponent.self) {
-                                spriteComponent.node.position = CGPoint(x: spriteComponent.node.position.x - 50, y: spriteComponent.node.position.y)
-                                // a partir do nome antigo, remontamos dessa forma
-                                let oldIndex = spriteComponent.node.name?.components(separatedBy: "-dropped-")
-                                let newIndex = Int(oldIndex![1])! - 1
-                                spriteComponent.node.name = "\(oldIndex![0])-dropped-\(newIndex)"
+                        switch arrayName {
+                        case "command-":
+                            commandBlocks.remove(at: indexToRemove)
+                            // trazemos os blocos para a esquerda, ajustando tanto a posição do sprite quanto seu índice no final do nome
+                            for index in indexToRemove..<commandBlocks.count {
+                                if let spriteComponent = commandBlocks[index].component(ofType: SpriteComponent.self) {
+                                    spriteComponent.node.position = CGPoint(x: spriteComponent.node.position.x - 50, y: spriteComponent.node.position.y)
+                                    // a partir do nome antigo, remontamos dessa forma
+                                    let oldIndex = spriteComponent.node.name?.components(separatedBy: "-dropped-command-")
+                                    let newIndex = Int(oldIndex![1])! - 1
+                                    spriteComponent.node.name = "\(oldIndex![0])-dropped-command-\(newIndex)"
+                                }
                             }
+                        case "function-":
+                            functionBlocks.remove(at: indexToRemove)
+                            // trazemos os blocos para a esquerda, ajustando tanto a posição do sprite quanto seu índice no final do nome
+                            for index in indexToRemove..<functionBlocks.count {
+                                if let spriteComponent = functionBlocks[index].component(ofType: SpriteComponent.self) {
+                                    spriteComponent.node.position = CGPoint(x: spriteComponent.node.position.x - 50, y: spriteComponent.node.position.y)
+                                    // a partir do nome antigo, remontamos dessa forma
+                                    let oldIndex = spriteComponent.node.name?.components(separatedBy: "-dropped-function-")
+                                    let newIndex = Int(oldIndex![1])! - 1
+                                    spriteComponent.node.name = "\(oldIndex![0])-dropped-function-\(newIndex)"
+                                }
+                            }
+                        default:
+                            break
                         }
+                        
                     }
                 }
             }
@@ -418,6 +584,7 @@ class GameScene: SKScene {
                 let location = touch.location(in: self)
                 draggingItem?.position.x = location.x
                 draggingItem?.position.y = location.y
+                // detecta a dropzone da aba de comandos
                 if(commandBlocks.count < 6) {
                     if (location.y > gameplayAnchor.y - 143) && (location.y < gameplayAnchor.y - 93) && (location.x > gameplayAnchor.x - 200 + 50*CGFloat(commandBlocks.count)) && (location.x < gameplayAnchor.x + 120){
                         for i in 0...commandBlocks.count {
@@ -425,12 +592,34 @@ class GameScene: SKScene {
                                 spriteComponent.node.alpha = 0.6
                             }
                         }
+                        commandDropZoneIsTouched = true
                     } else {
                         for i in 0...commandBlocks.count {
                             if let spriteComponent = emptyBlocks[i].component(ofType: SpriteComponent.self) {
                                 spriteComponent.node.alpha = 0.1
                             }
                         }
+                        commandDropZoneIsTouched = false
+                    }
+                }
+                // detecta a dropzone da aba de comandos
+                
+                if(functionBlocks.count < 4) && (emptyFunctionBlocks.count > 0) {
+                    
+                    if (location.y > auxiliaryAnchor.y + 183) && (location.y < auxiliaryAnchor.y + 233) && (location.x > auxiliaryAnchor.x - 55 + 50*CGFloat(functionBlocks.count)) && (location.x < auxiliaryAnchor.x + 155){
+                        for i in 0...functionBlocks.count {
+                            if let spriteComponent = emptyFunctionBlocks[i].component(ofType: SpriteComponent.self) {
+                                spriteComponent.node.alpha = 0.6
+                            }
+                        }
+                        functionDropZoneIsTouched = true
+                    } else {
+                        for i in 0...functionBlocks.count {
+                            if let spriteComponent = emptyFunctionBlocks[i].component(ofType: SpriteComponent.self) {
+                                spriteComponent.node.alpha = 0.1
+                            }
+                        }
+                        functionDropZoneIsTouched = false
                     }
                 }
             }
@@ -442,14 +631,24 @@ class GameScene: SKScene {
         if let location = touches.first?.location(in: self) {
             if (self.atPoint(location).name == "white-block") {
                 if let draggingItem = draggingItem {
-                    if commandBlocks.count < 6 {
-                        let block = DraggableBlock(name: "\(draggingItem.name ?? "")-dropped-\(commandBlocks.count)" , spriteName: draggingItem.name ?? "")
+                    if (commandBlocks.count < 6) && commandDropZoneIsTouched {
+                        let block = DraggableBlock(name: "\(draggingItem.name ?? "")-dropped-command-\(commandBlocks.count)" , spriteName: draggingItem.name ?? "")
                         if let spriteComponent = block.component(ofType: SpriteComponent.self) {
                             spriteComponent.node.size = CGSize(width: draggingItem.size.width / 1.5, height: draggingItem.size.height / 1.5)
                             spriteComponent.node.position = CGPoint(x: gameplayAnchor.x - 175 + CGFloat(commandBlocks.count)*50, y: gameplayAnchor.y - 115)
-                            spriteComponent.node.zPosition = 20
+                            spriteComponent.node.zPosition = ZPositionsCategories.draggableBlock
                         }
                         commandBlocks.append(block)
+                        entityManager.add(block)
+                    }
+                    if (functionBlocks.count < 4) && functionDropZoneIsTouched && draggingItem.name != "function-block" {
+                        let block = DraggableBlock(name: "\(draggingItem.name ?? "")-dropped-function-\(functionBlocks.count)" , spriteName: draggingItem.name ?? "")
+                        if let spriteComponent = block.component(ofType: SpriteComponent.self) {
+                            spriteComponent.node.size = CGSize(width: draggingItem.size.width / 1.5, height: draggingItem.size.height / 1.5)
+                            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 25 + CGFloat(functionBlocks.count)*50, y: auxiliaryAnchor.y + 210)
+                            spriteComponent.node.zPosition = ZPositionsCategories.draggableBlock
+                        }
+                        functionBlocks.append(block)
                         entityManager.add(block)
                     }
                 }
@@ -459,9 +658,14 @@ class GameScene: SKScene {
                     whiteBlock.node.alpha = 0.1
                 }
             }
+            for i in 0..<emptyFunctionBlocks.count {
+                if let whiteBlock = emptyFunctionBlocks[i].component(ofType: SpriteComponent.self) {
+                    whiteBlock.node.alpha = 0.1
+                }
+            }
             draggingItem = nil
         }
-        //verfica se clicou no botão voltar
+        //verifica se clicou no botão voltar
         for touch in touches {
             let nodes = self.nodes(at: touch.location(in: self))
             let returnButtonOptional = self.childNode(withName: "return-button")
@@ -477,24 +681,24 @@ class GameScene: SKScene {
     func drawnReturnButton() {
         let returnButton = HubButton(name: "return-button")
         if let spriteComponent = returnButton.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: frame.minX+50, y: frame.maxY-50)
-            spriteComponent.node.zPosition = 2
+            spriteComponent.node.position = CGPoint(x: frame.minX + 50, y: frame.maxY - 50)
+            spriteComponent.node.zPosition = ZPositionsCategories.button
         }
         entityManager.add(returnButton)
     }
     func drawnConfigButton() {
         let configButton = HubButton(name: "config-button")
         if let spriteComponent = configButton.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: frame.maxX-150, y: frame.maxY-50)
-            spriteComponent.node.zPosition = 2
+            spriteComponent.node.position = CGPoint(x: frame.maxX - 150, y: frame.maxY - 50)
+            spriteComponent.node.zPosition = ZPositionsCategories.button
         }
         entityManager.add(configButton)
     }
     func drawnHintButton() {
         let hintButton = HubButton(name: "hint-button")
         if let spriteComponent = hintButton.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: frame.maxX-100, y: frame.maxY-50)
-            spriteComponent.node.zPosition = 2
+            spriteComponent.node.position = CGPoint(x: frame.maxX - 100, y: frame.maxY - 50)
+            spriteComponent.node.zPosition = ZPositionsCategories.button
         }
         entityManager.add(hintButton)
     }

@@ -11,8 +11,14 @@ import SpriteKit
 
 var blockTypes = ["walk-block","turn-left-block","turn-right-block","grab-block","save-block"]
 
-enum PhysicsCategories {
-    static let none: UInt32          = 0x1 << 0
-    static let actionBlock: UInt32  = 0x1 << 1
-    static let emptyBlock: UInt32 = 0x2 << 2
+enum ZPositionsCategories {
+    static let background:     CGFloat = 0
+    static let tab:            CGFloat = 1
+    static let subTab:         CGFloat = 2
+    static let dropZone:       CGFloat = 3
+    static let button:         CGFloat = 4
+    static let subDropZone:    CGFloat = 5
+    static let clearTabButton: CGFloat = 6
+    static let emptyBlock:     CGFloat = 15
+    static let draggableBlock: CGFloat = 20
 }
