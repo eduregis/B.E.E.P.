@@ -26,9 +26,9 @@ class MapScene:SKScene {
         drawBackground()
         
         //drawn hint button
-        addEntity(entity: HudButton(name: "hint-button"), nodeName: "hint-button", position: CGPoint(x: frame.maxX-100, y: frame.maxY-50), zPosition: 2, alpha: 1.0)
+        addEntity(entity: HubButton(name: "hint-button"), nodeName: "hint-button", position: CGPoint(x: frame.maxX-100, y: frame.maxY-50), zPosition: 2, alpha: 1.0)
         //drawn config button
-        addEntity(entity: HudButton(name: "config-button"), nodeName: "config-button", position: CGPoint(x: frame.maxX-150, y: frame.maxY-50), zPosition: 2, alpha: 1.0)
+        addEntity(entity: HubButton(name: "config-button"), nodeName: "config-button", position: CGPoint(x: frame.maxX-150, y: frame.maxY-50), zPosition: 2, alpha: 1.0)
         
         buildMap()
     }
@@ -146,7 +146,6 @@ class MapScene:SKScene {
         for touch in touches {
             let location = touch.location(in: self)
             touchesBeganLocation = location
-            print(location)
         }
     }
     

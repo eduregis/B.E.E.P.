@@ -14,7 +14,7 @@ class LightFloorMoveComponent: GKComponent {
         super.init()
     }
     
-    func move(direction: String) {
+    func move(direction: String) -> SKAction{
         
         let move: SKAction
         
@@ -29,16 +29,23 @@ class LightFloorMoveComponent: GKComponent {
             move = SKAction.move(by: CGVector(dx: 32, dy: -16), duration: 0)
         default:
             move = SKAction.move(by: CGVector(dx: 0, dy: 0), duration: 0)
+            
         }
         
         let sequence = SKAction.sequence([SKAction.wait(forDuration: 0.6), move])
-        node.run(sequence) {
+        /*node.run(sequence) {
             if direction == "left" || direction == "up" {
                 self.node.zPosition = self.node.zPosition - 1
             } else {
                 self.node.zPosition = self.node.zPosition + 1
             }
-        }
+        }*/
+        return sequence
+    }
+    func moveComplete(move: [SKAction]){
+        
+        let sequence = SKAction.sequence(move)
+        node.run(sequence)
     }
     
     required init?(coder aDecoder: NSCoder) {

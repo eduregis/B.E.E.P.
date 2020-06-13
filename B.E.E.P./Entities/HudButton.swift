@@ -9,7 +9,7 @@
 import SpriteKit
 import GameplayKit
 
-class HudButton:GKEntity {
+class HubButton:GKEntity {
     
     init(name: String) {
           super.init()
