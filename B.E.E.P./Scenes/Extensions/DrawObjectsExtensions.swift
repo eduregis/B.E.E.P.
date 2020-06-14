@@ -154,13 +154,22 @@ extension GameScene {
                 spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x, y: auxiliaryAnchor.y + yAjust)
                 spriteComponent.node.zPosition = ZPositionsCategories.tab
             }
+            
             entityManager.add(auxiliaryTab)
             drawFunctionTab()
+            
+            if(tabStyle == "loop") || (tabStyle == "conditional") {
+                drawLoopTab()
+            }
+            
+            if(tabStyle == "conditional") {
+                drawConditionalTab()
+            }
         }
     }
     
     func drawFunctionTab() {
-        // adiciona a aba de comandos
+        // adiciona a aba de função
         let functionTab = DefaultObject(name: "function-tab")
         if let spriteComponent = functionTab.component(ofType: SpriteComponent.self) {
             spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x, y: auxiliaryAnchor.y + 225)
@@ -204,6 +213,71 @@ extension GameScene {
             spriteComponent.node.size = CGSize(width: 60, height: 50)
         }
         entityManager.add(block)
+    }
+    
+    func drawLoopTab() {
+        // adiciona a aba de comandos
+        let loopTab = DefaultObject(name: "loop-tab")
+        if let spriteComponent = loopTab.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x, y: auxiliaryAnchor.y + 78)
+            spriteComponent.node.zPosition = ZPositionsCategories.subTab
+        }
+        entityManager.add(loopTab)
+        
+        // adiciona a aba de limpar
+        let clearTab = ClearTab(name: "loop-clear-tab", spriteName: "clear-auxiliary-tab")
+        if let spriteComponent = clearTab.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x + 30, y: auxiliaryAnchor.y + 148)
+            spriteComponent.node.zPosition = ZPositionsCategories.clearTabButton
+        }
+        entityManager.add(clearTab)
+        
+        // container de drop
+        let loopTabDropZone = DefaultObject(name: "auxiliary-tab-drop-zone")
+        if let spriteComponent = loopTabDropZone.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x + 50, y: auxiliaryAnchor.y + 28)
+            spriteComponent.node.zPosition = ZPositionsCategories.dropZone
+        }
+        entityManager.add(loopTabDropZone)
+        
+        // drop zones individuais
+        for i in 1...4 {
+            let block = EmptyBlock(name: "white-block")
+            if let spriteComponent = block.component(ofType: SpriteComponent.self) {
+                spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 25 + CGFloat(i - 1)*50, y: auxiliaryAnchor.y + 28)
+                spriteComponent.node.zPosition = ZPositionsCategories.emptyBlock
+                spriteComponent.node.alpha = 0.1
+                spriteComponent.node.size = CGSize(width: 60, height: 50)
+            }
+            emptyLoopBlocks.append(block)
+            entityManager.add(block)
+        }
+        
+        let block = DraggableBlock(name: "loop-block")
+        if let spriteComponent = block.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 127, y: auxiliaryAnchor.y + 98)
+            spriteComponent.node.zPosition = ZPositionsCategories.draggableBlock
+            spriteComponent.node.size = CGSize(width: 60, height: 50)
+        }
+        entityManager.add(block)
+        
+        let arrowLeft = DraggableBlock(name: "loop-arrow-left", spriteName: "arrow-left")
+        if let spriteComponent = arrowLeft.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 34, y: auxiliaryAnchor.y + 98)
+            spriteComponent.node.zPosition = ZPositionsCategories.button
+        }
+        entityManager.add(arrowLeft)
+        
+        let arrowRight = DraggableBlock(name: "loop-arrow-right", spriteName: "arrow-right")
+        if let spriteComponent = arrowRight.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x + 143, y: auxiliaryAnchor.y + 98)
+            spriteComponent.node.zPosition = ZPositionsCategories.button
+        }
+        entityManager.add(arrowRight)
+    }
+    
+    func drawConditionalTab() {
+        
     }
     
     func clearTab (tabName: String) {

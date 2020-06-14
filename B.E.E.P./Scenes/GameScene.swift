@@ -9,7 +9,7 @@ class GameScene: SKScene {
     var gameplayAnchor: CGPoint!
     var auxiliaryAnchor: CGPoint!
     var actualDirection = "right"
-    var tabStyle = "function"
+    var tabStyle = "loop"
     var boxes: [CGPoint] = [
         CGPoint(x: 3, y: 1)
     ]
@@ -28,6 +28,10 @@ class GameScene: SKScene {
     var functionBlocks: [DraggableBlock] = []
     var emptyFunctionBlocks: [EmptyBlock] = []
     var functionDropZoneIsTouched: Bool = false
+    
+    var loopBlocks: [DraggableBlock] = []
+    var emptyLoopBlocks: [EmptyBlock] = []
+    var loopDropZoneIsTouched: Bool = false
     
     var commandBlocks: [DraggableBlock] = []
     var stopButton = HubButton(name: "stop-button")
@@ -127,7 +131,7 @@ class GameScene: SKScene {
         
         if let location = touches.first?.location(in: self) {
             // Checamos o nome do SpriteNode que foi detectado pela função
-            if (self.atPoint(location).name == "walk-block") || (self.atPoint(location).name == "turn-left-block") || (self.atPoint(location).name == "turn-right-block") || (self.atPoint(location).name == "grab-block") || (self.atPoint(location).name == "save-block") || (self.atPoint(location).name == "function-block") {
+            if (self.atPoint(location).name == "walk-block") || (self.atPoint(location).name == "turn-left-block") || (self.atPoint(location).name == "turn-right-block") || (self.atPoint(location).name == "grab-block") || (self.atPoint(location).name == "save-block") || (self.atPoint(location).name == "function-block") || (self.atPoint(location).name == "loop-block") {
                 // passamos o objeto detectado para dentro do selectedItem
                 selectedItem = self.atPoint(location) as? SKSpriteNode
             }
@@ -301,7 +305,7 @@ class GameScene: SKScene {
                         commandBlocks.append(block)
                         entityManager.add(block)
                     }
-                    if (functionBlocks.count < 4) && functionDropZoneIsTouched && draggingItem.name != "function-block" {
+                    if (functionBlocks.count < 4) && functionDropZoneIsTouched && draggingItem.name != "function-block" && draggingItem.name != "loop-block" {
                         let block = DraggableBlock(name: "\(draggingItem.name ?? "")-dropped-function-\(functionBlocks.count)" , spriteName: draggingItem.name ?? "")
                         if let spriteComponent = block.component(ofType: SpriteComponent.self) {
                             spriteComponent.node.size = CGSize(width: draggingItem.size.width / 1.5, height: draggingItem.size.height / 1.5)
