@@ -297,6 +297,13 @@ extension GameScene {
                 }
             }
             functionBlocks.removeAll()
+        case "loop":
+            for block in loopBlocks {
+                if let spriteComponent = block.component(ofType: SpriteComponent.self) {
+                    spriteComponent.node.removeFromParent()
+                }
+            }
+            loopBlocks.removeAll()
         default:
             break
         }

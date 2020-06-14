@@ -40,7 +40,7 @@ class GameScene: SKScene {
     var arrayMoveRobot: [SKAction] = []
     var arrayMovelightFloor: [SKAction] = []
     var elementArrayMove: SKAction?
-
+    
     var emptyBlocks: [EmptyBlock] = []
     var commandDropZoneIsTouched: Bool = false
     
@@ -100,31 +100,31 @@ class GameScene: SKScene {
     
     func addElementFunc(){
         for block in functionBlocks{
-           if let spriteComponent = block.component(ofType: SpriteComponent.self) {
-               // usando o trecho "-dropped-" para separar obtermos o nome original e seu índice
-               let name = spriteComponent.node.name?.components(separatedBy: "-dropped-")
-               // com o nome original será escolhido o tipo de movimento que o robot irá fazer
-               switch name![0] {
-               case "walk-block":
-                   if !moveRobot() {
-                       print("nao deu")
-                   }
-               case "turn-right-block":
-                   arrayMoveRobot.append(turnRobot(direction: "right"))
-               case "turn-left-block":
-                   arrayMoveRobot.append(turnRobot(direction: "left"))
-               /*case "grab-block"
-               
-               case "save-block"
-               
-                   */
-               default:
-                   break;
-               }
-              
-           }
-       
-       }
+            if let spriteComponent = block.component(ofType: SpriteComponent.self) {
+                // usando o trecho "-dropped-" para separar obtermos o nome original e seu índice
+                let name = spriteComponent.node.name?.components(separatedBy: "-dropped-")
+                // com o nome original será escolhido o tipo de movimento que o robot irá fazer
+                switch name![0] {
+                case "walk-block":
+                    if !moveRobot() {
+                        print("nao deu")
+                    }
+                case "turn-right-block":
+                    arrayMoveRobot.append(turnRobot(direction: "right"))
+                case "turn-left-block":
+                    arrayMoveRobot.append(turnRobot(direction: "left"))
+                    /*case "grab-block"
+                     
+                     case "save-block"
+                     
+                     */
+                default:
+                    break;
+                }
+                
+            }
+            
+        }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -141,7 +141,7 @@ class GameScene: SKScene {
                 if self.atPoint(location).name == "play-button" {
                     resetMoveRobot()
                     /*verificar se o array commandBlocks está vazio
-                        - Se tem algum block na dropZone*/
+                     - Se tem algum block na dropZone*/
                     if !commandBlocks.isEmpty {
                         // rodamos commandBlocks para guardar as SKAction referente a cada block colocado na dropZone
                         for block in commandBlocks{
@@ -160,17 +160,17 @@ class GameScene: SKScene {
                                     arrayMoveRobot.append(turnRobot(direction: "left"))
                                 case "function-block":
                                     addElementFunc()
-                                /*case "grab-block"
-                                
-                                case "save-block"
-                                
-                                    */
+                                    /*case "grab-block"
+                                     
+                                     case "save-block"
+                                     
+                                     */
                                 default:
                                     break;
                                 }
-                               
+                                
                             }
-                        
+                            
                         }
                         if let stopButton = stopButton.component(ofType: SpriteComponent.self){
                             stopButton.node.zPosition = ZPositionsCategories.button + 1
@@ -182,12 +182,14 @@ class GameScene: SKScene {
                     clearTab(tabName: "command")
                 } else if (self.atPoint(location).name == "function-clear-tab") {
                     clearTab(tabName: "function")
+                } else if (self.atPoint(location).name == "loop-clear-tab") {
+                    clearTab(tabName: "loop")
                 }
             }
             if let oldName = self.atPoint(location).name {
                 // testa se selecionamos um bloco dentro da aba de comandos
                 if oldName.contains("-dropped-") {
-
+                    
                     // se sim, ituilizamos o trecho "-dropped-" para separar obtermos o nome original e seu índice
                     var newName: [String] = []
                     var arrayName: String = ""
@@ -197,6 +199,9 @@ class GameScene: SKScene {
                     } else if oldName.contains("-dropped-function-") {
                         newName = self.atPoint(location).name!.components(separatedBy: "-dropped-function-")
                         arrayName = "function-"
+                    } else if oldName.contains("-dropped-loop-") {
+                        newName = self.atPoint(location).name!.components(separatedBy: "-dropped-loop-")
+                        arrayName = "loop-"
                     }
                     let newBlock = self.atPoint(location) as? SKSpriteNode
                     // removemos o sprite do bloco na tela, este passando a existir apenas no selectedItem à seguir
@@ -232,10 +237,21 @@ class GameScene: SKScene {
                                     spriteComponent.node.name = "\(oldIndex![0])-dropped-function-\(newIndex)"
                                 }
                             }
+                        case "loop-":
+                            loopBlocks.remove(at: indexToRemove)
+                            // trazemos os blocos para a esquerda, ajustando tanto a posição do sprite quanto seu índice no final do nome
+                            for index in indexToRemove..<loopBlocks.count {
+                                if let spriteComponent = loopBlocks[index].component(ofType: SpriteComponent.self) {
+                                    spriteComponent.node.position = CGPoint(x: spriteComponent.node.position.x - 50, y: spriteComponent.node.position.y)
+                                    // a partir do nome antigo, remontamos dessa forma
+                                    let oldIndex = spriteComponent.node.name?.components(separatedBy: "-dropped-loop-")
+                                    let newIndex = Int(oldIndex![1])! - 1
+                                    spriteComponent.node.name = "\(oldIndex![0])-dropped-loop-\(newIndex)"
+                                }
+                            }
                         default:
                             break
                         }
-                        
                     }
                 }
             }
@@ -266,10 +282,8 @@ class GameScene: SKScene {
                         commandDropZoneIsTouched = false
                     }
                 }
-                // detecta a dropzone da aba de comandos
-                
+                // detecta a dropzone da aba de função
                 if(functionBlocks.count < 4) && (emptyFunctionBlocks.count > 0) {
-                    
                     if (location.y > auxiliaryAnchor.y + 183) && (location.y < auxiliaryAnchor.y + 233) && (location.x > auxiliaryAnchor.x - 55 + 50*CGFloat(functionBlocks.count)) && (location.x < auxiliaryAnchor.x + 155){
                         for i in 0...functionBlocks.count {
                             if let spriteComponent = emptyFunctionBlocks[i].component(ofType: SpriteComponent.self) {
@@ -284,6 +298,24 @@ class GameScene: SKScene {
                             }
                         }
                         functionDropZoneIsTouched = false
+                    }
+                }
+                // detecta a dropzone da aba de repetição
+                if(loopBlocks.count < 4) && (emptyLoopBlocks.count > 0) {
+                    if (location.y > auxiliaryAnchor.y + 1) && (location.y < auxiliaryAnchor.y + 51) && (location.x > auxiliaryAnchor.x - 55 + 50*CGFloat(functionBlocks.count)) && (location.x < auxiliaryAnchor.x + 155){
+                        for i in 0...loopBlocks.count {
+                            if let spriteComponent = emptyLoopBlocks[i].component(ofType: SpriteComponent.self) {
+                                spriteComponent.node.alpha = 0.6
+                            }
+                        }
+                        loopDropZoneIsTouched = true
+                    } else {
+                        for i in 0...loopBlocks.count {
+                            if let spriteComponent = emptyLoopBlocks[i].component(ofType: SpriteComponent.self) {
+                                spriteComponent.node.alpha = 0.1
+                            }
+                        }
+                        loopDropZoneIsTouched = false
                     }
                 }
             }
@@ -315,6 +347,16 @@ class GameScene: SKScene {
                         functionBlocks.append(block)
                         entityManager.add(block)
                     }
+                    if (loopBlocks.count < 4) && loopDropZoneIsTouched && draggingItem.name != "function-block" && draggingItem.name != "loop-block" {
+                        let block = DraggableBlock(name: "\(draggingItem.name ?? "")-dropped-loop-\(loopBlocks.count)" , spriteName: draggingItem.name ?? "")
+                        if let spriteComponent = block.component(ofType: SpriteComponent.self) {
+                            spriteComponent.node.size = CGSize(width: draggingItem.size.width / 1.5, height: draggingItem.size.height / 1.5)
+                            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 25 + CGFloat(loopBlocks.count)*50, y: auxiliaryAnchor.y + 28)
+                            spriteComponent.node.zPosition = ZPositionsCategories.draggableBlock
+                        }
+                        loopBlocks.append(block)
+                        entityManager.add(block)
+                    }
                 }
             }
             for i in 0..<emptyBlocks.count {
@@ -324,6 +366,11 @@ class GameScene: SKScene {
             }
             for i in 0..<emptyFunctionBlocks.count {
                 if let whiteBlock = emptyFunctionBlocks[i].component(ofType: SpriteComponent.self) {
+                    whiteBlock.node.alpha = 0.1
+                }
+            }
+            for i in 0..<emptyLoopBlocks.count {
+                if let whiteBlock = emptyLoopBlocks[i].component(ofType: SpriteComponent.self) {
                     whiteBlock.node.alpha = 0.1
                 }
             }
