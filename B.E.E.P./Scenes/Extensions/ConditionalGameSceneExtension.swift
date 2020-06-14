@@ -12,7 +12,6 @@ import SpriteKit
 extension GameScene {
     
     // MARK: Add Element
-    
     func addElementConditional(){
         var conditionalBlocks: [DraggableBlock] = []
         switch conditionalValue {
@@ -70,7 +69,6 @@ extension GameScene {
     }
     
     // MARK: Conditions
-    
     func objectAhead(type: String) -> Bool {
         
         var objectArray: [CGPoint] = []
@@ -156,8 +154,7 @@ extension GameScene {
         return false
     }
     
-    // MARK: Draw
-    
+    // MARK: Draw Conditional Tabs
     func drawConditionalTab() {
         // adiciona a aba de comandos
         let conditionalTab = DefaultObject(name: "conditional-tab")

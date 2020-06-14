@@ -11,6 +11,7 @@ import SpriteKit
 
 extension GameScene {
     
+    // MARK: Draw Tilesets
     // desenha o tileset e seu corredor de luz de acordo com sua posição
     func drawTilesets(width: Int, height: Int) {
         for i in 1...width {
@@ -39,6 +40,7 @@ extension GameScene {
         }
     }
     
+    // MARK: Draw Robots
     func drawRobot (xPosition: Int, yPosition: Int) {
         // desenha o chão iluminado embaixo do robô
         if let spriteComponent = lightFloor.component(ofType: SpriteComponent.self) {
@@ -61,6 +63,7 @@ extension GameScene {
         entityManager.add(robot)
     }
     
+    // MARK: Draw Tabs
     func drawTabs () {
         // adiciona a aba de comandos
         let commandTab = DefaultObject(name: "command-tab")
@@ -134,6 +137,7 @@ extension GameScene {
         }
     }
     
+    // MARK: Draw Auxiliary Tabs
     func drawAuxiliaryTab() {
         let size: Int
         let yAjust: CGFloat
@@ -168,6 +172,7 @@ extension GameScene {
         }
     }
     
+    // MARK: Draw Function Tabs
     func drawFunctionTab() {
         // adiciona a aba de função
         let functionTab = DefaultObject(name: "function-tab")
@@ -215,78 +220,7 @@ extension GameScene {
         entityManager.add(block)
     }
     
-    func drawLoopTab() {
-        // adiciona a aba de repetição
-        let loopTab = DefaultObject(name: "loop-tab")
-        if let spriteComponent = loopTab.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x, y: auxiliaryAnchor.y + 80)
-            spriteComponent.node.zPosition = ZPositionsCategories.subTab
-        }
-        entityManager.add(loopTab)
-        
-        // adiciona a aba de limpar
-        let clearTab = ClearTab(name: "loop-clear-tab", spriteName: "clear-auxiliary-tab")
-        if let spriteComponent = clearTab.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x + 30, y: auxiliaryAnchor.y + 150)
-            spriteComponent.node.zPosition = ZPositionsCategories.clearTabButton
-        }
-        entityManager.add(clearTab)
-        
-        let loopArrowLeft = DefaultObject(name: "loop-arrow-left", spriteName: "arrow-left")
-        if let spriteComponent = loopArrowLeft.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 34, y: auxiliaryAnchor.y + 100)
-            spriteComponent.node.zPosition = ZPositionsCategories.button
-            spriteComponent.node.alpha = 0.3
-        }
-        entityManager.add(loopArrowLeft)
-        loopArrows.append(loopArrowLeft)
-        
-        loopText = SKLabelNode(text: "\(loopValue)x")
-        loopText.fontName = "8bitoperator"
-        loopText.fontSize = 30.0
-        loopText.fontColor = .magenta
-        loopText.zPosition = ZPositionsCategories.button
-        loopText.position = CGPoint(x: auxiliaryAnchor.x + 54, y: auxiliaryAnchor.y + 87)
-        addChild(loopText)
-        
-        let loopArrowRight = DefaultObject(name: "loop-arrow-right", spriteName: "arrow-right")
-        if let spriteComponent = loopArrowRight.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x + 143, y: auxiliaryAnchor.y + 100)
-            spriteComponent.node.zPosition = ZPositionsCategories.button
-        }
-        entityManager.add(loopArrowRight)
-        loopArrows.append(loopArrowRight)
-        
-        // container de drop
-        let loopTabDropZone = DefaultObject(name: "auxiliary-tab-drop-zone")
-        if let spriteComponent = loopTabDropZone.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x + 50, y: auxiliaryAnchor.y + 30)
-            spriteComponent.node.zPosition = ZPositionsCategories.dropZone
-        }
-        entityManager.add(loopTabDropZone)
-        
-        // drop zones individuais
-        for i in 1...4 {
-            let block = EmptyBlock(name: "white-block")
-            if let spriteComponent = block.component(ofType: SpriteComponent.self) {
-                spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 25 + CGFloat(i - 1)*50, y: auxiliaryAnchor.y + 30)
-                spriteComponent.node.zPosition = ZPositionsCategories.emptyBlock
-                spriteComponent.node.alpha = 0.1
-                spriteComponent.node.size = CGSize(width: 60, height: 50)
-            }
-            emptyLoopBlocks.append(block)
-            entityManager.add(block)
-        }
-        
-        let block = DraggableBlock(name: "loop-block")
-        if let spriteComponent = block.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 127, y: auxiliaryAnchor.y + 100)
-            spriteComponent.node.zPosition = ZPositionsCategories.draggableBlock
-            spriteComponent.node.size = CGSize(width: 60, height: 50)
-        }
-        entityManager.add(block)
-    }
-    
+    // MARK: Clear Tabs
     func clearTab (tabName: String) {
         switch tabName {
         case "command":
@@ -329,6 +263,7 @@ extension GameScene {
         }
     }
     
+    // MARK: Draw Hud
     func drawnReturnButton() {
         let returnButton = HubButton(name: "return-button")
         if let spriteComponent = returnButton.component(ofType: SpriteComponent.self) {
@@ -354,6 +289,7 @@ extension GameScene {
         entityManager.add(hintButton)
     }
     
+    // MARK: Draw Boxes
     func drawBoxes () {
         for i in 0..<boxes.count {
             let box = DefaultObject(name: "box (\(boxes[i].x) - \(boxes[i].y)", spriteName: "box")
@@ -367,6 +303,7 @@ extension GameScene {
         }
     }
     
+    // MARK: Draw Box Drop zones
     func drawBoxDropZones () {
         for i in 0..<boxDropZones.count {
             let boxDropZone = DefaultObject(name: "box-drop-zone (\(boxDropZones[i].x) - \(boxDropZones[i].y)", spriteName: "box-empty-floor")
@@ -380,6 +317,7 @@ extension GameScene {
         }
     }
     
+    // MARK: Update Texts
     func updateLoopText () {
         loopText.text = "\(loopValue)x"
     }

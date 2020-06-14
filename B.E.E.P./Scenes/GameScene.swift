@@ -144,37 +144,6 @@ class GameScene: SKScene {
         }
     }
     
-    func addElementLoop(){
-        for _ in 1...loopValue {
-            for block in loopBlocks{
-                if let spriteComponent = block.component(ofType: SpriteComponent.self) {
-                    // usando o trecho "-dropped-" para separar obtermos o nome original e seu índice
-                    let name = spriteComponent.node.name?.components(separatedBy: "-dropped-")
-                    // com o nome original será escolhido o tipo de movimento que o robot irá fazer
-                    switch name![0] {
-                    case "walk-block":
-                        if !moveRobot() {
-                            print("nao deu")
-                        }
-                    case "turn-right-block":
-                        arrayMoveRobot.append(turnRobot(direction: "right"))
-                    case "turn-left-block":
-                        arrayMoveRobot.append(turnRobot(direction: "left"))
-                        /*case "grab-block"
-                         
-                         case "save-block"
-                         
-                         */
-                    default:
-                        break;
-                    }
-                }
-            }
-        }
-    }
-    
-    
-    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         if let location = touches.first?.location(in: self) {
