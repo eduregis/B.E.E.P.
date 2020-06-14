@@ -313,12 +313,13 @@ extension GameScene {
         entityManager.add(conditionalArrowLeft)
         conditionalArrows.append(conditionalArrowLeft)
         
-        conditionalText = SKLabelNode(text: "\(conditionalValue)x")
+        conditionalText = SKLabelNode(text: conditions[conditionalValue])
         conditionalText.fontName = "8bitoperator"
-        conditionalText.fontSize = 30.0
+        conditionalText.fontSize = 14.0
         conditionalText.fontColor = .magenta
         conditionalText.zPosition = ZPositionsCategories.button
-        conditionalText.position = CGPoint(x: auxiliaryAnchor.x + 54, y: auxiliaryAnchor.y - 94)
+        conditionalText.position = CGPoint(x: auxiliaryAnchor.x + 54, y: auxiliaryAnchor.y - 103)
+        conditionalText.numberOfLines = 2
         addChild(conditionalText)
         
         let conditionalArrowRight = DefaultObject(name: "conditional-arrow-right", spriteName: "arrow-right")
@@ -478,6 +479,6 @@ extension GameScene {
     }
     
     func updateConditionalText () {
-        conditionalText.text = "\(conditionalValue)x"
+        conditionalText.text = conditions[conditionalValue]
     }
 }

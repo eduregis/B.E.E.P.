@@ -37,7 +37,8 @@ class GameScene: SKScene {
     var emptyLoopBlocks: [EmptyBlock] = []
     var loopDropZoneIsTouched: Bool = false
     
-    var conditionalValue = 1
+    var conditionalValue = 0
+    var conditions = ["Inimigo\n à frente", "Caixa\n à frente", "Abismo\n a frente", "Encaixe\n à frente"]
     var conditionalArrows: [DefaultObject] = []
     var conditionalText = SKLabelNode(text: "")
     
@@ -268,13 +269,13 @@ class GameScene: SKScene {
                 } else if (self.atPoint(location).name == "conditional-clear-tab") {
                         clearTab(tabName: "conditional")
                 } else if (self.atPoint(location).name == "conditional-arrow-left") {
-                    if conditionalValue > 1 {
+                    if conditionalValue > 0 {
                         conditionalValue = conditionalValue - 1
                     }
                     if let spriteComponent = conditionalArrows[1].component(ofType: SpriteComponent.self) {
                         spriteComponent.node.alpha = 1
                     }
-                    if conditionalValue == 1 {
+                    if conditionalValue == 0 {
                         if let spriteComponent = conditionalArrows[0].component(ofType: SpriteComponent.self) {
                             spriteComponent.node.alpha = 0.3
                         }
@@ -285,13 +286,13 @@ class GameScene: SKScene {
                     }
                     updateConditionalText()
                 } else if (self.atPoint(location).name == "conditional-arrow-right") {
-                    if conditionalValue < 4 {
+                    if conditionalValue < 3 {
                         conditionalValue = conditionalValue + 1
                     }
                     if let spriteComponent = conditionalArrows[0].component(ofType: SpriteComponent.self) {
                         spriteComponent.node.alpha = 1
                     }
-                    if conditionalValue == 4 {
+                    if conditionalValue == 3 {
                         if let spriteComponent = conditionalArrows[1].component(ofType: SpriteComponent.self) {
                             spriteComponent.node.alpha = 0.3
                         }
