@@ -173,6 +173,8 @@ class GameScene: SKScene {
         }
     }
     
+    
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         if let location = touches.first?.location(in: self) {
@@ -213,6 +215,8 @@ class GameScene: SKScene {
                                      */
                                 case "loop-block":
                                     addElementLoop()
+                                case "conditional-block":
+                                    addElementConditional()
                                 default:
                                     break;
                                 }
@@ -267,7 +271,7 @@ class GameScene: SKScene {
                     }
                     updateLoopText()
                 } else if (self.atPoint(location).name == "conditional-clear-tab") {
-                        clearTab(tabName: "conditional")
+                    clearTab(tabName: "conditional")
                 } else if (self.atPoint(location).name == "conditional-arrow-left") {
                     if conditionalValue > 0 {
                         conditionalValue = conditionalValue - 1
@@ -307,8 +311,7 @@ class GameScene: SKScene {
             if let oldName = self.atPoint(location).name {
                 // testa se selecionamos um bloco dentro da aba de comandos
                 if oldName.contains("-dropped-") {
-                    
-                    // se sim, ituilizamos o trecho "-dropped-" para separar obtermos o nome original e seu índice
+                    // se sim, utilizamos o trecho "-dropped-" para separar obtermos o nome original e seu índice
                     var newName: [String] = []
                     var arrayName: String = ""
                     if oldName.contains("-dropped-command-") {
@@ -509,15 +512,20 @@ class GameScene: SKScene {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         draggingItem?.removeFromParent()
         if let location = touches.first?.location(in: self) {
+            // checa se o local onde o objeto está send solto é um boco branco, que funciona como uma dropzone
             if (self.atPoint(location).name == "white-block") {
                 if let draggingItem = draggingItem {
+                    // checa qual area de contato está sendo acionada, e se aquele array tem espaço
                     if (commandBlocks.count < 6) && commandDropZoneIsTouched {
+                        // usamos o nome do array para identificar o bloco, além de um índice
                         let block = DraggableBlock(name: "\(draggingItem.name ?? "")-dropped-command-\(commandBlocks.count)" , spriteName: draggingItem.name ?? "")
                         if let spriteComponent = block.component(ofType: SpriteComponent.self) {
+                            // devolve ao objeto seu tamanho e opacidade
                             spriteComponent.node.size = CGSize(width: draggingItem.size.width / 1.5, height: draggingItem.size.height / 1.5)
                             spriteComponent.node.position = CGPoint(x: gameplayAnchor.x - 175 + CGFloat(commandBlocks.count)*50, y: gameplayAnchor.y - 115)
                             spriteComponent.node.zPosition = ZPositionsCategories.draggableBlock
                         }
+                        // adiciona o bloco no gerenciador de entidades, e também no array
                         commandBlocks.append(block)
                         entityManager.add(block)
                     }
@@ -563,6 +571,7 @@ class GameScene: SKScene {
                     }
                 }
             }
+            // coloca todos os dropzones com opacidade 0.1
             for i in 0..<emptyBlocks.count {
                 if let whiteBlock = emptyBlocks[i].component(ofType: SpriteComponent.self) {
                     whiteBlock.node.alpha = 0.1
