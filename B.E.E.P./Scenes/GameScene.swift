@@ -9,7 +9,7 @@ class GameScene: SKScene {
     var gameplayAnchor: CGPoint!
     var auxiliaryAnchor: CGPoint!
     var actualDirection = "right"
-    var tabStyle = "loop"
+    var tabStyle = "conditional"
     var boxes: [CGPoint] = [
         CGPoint(x: 3, y: 1)
     ]
@@ -36,6 +36,18 @@ class GameScene: SKScene {
     var loopBlocks: [DraggableBlock] = []
     var emptyLoopBlocks: [EmptyBlock] = []
     var loopDropZoneIsTouched: Bool = false
+    
+    var conditionalValue = 1
+    var conditionalArrows: [DefaultObject] = []
+    var conditionalText = SKLabelNode(text: "")
+    
+    var conditionalIfBlocks: [DraggableBlock] = []
+    var emptyConditionalIfBlocks: [EmptyBlock] = []
+    var conditionalIfDropZoneIsTouched: Bool = false
+    
+    var conditionalElseBlocks: [DraggableBlock] = []
+    var emptyConditionalElseBlocks: [EmptyBlock] = []
+    var conditionalElseDropZoneIsTouched: Bool = false
     
     var commandBlocks: [DraggableBlock] = []
     var stopButton = HubButton(name: "stop-button")
@@ -164,7 +176,7 @@ class GameScene: SKScene {
         
         if let location = touches.first?.location(in: self) {
             // Checamos o nome do SpriteNode que foi detectado pela função
-            if (self.atPoint(location).name == "walk-block") || (self.atPoint(location).name == "turn-left-block") || (self.atPoint(location).name == "turn-right-block") || (self.atPoint(location).name == "grab-block") || (self.atPoint(location).name == "save-block") || (self.atPoint(location).name == "function-block") || (self.atPoint(location).name == "loop-block") {
+            if (self.atPoint(location).name == "walk-block") || (self.atPoint(location).name == "turn-left-block") || (self.atPoint(location).name == "turn-right-block") || (self.atPoint(location).name == "grab-block") || (self.atPoint(location).name == "save-block") || (self.atPoint(location).name == "function-block") || (self.atPoint(location).name == "loop-block") || (self.atPoint(location).name == "conditional-block") {
                 // passamos o objeto detectado para dentro do selectedItem
                 selectedItem = self.atPoint(location) as? SKSpriteNode
             }
@@ -253,8 +265,43 @@ class GameScene: SKScene {
                         }
                     }
                     updateLoopText()
+                } else if (self.atPoint(location).name == "conditional-clear-tab") {
+                        clearTab(tabName: "conditional")
+                } else if (self.atPoint(location).name == "conditional-arrow-left") {
+                    if conditionalValue > 1 {
+                        conditionalValue = conditionalValue - 1
+                    }
+                    if let spriteComponent = conditionalArrows[1].component(ofType: SpriteComponent.self) {
+                        spriteComponent.node.alpha = 1
+                    }
+                    if conditionalValue == 1 {
+                        if let spriteComponent = conditionalArrows[0].component(ofType: SpriteComponent.self) {
+                            spriteComponent.node.alpha = 0.3
+                        }
+                    } else {
+                        if let spriteComponent = conditionalArrows[0].component(ofType: SpriteComponent.self) {
+                            spriteComponent.node.alpha = 1
+                        }
+                    }
+                    updateConditionalText()
+                } else if (self.atPoint(location).name == "conditional-arrow-right") {
+                    if conditionalValue < 4 {
+                        conditionalValue = conditionalValue + 1
+                    }
+                    if let spriteComponent = conditionalArrows[0].component(ofType: SpriteComponent.self) {
+                        spriteComponent.node.alpha = 1
+                    }
+                    if conditionalValue == 4 {
+                        if let spriteComponent = conditionalArrows[1].component(ofType: SpriteComponent.self) {
+                            spriteComponent.node.alpha = 0.3
+                        }
+                    } else {
+                        if let spriteComponent = conditionalArrows[1].component(ofType: SpriteComponent.self) {
+                            spriteComponent.node.alpha = 1
+                        }
+                    }
+                    updateConditionalText()
                 }
-                print(loopValue)
             }
             if let oldName = self.atPoint(location).name {
                 // testa se selecionamos um bloco dentro da aba de comandos
@@ -272,6 +319,12 @@ class GameScene: SKScene {
                     } else if oldName.contains("-dropped-loop-") {
                         newName = self.atPoint(location).name!.components(separatedBy: "-dropped-loop-")
                         arrayName = "loop-"
+                    } else if oldName.contains("-dropped-conditional-if-") {
+                        newName = self.atPoint(location).name!.components(separatedBy: "-dropped-conditional-if-")
+                        arrayName = "conditional-if-"
+                    } else if oldName.contains("-dropped-conditional-else-") {
+                        newName = self.atPoint(location).name!.components(separatedBy: "-dropped-conditional-else-")
+                        arrayName = "conditional-else-"
                     }
                     let newBlock = self.atPoint(location) as? SKSpriteNode
                     // removemos o sprite do bloco na tela, este passando a existir apenas no selectedItem à seguir
@@ -317,6 +370,30 @@ class GameScene: SKScene {
                                     let oldIndex = spriteComponent.node.name?.components(separatedBy: "-dropped-loop-")
                                     let newIndex = Int(oldIndex![1])! - 1
                                     spriteComponent.node.name = "\(oldIndex![0])-dropped-loop-\(newIndex)"
+                                }
+                            }
+                        case "conditional-if-":
+                            conditionalIfBlocks.remove(at: indexToRemove)
+                            // trazemos os blocos para a esquerda, ajustando tanto a posição do sprite quanto seu índice no final do nome
+                            for index in indexToRemove..<conditionalIfBlocks.count {
+                                if let spriteComponent = conditionalIfBlocks[index].component(ofType: SpriteComponent.self) {
+                                    spriteComponent.node.position = CGPoint(x: spriteComponent.node.position.x - 50, y: spriteComponent.node.position.y)
+                                    // a partir do nome antigo, remontamos dessa forma
+                                    let oldIndex = spriteComponent.node.name?.components(separatedBy: "-dropped-conditional-if-")
+                                    let newIndex = Int(oldIndex![1])! - 1
+                                    spriteComponent.node.name = "\(oldIndex![0])-dropped-conditional-if-\(newIndex)"
+                                }
+                            }
+                        case "conditional-else-":
+                            conditionalElseBlocks.remove(at: indexToRemove)
+                            // trazemos os blocos para a esquerda, ajustando tanto a posição do sprite quanto seu índice no final do nome
+                            for index in indexToRemove..<conditionalElseBlocks.count {
+                                if let spriteComponent = conditionalElseBlocks[index].component(ofType: SpriteComponent.self) {
+                                    spriteComponent.node.position = CGPoint(x: spriteComponent.node.position.x - 50, y: spriteComponent.node.position.y)
+                                    // a partir do nome antigo, remontamos dessa forma
+                                    let oldIndex = spriteComponent.node.name?.components(separatedBy: "-dropped-conditional-else-")
+                                    let newIndex = Int(oldIndex![1])! - 1
+                                    spriteComponent.node.name = "\(oldIndex![0])-dropped-conditional-else-\(newIndex)"
                                 }
                             }
                         default:
@@ -388,6 +465,42 @@ class GameScene: SKScene {
                         loopDropZoneIsTouched = false
                     }
                 }
+                // detecta a dropzone da aba de condicional
+                if(conditionalIfBlocks.count < 4) && (emptyConditionalIfBlocks.count > 0) {
+                    if (location.y > auxiliaryAnchor.y - 185) && (location.y < auxiliaryAnchor.y - 135) && (location.x > auxiliaryAnchor.x - 55 + 50*CGFloat(conditionalIfBlocks.count)) && (location.x < auxiliaryAnchor.x + 155){
+                        for i in 0...conditionalIfBlocks.count {
+                            if let spriteComponent = emptyConditionalIfBlocks[i].component(ofType: SpriteComponent.self) {
+                                spriteComponent.node.alpha = 0.6
+                            }
+                        }
+                        conditionalIfDropZoneIsTouched = true
+                    } else {
+                        for i in 0...conditionalIfBlocks.count {
+                            if let spriteComponent = emptyConditionalIfBlocks[i].component(ofType: SpriteComponent.self) {
+                                spriteComponent.node.alpha = 0.1
+                            }
+                        }
+                        conditionalIfDropZoneIsTouched = false
+                    }
+                }
+                // detecta a dropzone da aba de condicional
+                if(conditionalElseBlocks.count < 4) && (emptyConditionalElseBlocks.count > 0) {
+                    if (location.y > auxiliaryAnchor.y - 247) && (location.y < auxiliaryAnchor.y - 197) && (location.x > auxiliaryAnchor.x - 55 + 50*CGFloat(conditionalElseBlocks.count)) && (location.x < auxiliaryAnchor.x + 155){
+                        for i in 0...conditionalElseBlocks.count {
+                            if let spriteComponent = emptyConditionalElseBlocks[i].component(ofType: SpriteComponent.self) {
+                                spriteComponent.node.alpha = 0.6
+                            }
+                        }
+                        conditionalElseDropZoneIsTouched = true
+                    } else {
+                        for i in 0...conditionalIfBlocks.count {
+                            if let spriteComponent = emptyConditionalElseBlocks[i].component(ofType: SpriteComponent.self) {
+                                spriteComponent.node.alpha = 0.1
+                            }
+                        }
+                        conditionalElseDropZoneIsTouched = false
+                    }
+                }
             }
         }
     }
@@ -407,7 +520,7 @@ class GameScene: SKScene {
                         commandBlocks.append(block)
                         entityManager.add(block)
                     }
-                    if (functionBlocks.count < 4) && functionDropZoneIsTouched && draggingItem.name != "function-block" && draggingItem.name != "loop-block" {
+                    if (functionBlocks.count < 4) && functionDropZoneIsTouched && draggingItem.name != "function-block" && draggingItem.name != "loop-block" && draggingItem.name != "conditional-block" {
                         let block = DraggableBlock(name: "\(draggingItem.name ?? "")-dropped-function-\(functionBlocks.count)" , spriteName: draggingItem.name ?? "")
                         if let spriteComponent = block.component(ofType: SpriteComponent.self) {
                             spriteComponent.node.size = CGSize(width: draggingItem.size.width / 1.5, height: draggingItem.size.height / 1.5)
@@ -417,14 +530,34 @@ class GameScene: SKScene {
                         functionBlocks.append(block)
                         entityManager.add(block)
                     }
-                    if (loopBlocks.count < 4) && loopDropZoneIsTouched && draggingItem.name != "function-block" && draggingItem.name != "loop-block" {
+                    if (loopBlocks.count < 4) && loopDropZoneIsTouched && draggingItem.name != "function-block" && draggingItem.name != "loop-block" && draggingItem.name != "conditional-block" {
                         let block = DraggableBlock(name: "\(draggingItem.name ?? "")-dropped-loop-\(loopBlocks.count)" , spriteName: draggingItem.name ?? "")
                         if let spriteComponent = block.component(ofType: SpriteComponent.self) {
                             spriteComponent.node.size = CGSize(width: draggingItem.size.width / 1.5, height: draggingItem.size.height / 1.5)
-                            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 25 + CGFloat(loopBlocks.count)*50, y: auxiliaryAnchor.y + 28)
+                            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 25 + CGFloat(loopBlocks.count)*50, y: auxiliaryAnchor.y + 30)
                             spriteComponent.node.zPosition = ZPositionsCategories.draggableBlock
                         }
                         loopBlocks.append(block)
+                        entityManager.add(block)
+                    }
+                    if (conditionalIfBlocks.count < 4) && conditionalIfDropZoneIsTouched && draggingItem.name != "function-block" && draggingItem.name != "loop-block" && draggingItem.name != "conditional-block" {
+                        let block = DraggableBlock(name: "\(draggingItem.name ?? "")-dropped-conditional-if-\(conditionalIfBlocks.count)" , spriteName: draggingItem.name ?? "")
+                        if let spriteComponent = block.component(ofType: SpriteComponent.self) {
+                            spriteComponent.node.size = CGSize(width: draggingItem.size.width / 1.5, height: draggingItem.size.height / 1.5)
+                            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 25 + CGFloat(conditionalIfBlocks.count)*50, y: auxiliaryAnchor.y - 151)
+                            spriteComponent.node.zPosition = ZPositionsCategories.draggableBlock
+                        }
+                        conditionalIfBlocks.append(block)
+                        entityManager.add(block)
+                    }
+                    if (conditionalElseBlocks.count < 4) && conditionalElseDropZoneIsTouched && draggingItem.name != "function-block" && draggingItem.name != "loop-block" && draggingItem.name != "conditional-block" {
+                        let block = DraggableBlock(name: "\(draggingItem.name ?? "")-dropped-conditional-else-\(conditionalElseBlocks.count)" , spriteName: draggingItem.name ?? "")
+                        if let spriteComponent = block.component(ofType: SpriteComponent.self) {
+                            spriteComponent.node.size = CGSize(width: draggingItem.size.width / 1.5, height: draggingItem.size.height / 1.5)
+                            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 25 + CGFloat(conditionalElseBlocks.count)*50, y: auxiliaryAnchor.y - 213)
+                            spriteComponent.node.zPosition = ZPositionsCategories.draggableBlock
+                        }
+                        conditionalElseBlocks.append(block)
                         entityManager.add(block)
                     }
                 }
@@ -441,6 +574,16 @@ class GameScene: SKScene {
             }
             for i in 0..<emptyLoopBlocks.count {
                 if let whiteBlock = emptyLoopBlocks[i].component(ofType: SpriteComponent.self) {
+                    whiteBlock.node.alpha = 0.1
+                }
+            }
+            for i in 0..<emptyConditionalIfBlocks.count {
+                if let whiteBlock = emptyConditionalIfBlocks[i].component(ofType: SpriteComponent.self) {
+                    whiteBlock.node.alpha = 0.1
+                }
+            }
+            for i in 0..<emptyConditionalElseBlocks.count {
+                if let whiteBlock = emptyConditionalElseBlocks[i].component(ofType: SpriteComponent.self) {
                     whiteBlock.node.alpha = 0.1
                 }
             }

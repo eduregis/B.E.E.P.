@@ -147,7 +147,7 @@ extension GameScene {
                 yAjust = 148
             default:
                 size = 3
-                yAjust = 0
+                yAjust = 28
             }
             let auxiliaryTab = AuxiliaryTab(size: size)
             if let spriteComponent = auxiliaryTab.component(ofType: SpriteComponent.self) {
@@ -163,7 +163,7 @@ extension GameScene {
             }
             
             if(tabStyle == "conditional") {
-                drawConditionalTab()
+               drawConditionalTab()
             }
         }
     }
@@ -216,10 +216,10 @@ extension GameScene {
     }
     
     func drawLoopTab() {
-        // adiciona a aba de comandos
+        // adiciona a aba de repetição
         let loopTab = DefaultObject(name: "loop-tab")
         if let spriteComponent = loopTab.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x, y: auxiliaryAnchor.y + 78)
+            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x, y: auxiliaryAnchor.y + 80)
             spriteComponent.node.zPosition = ZPositionsCategories.subTab
         }
         entityManager.add(loopTab)
@@ -227,43 +227,14 @@ extension GameScene {
         // adiciona a aba de limpar
         let clearTab = ClearTab(name: "loop-clear-tab", spriteName: "clear-auxiliary-tab")
         if let spriteComponent = clearTab.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x + 30, y: auxiliaryAnchor.y + 148)
+            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x + 30, y: auxiliaryAnchor.y + 150)
             spriteComponent.node.zPosition = ZPositionsCategories.clearTabButton
         }
         entityManager.add(clearTab)
         
-        // container de drop
-        let loopTabDropZone = DefaultObject(name: "auxiliary-tab-drop-zone")
-        if let spriteComponent = loopTabDropZone.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x + 50, y: auxiliaryAnchor.y + 28)
-            spriteComponent.node.zPosition = ZPositionsCategories.dropZone
-        }
-        entityManager.add(loopTabDropZone)
-        
-        // drop zones individuais
-        for i in 1...4 {
-            let block = EmptyBlock(name: "white-block")
-            if let spriteComponent = block.component(ofType: SpriteComponent.self) {
-                spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 25 + CGFloat(i - 1)*50, y: auxiliaryAnchor.y + 28)
-                spriteComponent.node.zPosition = ZPositionsCategories.emptyBlock
-                spriteComponent.node.alpha = 0.1
-                spriteComponent.node.size = CGSize(width: 60, height: 50)
-            }
-            emptyLoopBlocks.append(block)
-            entityManager.add(block)
-        }
-        
-        let block = DraggableBlock(name: "loop-block")
-        if let spriteComponent = block.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 127, y: auxiliaryAnchor.y + 98)
-            spriteComponent.node.zPosition = ZPositionsCategories.draggableBlock
-            spriteComponent.node.size = CGSize(width: 60, height: 50)
-        }
-        entityManager.add(block)
-        
         let loopArrowLeft = DefaultObject(name: "loop-arrow-left", spriteName: "arrow-left")
         if let spriteComponent = loopArrowLeft.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 34, y: auxiliaryAnchor.y + 98)
+            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 34, y: auxiliaryAnchor.y + 100)
             spriteComponent.node.zPosition = ZPositionsCategories.button
             spriteComponent.node.alpha = 0.3
         }
@@ -275,20 +246,138 @@ extension GameScene {
         loopText.fontSize = 30.0
         loopText.fontColor = .magenta
         loopText.zPosition = ZPositionsCategories.button
-        loopText.position = CGPoint(x: auxiliaryAnchor.x + 54, y: auxiliaryAnchor.y + 85)
+        loopText.position = CGPoint(x: auxiliaryAnchor.x + 54, y: auxiliaryAnchor.y + 87)
         addChild(loopText)
         
         let loopArrowRight = DefaultObject(name: "loop-arrow-right", spriteName: "arrow-right")
         if let spriteComponent = loopArrowRight.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x + 143, y: auxiliaryAnchor.y + 98)
+            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x + 143, y: auxiliaryAnchor.y + 100)
             spriteComponent.node.zPosition = ZPositionsCategories.button
         }
         entityManager.add(loopArrowRight)
         loopArrows.append(loopArrowRight)
+        
+        // container de drop
+        let loopTabDropZone = DefaultObject(name: "auxiliary-tab-drop-zone")
+        if let spriteComponent = loopTabDropZone.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x + 50, y: auxiliaryAnchor.y + 30)
+            spriteComponent.node.zPosition = ZPositionsCategories.dropZone
+        }
+        entityManager.add(loopTabDropZone)
+        
+        // drop zones individuais
+        for i in 1...4 {
+            let block = EmptyBlock(name: "white-block")
+            if let spriteComponent = block.component(ofType: SpriteComponent.self) {
+                spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 25 + CGFloat(i - 1)*50, y: auxiliaryAnchor.y + 30)
+                spriteComponent.node.zPosition = ZPositionsCategories.emptyBlock
+                spriteComponent.node.alpha = 0.1
+                spriteComponent.node.size = CGSize(width: 60, height: 50)
+            }
+            emptyLoopBlocks.append(block)
+            entityManager.add(block)
+        }
+        
+        let block = DraggableBlock(name: "loop-block")
+        if let spriteComponent = block.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 127, y: auxiliaryAnchor.y + 100)
+            spriteComponent.node.zPosition = ZPositionsCategories.draggableBlock
+            spriteComponent.node.size = CGSize(width: 60, height: 50)
+        }
+        entityManager.add(block)
     }
     
     func drawConditionalTab() {
+        // adiciona a aba de comandos
+        let conditionalTab = DefaultObject(name: "conditional-tab")
+        if let spriteComponent = conditionalTab.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x, y: auxiliaryAnchor.y - 133)
+            spriteComponent.node.zPosition = ZPositionsCategories.subTab
+        }
+        entityManager.add(conditionalTab)
         
+        // adiciona a aba de limpar
+        let clearTab = ClearTab(name: "conditional-clear-tab", spriteName: "clear-auxiliary-tab")
+        if let spriteComponent = clearTab.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x + 50, y: auxiliaryAnchor.y - 31)
+            spriteComponent.node.zPosition = ZPositionsCategories.clearTabButton
+        }
+        entityManager.add(clearTab)
+        
+        let conditionalArrowLeft = DefaultObject(name: "conditional-arrow-left", spriteName: "arrow-left")
+        if let spriteComponent = conditionalArrowLeft.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 34, y: auxiliaryAnchor.y - 81)
+            spriteComponent.node.zPosition = ZPositionsCategories.button
+            spriteComponent.node.alpha = 0.3
+        }
+        entityManager.add(conditionalArrowLeft)
+        conditionalArrows.append(conditionalArrowLeft)
+        
+        conditionalText = SKLabelNode(text: "\(conditionalValue)x")
+        conditionalText.fontName = "8bitoperator"
+        conditionalText.fontSize = 30.0
+        conditionalText.fontColor = .magenta
+        conditionalText.zPosition = ZPositionsCategories.button
+        conditionalText.position = CGPoint(x: auxiliaryAnchor.x + 54, y: auxiliaryAnchor.y - 94)
+        addChild(conditionalText)
+        
+        let conditionalArrowRight = DefaultObject(name: "conditional-arrow-right", spriteName: "arrow-right")
+        if let spriteComponent = conditionalArrowRight.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x + 143, y: auxiliaryAnchor.y - 81)
+            spriteComponent.node.zPosition = ZPositionsCategories.button
+        }
+        entityManager.add(conditionalArrowRight)
+        conditionalArrows.append(conditionalArrowRight)
+        
+        // container de drop
+        let conditionalTabDropZone = DefaultObject(name: "auxiliary-tab-drop-zone")
+        if let spriteComponent = conditionalTabDropZone.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x + 50, y: auxiliaryAnchor.y - 151)
+            spriteComponent.node.zPosition = ZPositionsCategories.dropZone
+        }
+        entityManager.add(conditionalTabDropZone)
+        
+        // drop zones individuais
+        for i in 1...4 {
+            let block = EmptyBlock(name: "white-block")
+            if let spriteComponent = block.component(ofType: SpriteComponent.self) {
+                spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 25 + CGFloat(i - 1)*50, y: auxiliaryAnchor.y - 151)
+                spriteComponent.node.zPosition = ZPositionsCategories.emptyBlock
+                spriteComponent.node.alpha = 0.1
+                spriteComponent.node.size = CGSize(width: 60, height: 50)
+            }
+            emptyConditionalIfBlocks.append(block)
+            entityManager.add(block)
+        }
+        
+        let block = DraggableBlock(name: "conditional-block")
+        if let spriteComponent = block.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 127, y: auxiliaryAnchor.y - 81)
+            spriteComponent.node.zPosition = ZPositionsCategories.draggableBlock
+            spriteComponent.node.size = CGSize(width: 60, height: 50)
+        }
+        entityManager.add(block)
+        
+        // container de drop
+        let conditionalElseTabDropZone = DefaultObject(name: "auxiliary-tab-drop-zone")
+        if let spriteComponent = conditionalElseTabDropZone.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x + 50, y: auxiliaryAnchor.y - 213)
+            spriteComponent.node.zPosition = ZPositionsCategories.dropZone
+        }
+        entityManager.add(conditionalElseTabDropZone)
+        
+        // drop zones individuais
+        for i in 1...4 {
+            let block = EmptyBlock(name: "white-block")
+            if let spriteComponent = block.component(ofType: SpriteComponent.self) {
+                spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 25 + CGFloat(i - 1)*50, y: auxiliaryAnchor.y - 213)
+                spriteComponent.node.zPosition = ZPositionsCategories.emptyBlock
+                spriteComponent.node.alpha = 0.1
+                spriteComponent.node.size = CGSize(width: 60, height: 50)
+            }
+            emptyConditionalElseBlocks.append(block)
+            entityManager.add(block)
+        }
     }
     
     func clearTab (tabName: String) {
@@ -315,6 +404,19 @@ extension GameScene {
                 }
             }
             loopBlocks.removeAll()
+        case "conditional":
+        for block in conditionalIfBlocks {
+            if let spriteComponent = block.component(ofType: SpriteComponent.self) {
+                spriteComponent.node.removeFromParent()
+            }
+        }
+        for block in conditionalElseBlocks {
+            if let spriteComponent = block.component(ofType: SpriteComponent.self) {
+                spriteComponent.node.removeFromParent()
+            }
+        }
+        conditionalIfBlocks.removeAll()
+        conditionalElseBlocks.removeAll()
         default:
             break
         }
@@ -373,5 +475,9 @@ extension GameScene {
     
     func updateLoopText () {
         loopText.text = "\(loopValue)x"
+    }
+    
+    func updateConditionalText () {
+        conditionalText.text = "\(conditionalValue)x"
     }
 }
