@@ -10,6 +10,8 @@ import GameplayKit
 import SpriteKit
 
 extension GameScene {
+    
+    // MARK: Reset Move Robot
      func resetMoveRobot(){
          // remover todos os elementos de todos os arrays referentes ao movimento do robot e lightFloor
          arrayMoveRobot.removeAll()
@@ -43,6 +45,7 @@ extension GameScene {
          }
      }
      
+    // MARK: Turn Robot
      func turnRobot(direction: String) -> SKAction {
          // checa para qual lado o robô irá girar
          switch direction {
@@ -86,6 +89,7 @@ extension GameScene {
          return elementArrayMove!
      }
     
+     // MARK: Move Robot
      func moveRobot() -> Bool {
         var newZPosition: CGFloat = 0
          // checa se o robô pode andar para a posição apontada
@@ -146,6 +150,7 @@ extension GameScene {
          return true
      }
      
+    // MARK: Move Light floor
      func moveCompleteRobotLightFloor(){
          if let lightFloorMoveComponent = lightFloor.component(ofType: LightFloorMoveComponent.self) {
              lightFloorMoveComponent.moveComplete(move: arrayMovelightFloor)
