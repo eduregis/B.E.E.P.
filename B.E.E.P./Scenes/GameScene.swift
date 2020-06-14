@@ -29,6 +29,10 @@ class GameScene: SKScene {
     var emptyFunctionBlocks: [EmptyBlock] = []
     var functionDropZoneIsTouched: Bool = false
     
+    var loopValue = 1
+    var loopArrows: [DefaultObject] = []
+    var loopText = SKLabelNode(text: "")
+    
     var loopBlocks: [DraggableBlock] = []
     var emptyLoopBlocks: [EmptyBlock] = []
     var loopDropZoneIsTouched: Bool = false
@@ -184,7 +188,42 @@ class GameScene: SKScene {
                     clearTab(tabName: "function")
                 } else if (self.atPoint(location).name == "loop-clear-tab") {
                     clearTab(tabName: "loop")
+                } else if (self.atPoint(location).name == "loop-arrow-left") {
+                    if loopValue > 1 {
+                        loopValue = loopValue - 1
+                    }
+                    if let spriteComponent = loopArrows[1].component(ofType: SpriteComponent.self) {
+                        spriteComponent.node.alpha = 1
+                    }
+                    if loopValue == 1 {
+                        if let spriteComponent = loopArrows[0].component(ofType: SpriteComponent.self) {
+                            spriteComponent.node.alpha = 0.3
+                        }
+                    } else {
+                        if let spriteComponent = loopArrows[0].component(ofType: SpriteComponent.self) {
+                            spriteComponent.node.alpha = 1
+                        }
+                    }
+                    updateLoopText()
+                } else if (self.atPoint(location).name == "loop-arrow-right") {
+                    if loopValue < 4 {
+                        loopValue = loopValue + 1
+                    }
+                    if let spriteComponent = loopArrows[0].component(ofType: SpriteComponent.self) {
+                        spriteComponent.node.alpha = 1
+                    }
+                    if loopValue == 4 {
+                        if let spriteComponent = loopArrows[1].component(ofType: SpriteComponent.self) {
+                            spriteComponent.node.alpha = 0.3
+                        }
+                    } else {
+                        if let spriteComponent = loopArrows[1].component(ofType: SpriteComponent.self) {
+                            spriteComponent.node.alpha = 1
+                        }
+                    }
+                    updateLoopText()
                 }
+                print(loopValue)
             }
             if let oldName = self.atPoint(location).name {
                 // testa se selecionamos um bloco dentro da aba de comandos

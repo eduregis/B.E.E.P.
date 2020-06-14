@@ -261,27 +261,30 @@ extension GameScene {
         }
         entityManager.add(block)
         
-        let arrowLeft = DraggableBlock(name: "loop-arrow-left", spriteName: "arrow-left")
-        if let spriteComponent = arrowLeft.component(ofType: SpriteComponent.self) {
+        let loopArrowLeft = DefaultObject(name: "loop-arrow-left", spriteName: "arrow-left")
+        if let spriteComponent = loopArrowLeft.component(ofType: SpriteComponent.self) {
             spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 34, y: auxiliaryAnchor.y + 98)
             spriteComponent.node.zPosition = ZPositionsCategories.button
+            spriteComponent.node.alpha = 0.3
         }
-        entityManager.add(arrowLeft)
+        entityManager.add(loopArrowLeft)
+        loopArrows.append(loopArrowLeft)
         
-        let loopValue = SKLabelNode(text: "4x")
-        loopValue.fontName = "8bitoperator"
-        loopValue.fontSize = 50.0
-        loopValue.fontColor = .magenta
-        loopValue.zPosition = ZPositionsCategories.button
-        loopValue.position = CGPoint(x: auxiliaryAnchor.x + 54, y: auxiliaryAnchor.y + 98)
-        addChild(loopValue)
+        loopText = SKLabelNode(text: "\(loopValue)x")
+        loopText.fontName = "8bitoperator"
+        loopText.fontSize = 30.0
+        loopText.fontColor = .magenta
+        loopText.zPosition = ZPositionsCategories.button
+        loopText.position = CGPoint(x: auxiliaryAnchor.x + 54, y: auxiliaryAnchor.y + 85)
+        addChild(loopText)
         
-        let arrowRight = DraggableBlock(name: "loop-arrow-right", spriteName: "arrow-right")
-        if let spriteComponent = arrowRight.component(ofType: SpriteComponent.self) {
+        let loopArrowRight = DefaultObject(name: "loop-arrow-right", spriteName: "arrow-right")
+        if let spriteComponent = loopArrowRight.component(ofType: SpriteComponent.self) {
             spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x + 143, y: auxiliaryAnchor.y + 98)
             spriteComponent.node.zPosition = ZPositionsCategories.button
         }
-        entityManager.add(arrowRight)
+        entityManager.add(loopArrowRight)
+        loopArrows.append(loopArrowRight)
     }
     
     func drawConditionalTab() {
@@ -366,5 +369,9 @@ extension GameScene {
             }
             entityManager.add(boxDropZone)
         }
+    }
+    
+    func updateLoopText () {
+        loopText.text = "\(loopValue)x"
     }
 }
