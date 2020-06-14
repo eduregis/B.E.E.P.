@@ -268,6 +268,14 @@ extension GameScene {
         }
         entityManager.add(arrowLeft)
         
+        let loopValue = SKLabelNode(text: "4x")
+        loopValue.fontName = "8bitoperator"
+        loopValue.fontSize = 50.0
+        loopValue.fontColor = .magenta
+        loopValue.zPosition = ZPositionsCategories.button
+        loopValue.position = CGPoint(x: auxiliaryAnchor.x + 54, y: auxiliaryAnchor.y + 98)
+        addChild(loopValue)
+        
         let arrowRight = DraggableBlock(name: "loop-arrow-right", spriteName: "arrow-right")
         if let spriteComponent = arrowRight.component(ofType: SpriteComponent.self) {
             spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x + 143, y: auxiliaryAnchor.y + 98)
