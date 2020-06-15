@@ -13,6 +13,18 @@ class GameScene: SKScene {
     var boxes: [CGPoint] = [
         CGPoint(x: 3, y: 1)
     ]
+    
+    
+    
+    var verificationBox = false
+    var boxesCopy: [DefaultObject] = []
+    var boxesChangeable: [CGPoint] = [
+        CGPoint(x: 3, y: 1)
+    ]
+    
+    
+    
+    
     var boxDropZones: [CGPoint] = [
         CGPoint(x: 4, y: 1)
     ]
@@ -51,7 +63,7 @@ class GameScene: SKScene {
     var conditionalElseDropZoneIsTouched: Bool = false
     
     var commandBlocks: [DraggableBlock] = []
-    var stopButton = HubButton(name: "stop-button")
+    var stopButton = HudButton(name: "stop-button")
     
     // arrays que vão permitir uma movimentação linear do robot e do lightFloor
     var arrayMoveRobot: [SKAction] = []
@@ -156,6 +168,7 @@ class GameScene: SKScene {
                 // caso não seja o objeto que queremos, esvaziamos o selectedItem
                 selectedItem = nil
                 if self.atPoint(location).name == "play-button" {
+                    var countMove = 0
                     resetMoveRobot()
                     /*verificar se o array commandBlocks está vazio
                      - Se tem algum block na dropZone*/
@@ -170,14 +183,24 @@ class GameScene: SKScene {
                                 case "walk-block":
                                     if !moveRobot() {
                                         print("nao deu")
+                                    }else{
+                                        countMove += 1
                                     }
                                 case "turn-right-block":
                                     arrayMoveRobot.append(turnRobot(direction: "right"))
+                                    countMove += 1
                                 case "turn-left-block":
                                     arrayMoveRobot.append(turnRobot(direction: "left"))
+                                    countMove += 1
                                 case "function-block":
                                     addElementFunc()
-                                    /*case "grab-block"
+                                case "grab-block":
+                                    if !grabBox(countMove: countMove){
+                                         print("nao deu")
+                                    }else{
+                                        countMove = 0
+                                    }
+                                    /*
                                      
                                      case "save-block"
                                      

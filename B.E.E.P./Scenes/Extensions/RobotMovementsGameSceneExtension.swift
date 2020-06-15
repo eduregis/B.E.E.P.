@@ -43,6 +43,19 @@ extension GameScene {
              spriteComponent.node.position = CGPoint(x: x, y: y)
              spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(actualPosition.x + actualPosition.y + 1)
          }
+        //redesenhar os boxes
+        var i = 0
+        for box in boxesCopy {
+            if let spriteComponent = box.component(ofType: SpriteComponent.self) {
+                let x = gameplayAnchor.x + CGFloat(32 * (boxes[i].x - 1)) - CGFloat(32 * (boxes[i].y - 1))
+                let y = gameplayAnchor.y + 182 - CGFloat(16 * (boxes[i].x - 1)) - CGFloat(16 * (boxes[i].y - 1))
+                spriteComponent.node.position = CGPoint(x: x, y: y)
+                spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(boxes[i].x + boxes[i].y) + 1
+            }
+            i += 1
+        }
+        
+        verificationBox = false
      }
      
     // MARK: Turn Robot
@@ -80,7 +93,7 @@ extension GameScene {
              break
          }
          if let robotMoveComponent = robot.component(ofType: RobotMoveComponent.self) {
-             elementArrayMove = robotMoveComponent.turn(direction: actualDirection)
+             elementArrayMove = robotMoveComponent.turn(direction: actualDirection, box: verificationBox)
          }
          // adicionamos uma -move da lightFloor default- para igualar o tempo de reação do lightFloor com a do robot
          if let lightFloorMoveComponent = lightFloor.component(ofType: LightFloorMoveComponent.self) {
@@ -88,7 +101,54 @@ extension GameScene {
          }
          return elementArrayMove!
      }
-    
+    // MARK: Grab Box
+    func grabBox(countMove: Int) -> Bool{
+        if !verificationBox{
+            verificationBox = true
+        }
+        let positionBoxe: CGPoint
+        switch actualDirection {
+        case "up":
+           if !boxesChangeable.contains(CGPoint(x: actualPosition.x, y: actualPosition.y - 1)){
+                return false
+            } else {
+                positionBoxe = CGPoint(x: actualPosition.x, y: actualPosition.y - 1)
+            }
+        case "left":
+            if !boxesChangeable.contains(CGPoint(x: actualPosition.x - 1, y: actualPosition.y)){
+                return false
+            } else {
+                positionBoxe = CGPoint(x: actualPosition.x - 1, y: actualPosition.y)
+            }
+        case "down":
+            if !boxesChangeable.contains(CGPoint(x: actualPosition.x, y: actualPosition.y + 1)){
+                return false
+            } else {
+                positionBoxe = CGPoint(x: actualPosition.x, y: actualPosition.y + 1)
+            }
+        case "right":
+            if !boxesChangeable.contains(CGPoint(x: actualPosition.x + 1, y: actualPosition.y)){
+                return false
+            } else {
+                positionBoxe = CGPoint(x: actualPosition.x + 1, y: actualPosition.y)
+            }
+        default:
+            positionBoxe = CGPoint(x: 0, y: 0)
+        }
+        if let robot = robot.component(ofType: RobotMoveComponent.self){
+            arrayMoveRobot.append(robot.moveBoxe(direction: actualDirection))
+        }
+        for box in boxesCopy{
+            if let component = box.component(ofType: SpriteComponent.self){
+                if component.node.name == "box (\(positionBoxe.x) - \(positionBoxe.y)" {
+                    component.node.run(SKAction.wait(forDuration: Double(countMove)*0.65)){
+                        component.node.zPosition = 0
+                    }
+                }
+            }
+        }
+        return true
+    }
      // MARK: Move Robot
      func moveRobot() -> Bool {
         var newZPosition: CGFloat = 0
@@ -129,7 +189,7 @@ extension GameScene {
          //Caso ele possa andar
          // adicionamos a SKAction referente a direção atual no arrayMoveRobot
          if let robotMoveComponent = robot.component(ofType: RobotMoveComponent.self) {
-             arrayMoveRobot.append(robotMoveComponent.move(direction: actualDirection))
+             arrayMoveRobot.append(robotMoveComponent.move(direction: actualDirection, box: verificationBox))
          }
         
         // ajustamos sua zPosition
