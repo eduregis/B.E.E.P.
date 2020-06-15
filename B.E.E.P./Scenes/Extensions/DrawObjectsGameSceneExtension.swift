@@ -230,7 +230,6 @@ extension GameScene {
                 }
             }
             commandBlocks.removeAll()
-            resetMoveRobot()
         case "function":
             for block in functionBlocks {
                 if let spriteComponent = block.component(ofType: SpriteComponent.self) {
@@ -265,7 +264,7 @@ extension GameScene {
     
     // MARK: Draw Hud
     func drawnReturnButton() {
-        let returnButton = HubButton(name: "return-button")
+        let returnButton = HudButton(name: "return-button")
         if let spriteComponent = returnButton.component(ofType: SpriteComponent.self) {
             spriteComponent.node.position = CGPoint(x: frame.minX + 50, y: frame.maxY - 50)
             spriteComponent.node.zPosition = ZPositionsCategories.button
@@ -273,7 +272,7 @@ extension GameScene {
         entityManager.add(returnButton)
     }
     func drawnConfigButton() {
-        let configButton = HubButton(name: "config-button")
+        let configButton = HudButton(name: "config-button")
         if let spriteComponent = configButton.component(ofType: SpriteComponent.self) {
             spriteComponent.node.position = CGPoint(x: frame.maxX - 150, y: frame.maxY - 50)
             spriteComponent.node.zPosition = ZPositionsCategories.button
@@ -281,7 +280,7 @@ extension GameScene {
         entityManager.add(configButton)
     }
     func drawnHintButton() {
-        let hintButton = HubButton(name: "hint-button")
+        let hintButton = HudButton(name: "hint-button")
         if let spriteComponent = hintButton.component(ofType: SpriteComponent.self) {
             spriteComponent.node.position = CGPoint(x: frame.maxX - 100, y: frame.maxY - 50)
             spriteComponent.node.zPosition = ZPositionsCategories.button
@@ -299,6 +298,7 @@ extension GameScene {
                 spriteComponent.node.position = CGPoint(x: x, y: y)
                 spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(boxes[i].x + boxes[i].y) + 1
             }
+            boxesCopy.append(box)
             entityManager.add(box)
         }
     }
