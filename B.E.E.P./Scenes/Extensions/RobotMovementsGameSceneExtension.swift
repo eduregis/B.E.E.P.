@@ -50,6 +50,7 @@ extension GameScene {
                 let x = gameplayAnchor.x + CGFloat(32 * (boxes[i].x - 1)) - CGFloat(32 * (boxes[i].y - 1))
                 let y = gameplayAnchor.y + 182 - CGFloat(16 * (boxes[i].x - 1)) - CGFloat(16 * (boxes[i].y - 1))
                 spriteComponent.node.position = CGPoint(x: x, y: y)
+                spriteComponent.node.name = "box (\(boxes[i].x) - \(boxes[i].y)"
                 spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(boxes[i].x + boxes[i].y) + 1
             }
             i += 1
@@ -101,52 +102,116 @@ extension GameScene {
          }
          return elementArrayMove!
      }
+    func textureRobotDirection(){
+        let texture: [SKTexture]
+        switch actualDirection {
+            case "up":
+                texture = [SKTexture(imageNamed: "robot-idle-up-2")]
+            case "left":
+                texture = [SKTexture(imageNamed: "robot-idle-left-2")]
+            case "down":
+                texture = [SKTexture(imageNamed: "robot-idle-down-2")]
+            case "right":
+                texture = [SKTexture(imageNamed: "robot-idle-right-2")]
+            default:
+                texture = [SKTexture(imageNamed: "")]
+        }
+        let animate = SKAction.animate(with: texture, timePerFrame: 0)
+        arrayMoveRobot.append(animate)
+        
+    }
     // MARK: Grab Box
     func grabBox(countMove: Int) -> Bool{
-        if !verificationBox{
-            verificationBox = true
+        var positionBox: CGPoint
+        if verificationBox  == true {
+            switch actualDirection {
+            case "up":
+               if actualPosition.y == 0 {
+                    return false
+                } else {
+                    positionBox = CGPoint(x: actualPosition.x, y: actualPosition.y - 1)
+                }
+            case "left":
+                if actualPosition.x == 0 {
+                    return false
+                } else {
+                    positionBox = CGPoint(x: actualPosition.x - 1, y: actualPosition.y)
+                }
+            case "down":
+                if actualPosition.y == stageDimensions.height - 1 {
+                    return false
+                } else {
+                    positionBox = CGPoint(x: actualPosition.x, y: actualPosition.y + 1)
+                }
+            case "right":
+                if actualPosition.x == stageDimensions.width - 1 {
+                   return false
+                } else {
+                    positionBox = CGPoint(x: actualPosition.x + 1, y: actualPosition.y)
+                }
+            default:
+                positionBox = CGPoint(x: 0, y: 0)
+                return false
+            }
+            if let box = boxesCopy[identifierBox!].component(ofType: SpriteComponent.self){
+                let x = gameplayAnchor.x + CGFloat(32 * (positionBox.x - 1)) - CGFloat(32 * (positionBox.y - 1))
+                let y = gameplayAnchor.y + 182 - CGFloat(16 * (positionBox.x - 1)) - CGFloat(16 * (positionBox.y - 1))
+                let z = stageDimensions.width + stageDimensions.height + CGFloat(positionBox.x + positionBox.y) + 1
+                textureRobotDirection()
+                box.node.run(SKAction.wait(forDuration: Double(countMove)*0.75)){
+                    box.node.position = CGPoint(x: x, y: y)
+                    box.node.zPosition = z
+                }
+            }
+            verificationBox = false
+            return true
         }
-        let positionBoxe: CGPoint
+        
         switch actualDirection {
         case "up":
            if !boxesChangeable.contains(CGPoint(x: actualPosition.x, y: actualPosition.y - 1)){
                 return false
             } else {
-                positionBoxe = CGPoint(x: actualPosition.x, y: actualPosition.y - 1)
+                positionBox = CGPoint(x: actualPosition.x, y: actualPosition.y - 1)
             }
         case "left":
             if !boxesChangeable.contains(CGPoint(x: actualPosition.x - 1, y: actualPosition.y)){
                 return false
             } else {
-                positionBoxe = CGPoint(x: actualPosition.x - 1, y: actualPosition.y)
+                positionBox = CGPoint(x: actualPosition.x - 1, y: actualPosition.y)
             }
         case "down":
             if !boxesChangeable.contains(CGPoint(x: actualPosition.x, y: actualPosition.y + 1)){
                 return false
             } else {
-                positionBoxe = CGPoint(x: actualPosition.x, y: actualPosition.y + 1)
+                positionBox = CGPoint(x: actualPosition.x, y: actualPosition.y + 1)
             }
         case "right":
             if !boxesChangeable.contains(CGPoint(x: actualPosition.x + 1, y: actualPosition.y)){
                 return false
             } else {
-                positionBoxe = CGPoint(x: actualPosition.x + 1, y: actualPosition.y)
+                positionBox = CGPoint(x: actualPosition.x + 1, y: actualPosition.y)
             }
         default:
-            positionBoxe = CGPoint(x: 0, y: 0)
+            positionBox = CGPoint(x: 0, y: 0)
+            return false
         }
         if let robot = robot.component(ofType: RobotMoveComponent.self){
             arrayMoveRobot.append(robot.moveBoxe(direction: actualDirection))
         }
+        var i = 0
         for box in boxesCopy{
             if let component = box.component(ofType: SpriteComponent.self){
-                if component.node.name == "box (\(positionBoxe.x) - \(positionBoxe.y)" {
+                if component.node.name == "box (\(positionBox.x) - \(positionBox.y)" {
+                    identifierBox = i
                     component.node.run(SKAction.wait(forDuration: Double(countMove)*0.65)){
                         component.node.zPosition = 0
                     }
                 }
             }
+            i+=1
         }
+        verificationBox = true
         return true
     }
      // MARK: Move Robot
@@ -185,7 +250,7 @@ extension GameScene {
          default:
              actualPosition = CGPoint(x: actualPosition.x, y: actualPosition.y)
          }
-         
+        
          //Caso ele possa andar
          // adicionamos a SKAction referente a direção atual no arrayMoveRobot
          if let robotMoveComponent = robot.component(ofType: RobotMoveComponent.self) {

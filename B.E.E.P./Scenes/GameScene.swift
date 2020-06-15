@@ -15,7 +15,7 @@ class GameScene: SKScene {
     ]
     
     
-    
+    var identifierBox: Int?
     var verificationBox = false
     var boxesCopy: [DefaultObject] = []
     var boxesChangeable: [CGPoint] = [
@@ -197,8 +197,6 @@ class GameScene: SKScene {
                                 case "grab-block":
                                     if !grabBox(countMove: countMove){
                                          print("nao deu")
-                                    }else{
-                                        countMove = 0
                                     }
                                     /*
                                      
