@@ -36,6 +36,7 @@
 		56C9EE84249043A7007924BA /* MapScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C9EE83249043A7007924BA /* MapScene.swift */; };
 		56C9EE862490459A007924BA /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C9EE852490459A007924BA /* MapViewController.swift */; };
 		56C9EE8824906479007924BA /* HudButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C9EE8724906479007924BA /* HudButton.swift */; };
+		56CE66AF24983BB400BE371E /* RobotActionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56CE66AE24983BB400BE371E /* RobotActionsTests.swift */; };
 		7B07CF3B2497ED7500EAA181 /* ConfigScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B07CF3A2497ED7500EAA181 /* ConfigScene.swift */; };
 		7B07CF3D2497ED9200EAA181 /* ConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B07CF3C2497ED9200EAA181 /* ConfigViewController.swift */; };
 		7B32A9BF2496BE2D00BB939F /* ApiModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B32A9BE2496BE2D00BB939F /* ApiModel.swift */; };
@@ -96,6 +97,7 @@
 		56C9EE83249043A7007924BA /* MapScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapScene.swift; sourceTree = "<group>"; };
 		56C9EE852490459A007924BA /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		56C9EE8724906479007924BA /* HudButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HudButton.swift; sourceTree = "<group>"; };
+		56CE66AE24983BB400BE371E /* RobotActionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RobotActionsTests.swift; sourceTree = "<group>"; };
 		7B07CF3A2497ED7500EAA181 /* ConfigScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigScene.swift; sourceTree = "<group>"; };
 		7B07CF3C2497ED9200EAA181 /* ConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigViewController.swift; sourceTree = "<group>"; };
 		7B32A9BE2496BE2D00BB939F /* ApiModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiModel.swift; sourceTree = "<group>"; };
@@ -248,6 +250,7 @@
 			isa = PBXGroup;
 			children = (
 				5632E8EA248ED9C50011B5ED /* Info.plist */,
+				56CE66AE24983BB400BE371E /* RobotActionsTests.swift */,
 			);
 			path = B.E.E.P.Tests;
 			sourceTree = "<group>";
@@ -341,6 +344,7 @@
 					};
 					5632E8E5248ED9C50011B5ED = {
 						CreatedOnToolsVersion = 11.5;
+						LastSwiftMigration = 1150;
 						TestTargetID = 2EF6C509248C0DE00040F927;
 					};
 					5632E8F3248EDA1A0011B5ED = {
@@ -439,6 +443,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				56CE66AF24983BB400BE371E /* RobotActionsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -632,6 +637,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2KUGC5CZ6Z;
 				INFOPLIST_FILE = B.E.E.P.Tests/Info.plist;
@@ -642,6 +648,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.eduardoregis.B-E-E-P-Tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/B.E.E.P..app/B.E.E.P.";
@@ -652,6 +659,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2KUGC5CZ6Z;
 				INFOPLIST_FILE = B.E.E.P.Tests/Info.plist;
