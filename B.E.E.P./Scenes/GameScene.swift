@@ -76,6 +76,7 @@ class GameScene: SKScene {
         }
     }
     var draggingItem: SKSpriteNode?
+    
     override func didMove(to view: SKView) {
         // posiciona os elementos de acordo como tipo de fase
         switch tabStyle {
@@ -572,11 +573,14 @@ class GameScene: SKScene {
         for touch in touches {
             let nodes = self.nodes(at: touch.location(in: self))
             let returnButtonOptional = self.childNode(withName: "return-button")
-            
             if let returnButton = returnButtonOptional {
                 if nodes.contains(returnButton) {
                     returnToMap()
                 }
+            }
+            if nodes[0].name?.contains("config-button") ?? false {
+               let configScene = ConfigScene(size: view!.bounds.size)
+               view!.presentScene(configScene)
             }
         }
     }

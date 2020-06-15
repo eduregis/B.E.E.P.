@@ -17,12 +17,6 @@ struct DialoguesModel: Codable {
         self.text = text
     }
     
-//    init(json: [Any : Any]) {
-//        self.name = json["name"] as? String? ?? ""
-//        self.text = json["text"] as? [String]? ?? []
-//    }
-    
-    
 }
 
 struct StageDesignModel: Codable {

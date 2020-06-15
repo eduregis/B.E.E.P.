@@ -38,6 +38,8 @@
 		56C9EE84249043A7007924BA /* MapScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C9EE83249043A7007924BA /* MapScene.swift */; };
 		56C9EE862490459A007924BA /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C9EE852490459A007924BA /* MapViewController.swift */; };
 		56C9EE8824906479007924BA /* HudButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C9EE8724906479007924BA /* HudButton.swift */; };
+		7B07CF3B2497ED7500EAA181 /* ConfigScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B07CF3A2497ED7500EAA181 /* ConfigScene.swift */; };
+		7B07CF3D2497ED9200EAA181 /* ConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B07CF3C2497ED9200EAA181 /* ConfigViewController.swift */; };
 		7B32A9BF2496BE2D00BB939F /* ApiModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B32A9BE2496BE2D00BB939F /* ApiModel.swift */; };
 		7B32A9CF2496E0F400BB939F /* ApiError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B32A9CE2496E0F400BB939F /* ApiError.swift */; };
 		7B32A9D12496EDC500BB939F /* ApiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B32A9D02496EDC500BB939F /* ApiManager.swift */; };
@@ -98,6 +100,8 @@
 		56C9EE83249043A7007924BA /* MapScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapScene.swift; sourceTree = "<group>"; };
 		56C9EE852490459A007924BA /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		56C9EE8724906479007924BA /* HudButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HudButton.swift; sourceTree = "<group>"; };
+		7B07CF3A2497ED7500EAA181 /* ConfigScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigScene.swift; sourceTree = "<group>"; };
+		7B07CF3C2497ED9200EAA181 /* ConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigViewController.swift; sourceTree = "<group>"; };
 		7B32A9BE2496BE2D00BB939F /* ApiModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiModel.swift; sourceTree = "<group>"; };
 		7B32A9CE2496E0F400BB939F /* ApiError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiError.swift; sourceTree = "<group>"; };
 		7B32A9D02496EDC500BB939F /* ApiManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiManager.swift; sourceTree = "<group>"; };
@@ -229,6 +233,7 @@
 				2EE8D1EE249481E20090F971 /* Extensions */,
 				2EF6C513248C0DE00040F927 /* GameScene.swift */,
 				56C9EE83249043A7007924BA /* MapScene.swift */,
+				7B07CF3A2497ED7500EAA181 /* ConfigScene.swift */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -238,6 +243,7 @@
 			children = (
 				2EF6C515248C0DE00040F927 /* GameViewController.swift */,
 				56C9EE852490459A007924BA /* MapViewController.swift */,
+				7B07CF3C2497ED9200EAA181 /* ConfigViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -401,6 +407,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7B07CF3D2497ED9200EAA181 /* ConfigViewController.swift in Sources */,
 				2EEF855A2492EBE300C10CB2 /* AuxiliaryTab.swift in Sources */,
 				56B459D7249148C2007D82D2 /* Filament.swift in Sources */,
 				2EF6C514248C0DE00040F927 /* GameScene.swift in Sources */,
@@ -425,6 +432,7 @@
 				56C9EE8824906479007924BA /* HudButton.swift in Sources */,
 				7B32A9CF2496E0F400BB939F /* ApiError.swift in Sources */,
 				2EE8D1F0249482030090F971 /* RobotMovementsGameSceneExtension.swift in Sources */,
+				7B07CF3B2497ED7500EAA181 /* ConfigScene.swift in Sources */,
 				2EF6C50E248C0DE00040F927 /* AppDelegate.swift in Sources */,
 				2EE8D1F2249482AC0090F971 /* DrawObjectsGameSceneExtension.swift in Sources */,
 				2EE8AABC248C61A200B652E3 /* LightFloor.swift in Sources */,
