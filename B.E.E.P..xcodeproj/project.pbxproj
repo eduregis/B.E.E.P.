@@ -38,6 +38,9 @@
 		56C9EE84249043A7007924BA /* MapScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C9EE83249043A7007924BA /* MapScene.swift */; };
 		56C9EE862490459A007924BA /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C9EE852490459A007924BA /* MapViewController.swift */; };
 		56C9EE8824906479007924BA /* HudButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C9EE8724906479007924BA /* HudButton.swift */; };
+		7B32A9BF2496BE2D00BB939F /* ApiModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B32A9BE2496BE2D00BB939F /* ApiModel.swift */; };
+		7B32A9CF2496E0F400BB939F /* ApiError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B32A9CE2496E0F400BB939F /* ApiError.swift */; };
+		7B32A9D12496EDC500BB939F /* ApiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B32A9D02496EDC500BB939F /* ApiManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -95,6 +98,9 @@
 		56C9EE83249043A7007924BA /* MapScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapScene.swift; sourceTree = "<group>"; };
 		56C9EE852490459A007924BA /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		56C9EE8724906479007924BA /* HudButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HudButton.swift; sourceTree = "<group>"; };
+		7B32A9BE2496BE2D00BB939F /* ApiModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiModel.swift; sourceTree = "<group>"; };
+		7B32A9CE2496E0F400BB939F /* ApiError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiError.swift; sourceTree = "<group>"; };
+		7B32A9D02496EDC500BB939F /* ApiManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,6 +178,7 @@
 		2EF6C50C248C0DE00040F927 /* B.E.E.P. */ = {
 			isa = PBXGroup;
 			children = (
+				7B32A9BD2496BE0100BB939F /* Api */,
 				2EEAEB282495C46100501FBB /* Fonts */,
 				2EE8AAC6248C70DE00B652E3 /* Helpers */,
 				2EF6C52E248C16EE0040F927 /* Controller */,
@@ -251,6 +258,16 @@
 				5632E8F8248EDA1A0011B5ED /* Info.plist */,
 			);
 			path = B.E.E.P.UITests;
+			sourceTree = "<group>";
+		};
+		7B32A9BD2496BE0100BB939F /* Api */ = {
+			isa = PBXGroup;
+			children = (
+				7B32A9BE2496BE2D00BB939F /* ApiModel.swift */,
+				7B32A9CE2496E0F400BB939F /* ApiError.swift */,
+				7B32A9D02496EDC500BB939F /* ApiManager.swift */,
+			);
+			path = Api;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -406,10 +423,13 @@
 				2EE9C13D248C93F3002E6A14 /* LightFloorMoveComponent.swift in Sources */,
 				2EE8AAB8248C523A00B652E3 /* Light.swift in Sources */,
 				56C9EE8824906479007924BA /* HudButton.swift in Sources */,
+				7B32A9CF2496E0F400BB939F /* ApiError.swift in Sources */,
 				2EE8D1F0249482030090F971 /* RobotMovementsGameSceneExtension.swift in Sources */,
 				2EF6C50E248C0DE00040F927 /* AppDelegate.swift in Sources */,
 				2EE8D1F2249482AC0090F971 /* DrawObjectsGameSceneExtension.swift in Sources */,
 				2EE8AABC248C61A200B652E3 /* LightFloor.swift in Sources */,
+				7B32A9D12496EDC500BB939F /* ApiManager.swift in Sources */,
+				7B32A9BF2496BE2D00BB939F /* ApiModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
