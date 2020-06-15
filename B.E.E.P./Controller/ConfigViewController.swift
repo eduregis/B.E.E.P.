@@ -1,8 +1,8 @@
 //
-//  GameViewController.swift
+//  ConfigViewController.swift
 //  B.E.E.P.
 //
-//  Created by Eduardo Oliveira on 06/06/20.
+//  Created by Patricia Sampaio on 15/06/20.
 //  Copyright © 2020 Eduardo Oliveira. All rights reserved.
 //
 
@@ -10,12 +10,12 @@ import UIKit
 import SpriteKit
 import GameplayKit
 
-class GameViewController: UIViewController {
+class ConfigViewController: UIViewController {
     
     override func loadView() {
         let view = SKView(frame: UIScreen.main.bounds) //cria uma sk view
         
-        let scene = GameScene(size: view.bounds.size) //cria a scene que vai ser apresentada
+        let scene = ConfigScene(size: view.bounds.size) //cria a scene que vai ser apresentada
         // Set the scale mode to scale to fit the window
         scene.scaleMode = .aspectFill
         

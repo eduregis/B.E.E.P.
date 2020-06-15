@@ -11,6 +11,7 @@ import SpriteKit
 
 var blockTypes = ["walk-block","turn-left-block","turn-right-block","grab-block","save-block"]
 
+
 enum ZPositionsCategories {
     static let background:     CGFloat = 0
     static let tab:            CGFloat = 1
@@ -22,3 +23,9 @@ enum ZPositionsCategories {
     static let emptyBlock:     CGFloat = 15
     static let draggableBlock: CGFloat = 20
 }
+
+enum Direction {
+    case backward
+    case forward
+}
+

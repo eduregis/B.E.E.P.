@@ -5,11 +5,18 @@ class GameScene: SKScene {
     
     // variáveis que irão receber os valores da API
     var actualPosition = CGPoint(x: 1, y: 1)
-    var stageDimensions = CGSize(width: 5, height: 6)
+    var stageDimensions = CGSize(width: 5, height: 3)
     var gameplayAnchor: CGPoint!
     var auxiliaryAnchor: CGPoint!
     var actualDirection = "right"
-    var tabStyle = "function"
+    var tabStyle = "conditional"
+    var boxes: [CGPoint] = [
+        CGPoint(x: 3, y: 1)
+    ]
+    var boxDropZones: [CGPoint] = [
+        CGPoint(x: 4, y: 1)
+    ]
+    var infectedRobots: [CGPoint] = []
     
     // criamos a referência o gerenciador de entidades
     var entityManager: EntityManager!
@@ -22,7 +29,35 @@ class GameScene: SKScene {
     var emptyFunctionBlocks: [EmptyBlock] = []
     var functionDropZoneIsTouched: Bool = false
     
+    var loopValue = 1
+    var loopArrows: [DefaultObject] = []
+    var loopText = SKLabelNode(text: "")
+    
+    var loopBlocks: [DraggableBlock] = []
+    var emptyLoopBlocks: [EmptyBlock] = []
+    var loopDropZoneIsTouched: Bool = false
+    
+    var conditionalValue = 0
+    var conditions = ["Inimigo\n à frente", "Caixa\n à frente", "Abismo\n a frente", "Encaixe\n à frente"]
+    var conditionalArrows: [DefaultObject] = []
+    var conditionalText = SKLabelNode(text: "")
+    
+    var conditionalIfBlocks: [DraggableBlock] = []
+    var emptyConditionalIfBlocks: [EmptyBlock] = []
+    var conditionalIfDropZoneIsTouched: Bool = false
+    
+    var conditionalElseBlocks: [DraggableBlock] = []
+    var emptyConditionalElseBlocks: [EmptyBlock] = []
+    var conditionalElseDropZoneIsTouched: Bool = false
+    
     var commandBlocks: [DraggableBlock] = []
+    var stopButton = HubButton(name: "stop-button")
+    
+    // arrays que vão permitir uma movimentação linear do robot e do lightFloor
+    var arrayMoveRobot: [SKAction] = []
+    var arrayMovelightFloor: [SKAction] = []
+    var elementArrayMove: SKAction?
+    
     var emptyBlocks: [EmptyBlock] = []
     var commandDropZoneIsTouched: Bool = false
     
@@ -70,327 +105,183 @@ class GameScene: SKScene {
         
         drawTilesets(width: Int(stageDimensions.width), height: Int(stageDimensions.height))
         drawRobot(xPosition: Int(actualPosition.x), yPosition: Int(actualPosition.y))
+        
         drawTabs()
         drawAuxiliaryTab()
+        
         drawnConfigButton()
         drawnHintButton()
         
+        if (boxes.count > 0){ drawBoxes() }
+        if (boxDropZones.count > 0){ drawBoxDropZones() }
     }
     
-    // desenha o tileset e seu corredor de luz de acordo com sua posição
-    func drawTilesets(width: Int, height: Int) {
-        for i in 1...width {
-            for j in 1...height {
+    func addElementFunc(){
+        for block in functionBlocks{
+            if let spriteComponent = block.component(ofType: SpriteComponent.self) {
+                // usando o trecho "-dropped-" para separar obtermos o nome original e seu índice
+                let name = spriteComponent.node.name?.components(separatedBy: "-dropped-")
+                // com o nome original será escolhido o tipo de movimento que o robot irá fazer
+                switch name![0] {
+                case "walk-block":
+                    if !moveRobot() {
+                        print("nao deu")
+                    }
+                case "turn-right-block":
+                    arrayMoveRobot.append(turnRobot(direction: "right"))
+                case "turn-left-block":
+                    arrayMoveRobot.append(turnRobot(direction: "left"))
+                    /*case "grab-block"
+                     
+                     case "save-block"
+                     
+                     */
+                default:
+                    break;
+                }
                 
-                // desenha o tileset
-                let tileset = Tileset()
-                if let spriteComponent = tileset.component(ofType: SpriteComponent.self) {
-                    let x = gameplayAnchor.x + CGFloat(32 * (i - 1)) - CGFloat(32 * (j - 1))
-                    let y = gameplayAnchor.y + 200 - CGFloat(16 * (i - 1)) - CGFloat(16 * (j - 1))
-                    spriteComponent.node.position = CGPoint(x: x, y: y)
-                    spriteComponent.node.zPosition = CGFloat(i + j)
-                }
-                entityManager.add(tileset)
-                
-                // desenha a luz do tileset
-                let light = Light(xPosition: i, yPosition: j, maxX: width, maxY: height)
-                if let spriteComponent = light.component(ofType: SpriteComponent.self) {
-                    let x = gameplayAnchor.x + CGFloat(32 * (i - 1)) - CGFloat(32 * (j - 1))
-                    let y = gameplayAnchor.y + 200 - CGFloat(16 * (i - 1)) - CGFloat(16 * (j - 1))
-                    spriteComponent.node.position = CGPoint(x: x, y: y)
-                    spriteComponent.node.zPosition = CGFloat(i + j + 2)
-                }
-                entityManager.add(light)
             }
+            
         }
-    }
-    
-    func drawRobot (xPosition: Int, yPosition: Int) {
-        // desenha o chão iluminado embaixo do robô
-        if let spriteComponent = lightFloor.component(ofType: SpriteComponent.self) {
-            let x = gameplayAnchor.x + CGFloat(32 * (xPosition - 1)) - CGFloat(32 * (yPosition - 1))
-            let y = gameplayAnchor.y + 200 - CGFloat(16 * (xPosition - 1)) - CGFloat(16 * (yPosition - 1))
-            spriteComponent.node.position = CGPoint(x: x, y: y)
-            spriteComponent.node.zPosition = CGFloat(actualPosition.x + actualPosition.y + 1)
-            spriteComponent.node.alpha = 0.7
-        }
-        entityManager.add(lightFloor)
-        
-        // desenha o robô
-        if let spriteComponent = robot.component(ofType: SpriteComponent.self) {
-            let x = gameplayAnchor.x + CGFloat(32 * (xPosition - 1)) - CGFloat(32 * (yPosition - 1))
-            let y = gameplayAnchor.y + 236 - CGFloat(16 * (xPosition - 1)) - CGFloat(16 * (yPosition - 1))
-            spriteComponent.node.position = CGPoint(x: x, y: y)
-            spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(xPosition + yPosition + 1)
-        }
-        entityManager.add(robot)
-    }
-    
-    func drawTabs () {
-        // adiciona a aba de comandos
-        let commandTab = DefaultObject(name: "command-tab")
-        if let spriteComponent = commandTab.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: gameplayAnchor.x, y: gameplayAnchor.y - 100)
-            spriteComponent.node.zPosition = ZPositionsCategories.tab
-        }
-        entityManager.add(commandTab)
-        
-        // adiciona a aba de limpar
-        let clearTab = ClearTab(name: "command-clear-tab", spriteName: "clear-tab")
-        if let spriteComponent = clearTab.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: gameplayAnchor.x - 20, y: gameplayAnchor.y - 65)
-            spriteComponent.node.zPosition = ZPositionsCategories.clearTabButton
-        }
-        entityManager.add(clearTab)
-        
-        // container de drop
-        let commandTabDropZone = DefaultObject(name: "command-tab-drop-zone")
-        if let spriteComponent = commandTabDropZone.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: gameplayAnchor.x - 50, y: gameplayAnchor.y - 115)
-            spriteComponent.node.zPosition = ZPositionsCategories.dropZone
-        }
-        entityManager.add(commandTabDropZone)
-        
-        // drop zones individuais
-        for i in 1...6 {
-            let block = EmptyBlock(name: "white-block")
-            if let spriteComponent = block.component(ofType: SpriteComponent.self) {
-                spriteComponent.node.position = CGPoint(x: gameplayAnchor.x - 175 + CGFloat(i - 1)*50, y: gameplayAnchor.y - 115)
-                spriteComponent.node.zPosition = ZPositionsCategories.emptyBlock
-                spriteComponent.node.alpha = 0.1
-                spriteComponent.node.size = CGSize(width: 60, height: 50)
-            }
-            emptyBlocks.append(block)
-            entityManager.add(block)
-        }
-        
-        // botão de play
-        let playButton = DefaultObject(name: "play-button")
-        if let spriteComponent = playButton.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: gameplayAnchor.x + 170, y: gameplayAnchor.y - 115)
-            spriteComponent.node.zPosition = ZPositionsCategories.button
-        }
-        entityManager.add(playButton)
-        
-        // adiciona a aba de ações
-        let actionTab = DefaultObject(name: "action-tab")
-        if let spriteComponent = actionTab.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: gameplayAnchor.x, y: gameplayAnchor.y - 240)
-            spriteComponent.node.zPosition = ZPositionsCategories.tab
-        }
-        entityManager.add(actionTab)
-        
-        // adiciona os blocos de ações
-        for i in 1...blockTypes.count {
-            let block = DraggableBlock(name: blockTypes[i - 1])
-            if let spriteComponent = block.component(ofType: SpriteComponent.self) {
-                spriteComponent.node.position = CGPoint(x: gameplayAnchor.x - 150 + CGFloat(i - 1)*75, y: gameplayAnchor.y - 255)
-                spriteComponent.node.zPosition = ZPositionsCategories.draggableBlock
-                spriteComponent.node.size = CGSize(width: 60, height: 50)
-            }
-            entityManager.add(block)
-        }
-    }
-    
-    func drawAuxiliaryTab() {
-        let size: Int
-        let yAjust: CGFloat
-        if tabStyle != "default" {
-            switch tabStyle {
-            case "function","antivirus":
-                size = 1
-                yAjust = 240
-            case "loop":
-                size = 2
-                yAjust = 148
-            default:
-                size = 3
-                yAjust = 0
-            }
-            let auxiliaryTab = AuxiliaryTab(size: size)
-            if let spriteComponent = auxiliaryTab.component(ofType: SpriteComponent.self) {
-                spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x, y: auxiliaryAnchor.y + yAjust)
-                spriteComponent.node.zPosition = ZPositionsCategories.tab
-            }
-            entityManager.add(auxiliaryTab)
-            drawFunctionTab()
-        }
-    }
-    
-    func drawFunctionTab() {
-        // adiciona a aba de comandos
-        let functionTab = DefaultObject(name: "function-tab")
-        if let spriteComponent = functionTab.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x, y: auxiliaryAnchor.y + 225)
-            spriteComponent.node.zPosition = ZPositionsCategories.subTab
-        }
-        entityManager.add(functionTab)
-        
-        // adiciona a aba de limpar
-        let clearTab = ClearTab(name: "function-clear-tab", spriteName: "clear-auxiliary-tab")
-        if let spriteComponent = clearTab.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 10, y: auxiliaryAnchor.y + 260)
-            spriteComponent.node.zPosition = ZPositionsCategories.clearTabButton
-        }
-        entityManager.add(clearTab)
-        
-        // container de drop
-        let functionTabDropZone = DefaultObject(name: "auxiliary-tab-drop-zone")
-        if let spriteComponent = functionTabDropZone.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x + 50, y: auxiliaryAnchor.y + 210)
-            spriteComponent.node.zPosition = ZPositionsCategories.dropZone
-        }
-        entityManager.add(functionTabDropZone)
-        
-        // drop zones individuais
-        for i in 1...4 {
-            let block = EmptyBlock(name: "white-block")
-            if let spriteComponent = block.component(ofType: SpriteComponent.self) {
-                spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 25 + CGFloat(i - 1)*50, y: auxiliaryAnchor.y + 210)
-                spriteComponent.node.zPosition = ZPositionsCategories.emptyBlock
-                spriteComponent.node.alpha = 0.1
-                spriteComponent.node.size = CGSize(width: 60, height: 50)
-            }
-            emptyFunctionBlocks.append(block)
-            entityManager.add(block)
-        }
-        
-        let block = DraggableBlock(name: "function-block")
-        if let spriteComponent = block.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 127, y: auxiliaryAnchor.y + 210)
-            spriteComponent.node.zPosition = ZPositionsCategories.draggableBlock
-            spriteComponent.node.size = CGSize(width: 60, height: 50)
-        }
-        entityManager.add(block)
-    }
-    
-    func clearTab (tabName: String) {
-        switch tabName {
-        case "command":
-            for block in commandBlocks {
-                if let spriteComponent = block.component(ofType: SpriteComponent.self) {
-                    spriteComponent.node.removeFromParent()
-                }
-            }
-            commandBlocks.removeAll()
-        case "function":
-            for block in functionBlocks {
-                if let spriteComponent = block.component(ofType: SpriteComponent.self) {
-                    spriteComponent.node.removeFromParent()
-                }
-            }
-            functionBlocks.removeAll()
-        default:
-            break
-        }
-        
-    }
-    
-    func turnRobot(direction: String) {
-        // checa para qual lado o robô irá girar
-        switch direction {
-        case "left":
-            // gira de acordo com a direção do robô
-            switch actualDirection {
-            case "up":
-                actualDirection = "left"
-            case "left":
-                actualDirection = "down"
-            case "down":
-                actualDirection = "right"
-            case "right":
-                actualDirection = "up"
-            default:
-                break
-            }
-        case "right":
-            switch actualDirection {
-            case "up":
-                actualDirection = "right"
-            case "left":
-                actualDirection = "up"
-            case "down":
-                actualDirection = "left"
-            case "right":
-                actualDirection = "down"
-            default:
-                break
-            }
-        default:
-            break
-        }
-        if let robotMoveComponent = robot.component(ofType: RobotMoveComponent.self) {
-            robotMoveComponent.turn(direction: actualDirection)
-        }
-    }
-    
-    func moveRobot() -> Bool {
-        // checa se o robô pode andar para a posição apontada
-        switch actualDirection {
-        case "up":
-            if (actualPosition.y == 1) {
-                return false
-            } else {
-                actualPosition = CGPoint(x: actualPosition.x, y: actualPosition.y - 1)
-            }
-        case "left":
-            if (actualPosition.x == 1) {
-                return false
-            } else {
-                actualPosition = CGPoint(x: actualPosition.x - 1, y: actualPosition.y)
-            }
-        case "down":
-            if (actualPosition.y == stageDimensions.height) {
-                return false
-            } else {
-                actualPosition = CGPoint(x: actualPosition.x, y: actualPosition.y + 1)
-            }
-        case "right":
-            if (actualPosition.x == stageDimensions.width) {
-                return false
-            } else {
-                actualPosition = CGPoint(x: actualPosition.x + 1, y: actualPosition.y)
-            }
-        default:
-            actualPosition = CGPoint(x: actualPosition.x, y: actualPosition.y)
-        }
-        
-        // move o robô caso ele possa, fazendo a sua animação também
-        if let robotMoveComponent = robot.component(ofType: RobotMoveComponent.self) {
-            robotMoveComponent.move(direction: actualDirection)
-        }
-        
-        // move o bloco luminoso embaixo do robô, quando ele termina o movimento
-        if let lightFloorMoveComponent = lightFloor.component(ofType: LightFloorMoveComponent.self) {
-            lightFloorMoveComponent.move(direction: actualDirection)
-        }
-        return true
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        // moveRobot()
-        // turnRobot(direction: "left")
+        
         if let location = touches.first?.location(in: self) {
             // Checamos o nome do SpriteNode que foi detectado pela função
-            if (self.atPoint(location).name == "walk-block") || (self.atPoint(location).name == "turn-left-block") || (self.atPoint(location).name == "turn-right-block") || (self.atPoint(location).name == "grab-block") || (self.atPoint(location).name == "save-block") || (self.atPoint(location).name == "function-block") {
+            if (self.atPoint(location).name == "walk-block") || (self.atPoint(location).name == "turn-left-block") || (self.atPoint(location).name == "turn-right-block") || (self.atPoint(location).name == "grab-block") || (self.atPoint(location).name == "save-block") || (self.atPoint(location).name == "function-block") || (self.atPoint(location).name == "loop-block") || (self.atPoint(location).name == "conditional-block") {
                 // passamos o objeto detectado para dentro do selectedItem
                 selectedItem = self.atPoint(location) as? SKSpriteNode
             }
             else {
                 // caso não seja o objeto que queremos, esvaziamos o selectedItem
                 selectedItem = nil
-                if (self.atPoint(location).name == "play-button") {
-                    // moveRobot()
+                if self.atPoint(location).name == "play-button" {
+                    resetMoveRobot()
+                    /*verificar se o array commandBlocks está vazio
+                     - Se tem algum block na dropZone*/
+                    if !commandBlocks.isEmpty {
+                        // rodamos commandBlocks para guardar as SKAction referente a cada block colocado na dropZone
+                        for block in commandBlocks{
+                            if let spriteComponent = block.component(ofType: SpriteComponent.self) {
+                                // usando o trecho "-dropped-" para separar obtermos o nome original e seu índice
+                                let name = spriteComponent.node.name?.components(separatedBy: "-dropped-")
+                                // com o nome original será escolhido o tipo de movimento que o robot irá fazer
+                                switch name![0] {
+                                case "walk-block":
+                                    if !moveRobot() {
+                                        print("nao deu")
+                                    }
+                                case "turn-right-block":
+                                    arrayMoveRobot.append(turnRobot(direction: "right"))
+                                case "turn-left-block":
+                                    arrayMoveRobot.append(turnRobot(direction: "left"))
+                                case "function-block":
+                                    addElementFunc()
+                                    /*case "grab-block"
+                                     
+                                     case "save-block"
+                                     
+                                     */
+                                case "loop-block":
+                                    addElementLoop()
+                                case "conditional-block":
+                                    addElementConditional()
+                                default:
+                                    break;
+                                }
+                                
+                            }
+                            
+                        }
+                        if let stopButton = stopButton.component(ofType: SpriteComponent.self){
+                            stopButton.node.zPosition = ZPositionsCategories.button + 1
+                        }
+                        //execução do array actionMove que permitirar uma movimentação linear sem desvios
+                        moveCompleteRobotLightFloor()
+                    }
                 } else if (self.atPoint(location).name == "command-clear-tab") {
                     clearTab(tabName: "command")
                 } else if (self.atPoint(location).name == "function-clear-tab") {
                     clearTab(tabName: "function")
+                } else if (self.atPoint(location).name == "loop-clear-tab") {
+                    clearTab(tabName: "loop")
+                } else if (self.atPoint(location).name == "loop-arrow-left") {
+                    if loopValue > 1 {
+                        loopValue = loopValue - 1
+                    }
+                    if let spriteComponent = loopArrows[1].component(ofType: SpriteComponent.self) {
+                        spriteComponent.node.alpha = 1
+                    }
+                    if loopValue == 1 {
+                        if let spriteComponent = loopArrows[0].component(ofType: SpriteComponent.self) {
+                            spriteComponent.node.alpha = 0.3
+                        }
+                    } else {
+                        if let spriteComponent = loopArrows[0].component(ofType: SpriteComponent.self) {
+                            spriteComponent.node.alpha = 1
+                        }
+                    }
+                    updateLoopText()
+                } else if (self.atPoint(location).name == "loop-arrow-right") {
+                    if loopValue < 4 {
+                        loopValue = loopValue + 1
+                    }
+                    if let spriteComponent = loopArrows[0].component(ofType: SpriteComponent.self) {
+                        spriteComponent.node.alpha = 1
+                    }
+                    if loopValue == 4 {
+                        if let spriteComponent = loopArrows[1].component(ofType: SpriteComponent.self) {
+                            spriteComponent.node.alpha = 0.3
+                        }
+                    } else {
+                        if let spriteComponent = loopArrows[1].component(ofType: SpriteComponent.self) {
+                            spriteComponent.node.alpha = 1
+                        }
+                    }
+                    updateLoopText()
+                } else if (self.atPoint(location).name == "conditional-clear-tab") {
+                    clearTab(tabName: "conditional")
+                } else if (self.atPoint(location).name == "conditional-arrow-left") {
+                    if conditionalValue > 0 {
+                        conditionalValue = conditionalValue - 1
+                    }
+                    if let spriteComponent = conditionalArrows[1].component(ofType: SpriteComponent.self) {
+                        spriteComponent.node.alpha = 1
+                    }
+                    if conditionalValue == 0 {
+                        if let spriteComponent = conditionalArrows[0].component(ofType: SpriteComponent.self) {
+                            spriteComponent.node.alpha = 0.3
+                        }
+                    } else {
+                        if let spriteComponent = conditionalArrows[0].component(ofType: SpriteComponent.self) {
+                            spriteComponent.node.alpha = 1
+                        }
+                    }
+                    updateConditionalText()
+                } else if (self.atPoint(location).name == "conditional-arrow-right") {
+                    if conditionalValue < 3 {
+                        conditionalValue = conditionalValue + 1
+                    }
+                    if let spriteComponent = conditionalArrows[0].component(ofType: SpriteComponent.self) {
+                        spriteComponent.node.alpha = 1
+                    }
+                    if conditionalValue == 3 {
+                        if let spriteComponent = conditionalArrows[1].component(ofType: SpriteComponent.self) {
+                            spriteComponent.node.alpha = 0.3
+                        }
+                    } else {
+                        if let spriteComponent = conditionalArrows[1].component(ofType: SpriteComponent.self) {
+                            spriteComponent.node.alpha = 1
+                        }
+                    }
+                    updateConditionalText()
                 }
             }
             if let oldName = self.atPoint(location).name {
                 // testa se selecionamos um bloco dentro da aba de comandos
                 if oldName.contains("-dropped-") {
-                    // se sim, ituilizamos o trecho "-dropped-" para separar obtermos o nome original e seu índice
+                    // se sim, utilizamos o trecho "-dropped-" para separar obtermos o nome original e seu índice
                     var newName: [String] = []
                     var arrayName: String = ""
                     if oldName.contains("-dropped-command-") {
@@ -399,6 +290,15 @@ class GameScene: SKScene {
                     } else if oldName.contains("-dropped-function-") {
                         newName = self.atPoint(location).name!.components(separatedBy: "-dropped-function-")
                         arrayName = "function-"
+                    } else if oldName.contains("-dropped-loop-") {
+                        newName = self.atPoint(location).name!.components(separatedBy: "-dropped-loop-")
+                        arrayName = "loop-"
+                    } else if oldName.contains("-dropped-conditional-if-") {
+                        newName = self.atPoint(location).name!.components(separatedBy: "-dropped-conditional-if-")
+                        arrayName = "conditional-if-"
+                    } else if oldName.contains("-dropped-conditional-else-") {
+                        newName = self.atPoint(location).name!.components(separatedBy: "-dropped-conditional-else-")
+                        arrayName = "conditional-else-"
                     }
                     let newBlock = self.atPoint(location) as? SKSpriteNode
                     // removemos o sprite do bloco na tela, este passando a existir apenas no selectedItem à seguir
@@ -434,10 +334,45 @@ class GameScene: SKScene {
                                     spriteComponent.node.name = "\(oldIndex![0])-dropped-function-\(newIndex)"
                                 }
                             }
+                        case "loop-":
+                            loopBlocks.remove(at: indexToRemove)
+                            // trazemos os blocos para a esquerda, ajustando tanto a posição do sprite quanto seu índice no final do nome
+                            for index in indexToRemove..<loopBlocks.count {
+                                if let spriteComponent = loopBlocks[index].component(ofType: SpriteComponent.self) {
+                                    spriteComponent.node.position = CGPoint(x: spriteComponent.node.position.x - 50, y: spriteComponent.node.position.y)
+                                    // a partir do nome antigo, remontamos dessa forma
+                                    let oldIndex = spriteComponent.node.name?.components(separatedBy: "-dropped-loop-")
+                                    let newIndex = Int(oldIndex![1])! - 1
+                                    spriteComponent.node.name = "\(oldIndex![0])-dropped-loop-\(newIndex)"
+                                }
+                            }
+                        case "conditional-if-":
+                            conditionalIfBlocks.remove(at: indexToRemove)
+                            // trazemos os blocos para a esquerda, ajustando tanto a posição do sprite quanto seu índice no final do nome
+                            for index in indexToRemove..<conditionalIfBlocks.count {
+                                if let spriteComponent = conditionalIfBlocks[index].component(ofType: SpriteComponent.self) {
+                                    spriteComponent.node.position = CGPoint(x: spriteComponent.node.position.x - 50, y: spriteComponent.node.position.y)
+                                    // a partir do nome antigo, remontamos dessa forma
+                                    let oldIndex = spriteComponent.node.name?.components(separatedBy: "-dropped-conditional-if-")
+                                    let newIndex = Int(oldIndex![1])! - 1
+                                    spriteComponent.node.name = "\(oldIndex![0])-dropped-conditional-if-\(newIndex)"
+                                }
+                            }
+                        case "conditional-else-":
+                            conditionalElseBlocks.remove(at: indexToRemove)
+                            // trazemos os blocos para a esquerda, ajustando tanto a posição do sprite quanto seu índice no final do nome
+                            for index in indexToRemove..<conditionalElseBlocks.count {
+                                if let spriteComponent = conditionalElseBlocks[index].component(ofType: SpriteComponent.self) {
+                                    spriteComponent.node.position = CGPoint(x: spriteComponent.node.position.x - 50, y: spriteComponent.node.position.y)
+                                    // a partir do nome antigo, remontamos dessa forma
+                                    let oldIndex = spriteComponent.node.name?.components(separatedBy: "-dropped-conditional-else-")
+                                    let newIndex = Int(oldIndex![1])! - 1
+                                    spriteComponent.node.name = "\(oldIndex![0])-dropped-conditional-else-\(newIndex)"
+                                }
+                            }
                         default:
                             break
                         }
-                        
                     }
                 }
             }
@@ -468,10 +403,8 @@ class GameScene: SKScene {
                         commandDropZoneIsTouched = false
                     }
                 }
-                // detecta a dropzone da aba de comandos
-                
+                // detecta a dropzone da aba de função
                 if(functionBlocks.count < 4) && (emptyFunctionBlocks.count > 0) {
-                    
                     if (location.y > auxiliaryAnchor.y + 183) && (location.y < auxiliaryAnchor.y + 233) && (location.x > auxiliaryAnchor.x - 55 + 50*CGFloat(functionBlocks.count)) && (location.x < auxiliaryAnchor.x + 155){
                         for i in 0...functionBlocks.count {
                             if let spriteComponent = emptyFunctionBlocks[i].component(ofType: SpriteComponent.self) {
@@ -488,6 +421,60 @@ class GameScene: SKScene {
                         functionDropZoneIsTouched = false
                     }
                 }
+                // detecta a dropzone da aba de repetição
+                if(loopBlocks.count < 4) && (emptyLoopBlocks.count > 0) {
+                    if (location.y > auxiliaryAnchor.y + 1) && (location.y < auxiliaryAnchor.y + 51) && (location.x > auxiliaryAnchor.x - 55 + 50*CGFloat(functionBlocks.count)) && (location.x < auxiliaryAnchor.x + 155){
+                        for i in 0...loopBlocks.count {
+                            if let spriteComponent = emptyLoopBlocks[i].component(ofType: SpriteComponent.self) {
+                                spriteComponent.node.alpha = 0.6
+                            }
+                        }
+                        loopDropZoneIsTouched = true
+                    } else {
+                        for i in 0...loopBlocks.count {
+                            if let spriteComponent = emptyLoopBlocks[i].component(ofType: SpriteComponent.self) {
+                                spriteComponent.node.alpha = 0.1
+                            }
+                        }
+                        loopDropZoneIsTouched = false
+                    }
+                }
+                // detecta a dropzone da aba de condicional
+                if(conditionalIfBlocks.count < 4) && (emptyConditionalIfBlocks.count > 0) {
+                    if (location.y > auxiliaryAnchor.y - 185) && (location.y < auxiliaryAnchor.y - 135) && (location.x > auxiliaryAnchor.x - 55 + 50*CGFloat(conditionalIfBlocks.count)) && (location.x < auxiliaryAnchor.x + 155){
+                        for i in 0...conditionalIfBlocks.count {
+                            if let spriteComponent = emptyConditionalIfBlocks[i].component(ofType: SpriteComponent.self) {
+                                spriteComponent.node.alpha = 0.6
+                            }
+                        }
+                        conditionalIfDropZoneIsTouched = true
+                    } else {
+                        for i in 0...conditionalIfBlocks.count {
+                            if let spriteComponent = emptyConditionalIfBlocks[i].component(ofType: SpriteComponent.self) {
+                                spriteComponent.node.alpha = 0.1
+                            }
+                        }
+                        conditionalIfDropZoneIsTouched = false
+                    }
+                }
+                // detecta a dropzone da aba de condicional
+                if(conditionalElseBlocks.count < 4) && (emptyConditionalElseBlocks.count > 0) {
+                    if (location.y > auxiliaryAnchor.y - 247) && (location.y < auxiliaryAnchor.y - 197) && (location.x > auxiliaryAnchor.x - 55 + 50*CGFloat(conditionalElseBlocks.count)) && (location.x < auxiliaryAnchor.x + 155){
+                        for i in 0...conditionalElseBlocks.count {
+                            if let spriteComponent = emptyConditionalElseBlocks[i].component(ofType: SpriteComponent.self) {
+                                spriteComponent.node.alpha = 0.6
+                            }
+                        }
+                        conditionalElseDropZoneIsTouched = true
+                    } else {
+                        for i in 0...conditionalIfBlocks.count {
+                            if let spriteComponent = emptyConditionalElseBlocks[i].component(ofType: SpriteComponent.self) {
+                                spriteComponent.node.alpha = 0.1
+                            }
+                        }
+                        conditionalElseDropZoneIsTouched = false
+                    }
+                }
             }
         }
     }
@@ -495,19 +482,24 @@ class GameScene: SKScene {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         draggingItem?.removeFromParent()
         if let location = touches.first?.location(in: self) {
+            // checa se o local onde o objeto está send solto é um boco branco, que funciona como uma dropzone
             if (self.atPoint(location).name == "white-block") {
                 if let draggingItem = draggingItem {
+                    // checa qual area de contato está sendo acionada, e se aquele array tem espaço
                     if (commandBlocks.count < 6) && commandDropZoneIsTouched {
+                        // usamos o nome do array para identificar o bloco, além de um índice
                         let block = DraggableBlock(name: "\(draggingItem.name ?? "")-dropped-command-\(commandBlocks.count)" , spriteName: draggingItem.name ?? "")
                         if let spriteComponent = block.component(ofType: SpriteComponent.self) {
+                            // devolve ao objeto seu tamanho e opacidade
                             spriteComponent.node.size = CGSize(width: draggingItem.size.width / 1.5, height: draggingItem.size.height / 1.5)
                             spriteComponent.node.position = CGPoint(x: gameplayAnchor.x - 175 + CGFloat(commandBlocks.count)*50, y: gameplayAnchor.y - 115)
                             spriteComponent.node.zPosition = ZPositionsCategories.draggableBlock
                         }
+                        // adiciona o bloco no gerenciador de entidades, e também no array
                         commandBlocks.append(block)
                         entityManager.add(block)
                     }
-                    if (functionBlocks.count < 4) && functionDropZoneIsTouched && draggingItem.name != "function-block" {
+                    if (functionBlocks.count < 4) && functionDropZoneIsTouched && draggingItem.name != "function-block" && draggingItem.name != "loop-block" && draggingItem.name != "conditional-block" {
                         let block = DraggableBlock(name: "\(draggingItem.name ?? "")-dropped-function-\(functionBlocks.count)" , spriteName: draggingItem.name ?? "")
                         if let spriteComponent = block.component(ofType: SpriteComponent.self) {
                             spriteComponent.node.size = CGSize(width: draggingItem.size.width / 1.5, height: draggingItem.size.height / 1.5)
@@ -517,8 +509,39 @@ class GameScene: SKScene {
                         functionBlocks.append(block)
                         entityManager.add(block)
                     }
+                    if (loopBlocks.count < 4) && loopDropZoneIsTouched && draggingItem.name != "function-block" && draggingItem.name != "loop-block" && draggingItem.name != "conditional-block" {
+                        let block = DraggableBlock(name: "\(draggingItem.name ?? "")-dropped-loop-\(loopBlocks.count)" , spriteName: draggingItem.name ?? "")
+                        if let spriteComponent = block.component(ofType: SpriteComponent.self) {
+                            spriteComponent.node.size = CGSize(width: draggingItem.size.width / 1.5, height: draggingItem.size.height / 1.5)
+                            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 25 + CGFloat(loopBlocks.count)*50, y: auxiliaryAnchor.y + 30)
+                            spriteComponent.node.zPosition = ZPositionsCategories.draggableBlock
+                        }
+                        loopBlocks.append(block)
+                        entityManager.add(block)
+                    }
+                    if (conditionalIfBlocks.count < 4) && conditionalIfDropZoneIsTouched && draggingItem.name != "function-block" && draggingItem.name != "loop-block" && draggingItem.name != "conditional-block" {
+                        let block = DraggableBlock(name: "\(draggingItem.name ?? "")-dropped-conditional-if-\(conditionalIfBlocks.count)" , spriteName: draggingItem.name ?? "")
+                        if let spriteComponent = block.component(ofType: SpriteComponent.self) {
+                            spriteComponent.node.size = CGSize(width: draggingItem.size.width / 1.5, height: draggingItem.size.height / 1.5)
+                            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 25 + CGFloat(conditionalIfBlocks.count)*50, y: auxiliaryAnchor.y - 151)
+                            spriteComponent.node.zPosition = ZPositionsCategories.draggableBlock
+                        }
+                        conditionalIfBlocks.append(block)
+                        entityManager.add(block)
+                    }
+                    if (conditionalElseBlocks.count < 4) && conditionalElseDropZoneIsTouched && draggingItem.name != "function-block" && draggingItem.name != "loop-block" && draggingItem.name != "conditional-block" {
+                        let block = DraggableBlock(name: "\(draggingItem.name ?? "")-dropped-conditional-else-\(conditionalElseBlocks.count)" , spriteName: draggingItem.name ?? "")
+                        if let spriteComponent = block.component(ofType: SpriteComponent.self) {
+                            spriteComponent.node.size = CGSize(width: draggingItem.size.width / 1.5, height: draggingItem.size.height / 1.5)
+                            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 25 + CGFloat(conditionalElseBlocks.count)*50, y: auxiliaryAnchor.y - 213)
+                            spriteComponent.node.zPosition = ZPositionsCategories.draggableBlock
+                        }
+                        conditionalElseBlocks.append(block)
+                        entityManager.add(block)
+                    }
                 }
             }
+            // coloca todos os dropzones com opacidade 0.1
             for i in 0..<emptyBlocks.count {
                 if let whiteBlock = emptyBlocks[i].component(ofType: SpriteComponent.self) {
                     whiteBlock.node.alpha = 0.1
@@ -529,44 +552,37 @@ class GameScene: SKScene {
                     whiteBlock.node.alpha = 0.1
                 }
             }
+            for i in 0..<emptyLoopBlocks.count {
+                if let whiteBlock = emptyLoopBlocks[i].component(ofType: SpriteComponent.self) {
+                    whiteBlock.node.alpha = 0.1
+                }
+            }
+            for i in 0..<emptyConditionalIfBlocks.count {
+                if let whiteBlock = emptyConditionalIfBlocks[i].component(ofType: SpriteComponent.self) {
+                    whiteBlock.node.alpha = 0.1
+                }
+            }
+            for i in 0..<emptyConditionalElseBlocks.count {
+                if let whiteBlock = emptyConditionalElseBlocks[i].component(ofType: SpriteComponent.self) {
+                    whiteBlock.node.alpha = 0.1
+                }
+            }
             draggingItem = nil
         }
         //verifica se clicou no botão voltar
         for touch in touches {
             let nodes = self.nodes(at: touch.location(in: self))
             let returnButtonOptional = self.childNode(withName: "return-button")
-            
             if let returnButton = returnButtonOptional {
                 if nodes.contains(returnButton) {
                     returnToMap()
                 }
             }
+            if nodes[0].name?.contains("config-button") ?? false {
+               let configScene = ConfigScene(size: view!.bounds.size)
+               view!.presentScene(configScene)
+            }
         }
-    }
-    
-    func drawnReturnButton() {
-        let returnButton = HubButton(name: "return-button")
-        if let spriteComponent = returnButton.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: frame.minX + 50, y: frame.maxY - 50)
-            spriteComponent.node.zPosition = ZPositionsCategories.button
-        }
-        entityManager.add(returnButton)
-    }
-    func drawnConfigButton() {
-        let configButton = HubButton(name: "config-button")
-        if let spriteComponent = configButton.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: frame.maxX - 150, y: frame.maxY - 50)
-            spriteComponent.node.zPosition = ZPositionsCategories.button
-        }
-        entityManager.add(configButton)
-    }
-    func drawnHintButton() {
-        let hintButton = HubButton(name: "hint-button")
-        if let spriteComponent = hintButton.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: frame.maxX - 100, y: frame.maxY - 50)
-            spriteComponent.node.zPosition = ZPositionsCategories.button
-        }
-        entityManager.add(hintButton)
     }
     
     func returnToMap() {

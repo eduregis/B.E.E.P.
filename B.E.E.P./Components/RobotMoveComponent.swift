@@ -14,8 +14,8 @@ class RobotMoveComponent: GKComponent {
         super.init()
     }
     
-    func move(direction: String) {
-        
+    func move(direction: String) -> SKAction{
+             
         let move: SKAction
         let textures: [SKTexture]
         
@@ -36,18 +36,32 @@ class RobotMoveComponent: GKComponent {
             move = SKAction.move(by: CGVector(dx: 0, dy: 0), duration: 0.6)
             textures = []
         }
-        let animate = SKAction.animate(with: textures, timePerFrame: 0.2, resize: false, restore: true)
-        node.run(SKAction.group([move, animate]))
-    }
-    
-    func turn(direction: String) {
-        let texture = SKTexture(imageNamed: "robot-idle-\(direction)-2")
-        node.run(SKAction.wait(forDuration: 0.6)){
-            self.node.texture = texture
-        }
+        let animate = SKAction.animate(with: textures, timePerFrame: 0.2, resize: false, restore: false)
         
+         //node.run(SKAction.group([move, animate]))*/
+        
+        return SKAction.group([move, animate])
     }
     
+    func moveComplete(move: [SKAction], button: GKEntity){
+        
+        let sequence = SKAction.sequence(move)
+        node.run(sequence){
+            if let button = button.component(ofType: SpriteComponent.self){
+                button.node.zPosition = 0
+            }
+        }
+    }
+    
+    func turn(direction: String) -> SKAction{
+        let texture = SKTexture(imageNamed: "robot-idle-\(direction)-2")
+        let textures: [SKTexture] = [texture]
+        /*node.run(SKAction.wait(forDuration: 0.6)){
+            self.node.texture = texture
+        }*/
+        let animate = SKAction.animate(with: textures, timePerFrame: 0.6, resize: false, restore: false)
+        return animate
+    }
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
