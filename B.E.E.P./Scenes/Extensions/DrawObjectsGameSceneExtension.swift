@@ -11,6 +11,7 @@ import SpriteKit
 
 extension GameScene {
     
+    // MARK: Draw Tilesets
     // desenha o tileset e seu corredor de luz de acordo com sua posição
     func drawTilesets(width: Int, height: Int) {
         for i in 1...width {
@@ -39,6 +40,7 @@ extension GameScene {
         }
     }
     
+    // MARK: Draw Robots
     func drawRobot (xPosition: Int, yPosition: Int) {
         // desenha o chão iluminado embaixo do robô
         if let spriteComponent = lightFloor.component(ofType: SpriteComponent.self) {
@@ -61,6 +63,7 @@ extension GameScene {
         entityManager.add(robot)
     }
     
+    // MARK: Draw Tabs
     func drawTabs () {
         // adiciona a aba de comandos
         let commandTab = DefaultObject(name: "command-tab")
@@ -134,6 +137,7 @@ extension GameScene {
         }
     }
     
+    // MARK: Draw Auxiliary Tabs
     func drawAuxiliaryTab() {
         let size: Int
         let yAjust: CGFloat
@@ -147,20 +151,30 @@ extension GameScene {
                 yAjust = 148
             default:
                 size = 3
-                yAjust = 0
+                yAjust = 28
             }
             let auxiliaryTab = AuxiliaryTab(size: size)
             if let spriteComponent = auxiliaryTab.component(ofType: SpriteComponent.self) {
                 spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x, y: auxiliaryAnchor.y + yAjust)
                 spriteComponent.node.zPosition = ZPositionsCategories.tab
             }
+            
             entityManager.add(auxiliaryTab)
             drawFunctionTab()
+            
+            if(tabStyle == "loop") || (tabStyle == "conditional") {
+                drawLoopTab()
+            }
+            
+            if(tabStyle == "conditional") {
+               drawConditionalTab()
+            }
         }
     }
     
+    // MARK: Draw Function Tabs
     func drawFunctionTab() {
-        // adiciona a aba de comandos
+        // adiciona a aba de função
         let functionTab = DefaultObject(name: "function-tab")
         if let spriteComponent = functionTab.component(ofType: SpriteComponent.self) {
             spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x, y: auxiliaryAnchor.y + 225)
@@ -206,6 +220,7 @@ extension GameScene {
         entityManager.add(block)
     }
     
+    // MARK: Clear Tabs
     func clearTab (tabName: String) {
         switch tabName {
         case "command":
@@ -223,11 +238,32 @@ extension GameScene {
                 }
             }
             functionBlocks.removeAll()
+        case "loop":
+            for block in loopBlocks {
+                if let spriteComponent = block.component(ofType: SpriteComponent.self) {
+                    spriteComponent.node.removeFromParent()
+                }
+            }
+            loopBlocks.removeAll()
+        case "conditional":
+        for block in conditionalIfBlocks {
+            if let spriteComponent = block.component(ofType: SpriteComponent.self) {
+                spriteComponent.node.removeFromParent()
+            }
+        }
+        for block in conditionalElseBlocks {
+            if let spriteComponent = block.component(ofType: SpriteComponent.self) {
+                spriteComponent.node.removeFromParent()
+            }
+        }
+        conditionalIfBlocks.removeAll()
+        conditionalElseBlocks.removeAll()
         default:
             break
         }
     }
     
+    // MARK: Draw Hud
     func drawnReturnButton() {
         let returnButton = HubButton(name: "return-button")
         if let spriteComponent = returnButton.component(ofType: SpriteComponent.self) {
@@ -253,6 +289,7 @@ extension GameScene {
         entityManager.add(hintButton)
     }
     
+    // MARK: Draw Boxes
     func drawBoxes () {
         for i in 0..<boxes.count {
             let box = DefaultObject(name: "box (\(boxes[i].x) - \(boxes[i].y)", spriteName: "box")
@@ -266,6 +303,7 @@ extension GameScene {
         }
     }
     
+    // MARK: Draw Box Drop zones
     func drawBoxDropZones () {
         for i in 0..<boxDropZones.count {
             let boxDropZone = DefaultObject(name: "box-drop-zone (\(boxDropZones[i].x) - \(boxDropZones[i].y)", spriteName: "box-empty-floor")
@@ -277,5 +315,14 @@ extension GameScene {
             }
             entityManager.add(boxDropZone)
         }
+    }
+    
+    // MARK: Update Texts
+    func updateLoopText () {
+        loopText.text = "\(loopValue)x"
+    }
+    
+    func updateConditionalText () {
+        conditionalText.text = conditions[conditionalValue]
     }
 }
