@@ -176,6 +176,10 @@ class MapScene:SKScene {
                     let gameScene = GameScene(size: view!.bounds.size)
                     view!.presentScene(gameScene)
                 }
+                if nodes[0].name?.contains("config-button") ?? false {
+                    let configScene = ConfigScene(size: view!.bounds.size)
+                    view!.presentScene(configScene)
+                }
             }
         }
         
