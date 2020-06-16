@@ -4,6 +4,8 @@ import GameplayKit
 
 class ConfigScene:SKScene {
     
+    lazy var backName:String = {return self.userData?["backSaved"] as? String ?? "configScene"}()
+    
    
     var posicao:Int = 0
     var locationAnterior:CGPoint = CGPoint(x: 0, y: 0)
@@ -76,30 +78,28 @@ class ConfigScene:SKScene {
 //            }
 //        }
             
-            //verifica se clicou no botão voltar
-                 for touch in touches {
-                     let nodes = self.nodes(at: touch.location(in: self))
-                     let returnButtonOptional = self.childNode(withName: "return-button")
-                     
-                     if let returnButton = returnButtonOptional {
-                         if nodes.contains(returnButton) {
-                            returnToMap()
-                         }
-                     }
-                 }
-        
-        
+        //verifica se clicou no botão voltar
+        for touch in touches {
+            let nodes = self.nodes(at: touch.location(in: self))
+            let returnButtonOptional = self.childNode(withName: "return-button")
+            
+            if let returnButton = returnButtonOptional {
+                if nodes.contains(returnButton) {
+                    switch self.backName {
+                    case "mapScene":
+                        let mapScene = MapScene(size: view!.bounds.size)
+                        view!.presentScene(mapScene)
+                    case "gameScene":
+                        let gameScene = GameScene(size: view!.bounds.size)
+                        view!.presentScene(gameScene)
+                    default:
+                        let mapScene = MapScene(size: view!.bounds.size)
+                        view!.presentScene(mapScene)
+                    }
+                }
+            }
+        }
     }
-    
-    func returnToMap() {
-          let mapScene = MapScene(size: view!.bounds.size)
-          view!.presentScene(mapScene)
-      }
-    
-    func returnToGame() {
-             let gameScene = GameScene(size: view!.bounds.size)
-             view!.presentScene(gameScene)
-         }
     
 }
 

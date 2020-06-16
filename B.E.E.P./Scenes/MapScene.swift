@@ -17,6 +17,8 @@ class MapScene:SKScene {
     var locationAnterior:CGPoint = CGPoint(x: 0, y: 0)
     var touchesBeganLocation = CGPoint(x: 0, y: 0)
     
+    lazy var backName:String = {return self.userData?["backSaved"] as? String ?? "mapScene"}()
+    
     var map = ["stage-available","stage-unavailable","filament-available","filament-unavailable","light-floor-stage-available","robot-stage-available"]
     
     override func didMove(to view: SKView) {
@@ -178,6 +180,8 @@ class MapScene:SKScene {
                 }
                 if nodes[0].name?.contains("config-button") ?? false {
                     let configScene = ConfigScene(size: view!.bounds.size)
+                    configScene.userData = configScene.userData ?? NSMutableDictionary()
+                    configScene.userData!["backSaved"] = backName
                     view!.presentScene(configScene)
                 }
             }
