@@ -20,6 +20,7 @@ enum ZPositionsCategories {
     static let button:             CGFloat = 4
     static let subDropZone:        CGFloat = 5
     static let clearTabButton:     CGFloat = 6
+    static let configOptions:      CGFloat = 7
     static let emptyBlock:         CGFloat = 15
     static let draggableBlock:     CGFloat = 20
     static let dialogueBackground: CGFloat = 50
