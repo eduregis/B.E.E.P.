@@ -184,7 +184,7 @@ extension GameScene {
         conditionalText = SKLabelNode(text: conditions[conditionalValue])
         conditionalText.fontName = "8bitoperator"
         conditionalText.fontSize = 14.0
-        conditionalText.fontColor = .magenta
+        conditionalText.fontColor = .textRoyal
         conditionalText.zPosition = ZPositionsCategories.button
         conditionalText.position = CGPoint(x: auxiliaryAnchor.x + 54, y: auxiliaryAnchor.y - 103)
         conditionalText.numberOfLines = 2
