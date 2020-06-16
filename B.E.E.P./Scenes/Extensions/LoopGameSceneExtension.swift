@@ -12,7 +12,8 @@ import SpriteKit
 extension GameScene {
     
     // MARK: Add Element
-    func addElementLoop(){
+    func addElementLoop(count: Double) -> Double{
+        var countMove = count
         for _ in 1...loopValue {
             for block in loopBlocks{
                 if let spriteComponent = block.component(ofType: SpriteComponent.self) {
@@ -22,12 +23,28 @@ extension GameScene {
                     switch name![0] {
                     case "walk-block":
                         if !moveRobot() {
-                            print("nao deu")
+                            print("nao 000")
+                        }else{
+                            countMove += 0.9
                         }
                     case "turn-right-block":
                         arrayMoveRobot.append(turnRobot(direction: "right"))
+                        countMove += 0.6
                     case "turn-left-block":
                         arrayMoveRobot.append(turnRobot(direction: "left"))
+                        countMove += 0.6
+                    case "grab-block":
+                        print("ei")
+                        if verificationBox {
+                            countMove += 0.2
+                            if !putBox(countMove: countMove){
+                                 print("nao deu")
+                            }
+                        }else{
+                            if !grabBox(countMove: countMove){
+                                 print("nao deu")
+                            }
+                        }
                         /*case "grab-block"
                          
                          case "save-block"
@@ -39,6 +56,7 @@ extension GameScene {
                 }
             }
         }
+        return countMove
     }
     
     

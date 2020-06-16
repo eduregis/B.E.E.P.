@@ -315,6 +315,10 @@ extension GameScene {
             }
             entityManager.add(boxDropZone)
         }
+        if let boxFloor = boxFloor.component(ofType: SpriteComponent.self){
+            boxFloor.node.zPosition = -1
+        }
+        entityManager.add(boxFloor)
     }
     
     // MARK: Update Texts
