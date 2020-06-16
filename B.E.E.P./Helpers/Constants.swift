@@ -25,7 +25,12 @@ enum ZPositionsCategories {
     static let dialogueBackground: CGFloat = 50
     static let dialogueTab:        CGFloat = 51
     static let dialogueItems:      CGFloat = 52
-    
+}
+
+// cores
+extension UIColor {
+    static var textRoyal: UIColor { return UIColor(red: 41/255, green: 27/255, blue: 95/255, alpha: 1.0)
+    }
 }
 
 // 

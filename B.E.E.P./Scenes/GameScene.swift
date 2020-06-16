@@ -19,15 +19,19 @@ class GameScene: SKScene {
     var infectedRobots: [CGPoint] = []
     // array de falas do B.E.E.P.
     var dialogues: [String] = ["Parece que não tem nenhum robô infectado aqui,\n mas tem uma caixa de informações fora do lugar. \nVamos arrumar isso!",
-    "Ela está em linha reta, parece que os comandos ‘Andar’ e ‘Pegar/Soltar caixas’ serão o suficiente. Coloque a caixa na área cinza.",
-    "Arraste os blocos da aba de ‘Ações’ para a aba de ‘Comandos’, e aperte o ‘botão de play’ para que o robozinho execute os comandos.",
-    "Lembre-se que o robozinho tem pouca memória, seu limite é de 6 comandos!",
-    "Se achar que errou algo, pode pressionar o ícone de lixeira, do lado do nome da aba pra limpar a aba e recomeçar.",
+    "Ela está em linha reta, parece que os comandos ‘Andar’\n e ‘Pegar/Soltar caixas’ serão o suficiente. \nColoque a caixa na área cinza.",
+    "Arraste os blocos da aba de ‘Ações’ para a\n aba de ‘Comandos’, e aperte o ‘botão de play’\n para que o robozinho execute os comandos.",
+    "Lembre-se que o robozinho tem pouca memória,\n seu limite é de 6 comandos!",
+    "Se achar que errou algo, pode pressionar\n o ícone de lixeira, do lado do nome da aba pra limpar a \naba e recomeçar.",
     "Conto com você!"]
     
+    var dialogueIndex = 0
     var dialogueBackground: DefaultObject!
     var beep: DefaultObject!
+    var dialogueTab: DefaultObject!
     var dialogueText = SKLabelNode(text: "")
+    var dialogueButton: DefaultObject!
+    var dialogueSkip: DefaultObject!
     
     // criamos a referência o gerenciador de entidades
     var entityManager: EntityManager!
@@ -213,6 +217,12 @@ class GameScene: SKScene {
                         //execução do array actionMove que permitirar uma movimentação linear sem desvios
                         moveCompleteRobotLightFloor()
                     }
+                } else if (self.atPoint(location).name == "play-dialogue") {
+                    updateText()
+                } else if (self.atPoint(location).name == "skip-button") {
+                    skipText()
+                } else if (self.atPoint(location).name == "hint-button") {
+                    hintStage()
                 } else if (self.atPoint(location).name == "command-clear-tab") {
                     clearTab(tabName: "command")
                 } else if (self.atPoint(location).name == "function-clear-tab") {
