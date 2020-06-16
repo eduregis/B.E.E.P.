@@ -22,7 +22,6 @@ class MapScene:SKScene {
     var map = ["stage-available","stage-unavailable","filament-available","filament-unavailable","light-floor-stage-available","robot-stage-available"]
     
     override func didMove(to view: SKView) {
-
         entityManager = EntityManager(scene: self)
         
         drawBackground()
@@ -33,7 +32,6 @@ class MapScene:SKScene {
         //drawn config button
         addEntity(entity: HudButton(name: "config-button"), nodeName: "config-button", position: CGPoint(x: frame.maxX-150, y: frame.maxY-50), zPosition: 2, alpha: 1.0)
 
-        
         buildMap()
     }
     
