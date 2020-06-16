@@ -3,6 +3,8 @@ import GameplayKit
 
 class GameScene: SKScene {
     
+    lazy var backName:String = {return self.userData?["backSaved"] as? String ?? "gameScene"}()
+    
     // variáveis que irão receber os valores da API
     var actualPosition = CGPoint(x: 1, y: 1)
     var stageDimensions = CGSize(width: 5, height: 3)
@@ -580,6 +582,8 @@ class GameScene: SKScene {
             }
             if nodes[0].name?.contains("config-button") ?? false {
                let configScene = ConfigScene(size: view!.bounds.size)
+               configScene.userData = configScene.userData ?? NSMutableDictionary()
+               configScene.userData!["backSaved"] = backName
                view!.presentScene(configScene)
             }
         }
