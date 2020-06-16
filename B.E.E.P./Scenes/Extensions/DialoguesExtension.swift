@@ -57,7 +57,9 @@ extension GameScene {
         dialogueText.fontSize = 14.0
         dialogueText.fontColor = .textRoyal
         dialogueText.zPosition = ZPositionsCategories.dialogueItems
-        dialogueText.position = CGPoint(x: dialogueAnchor.x + 108 + CGFloat(animateVector), y: dialogueAnchor.y - 40)
+        dialogueText.position = CGPoint(x: dialogueAnchor.x - 138 + CGFloat(animateVector), y: dialogueAnchor.y + 20)
+        dialogueText.verticalAlignmentMode = .top
+        dialogueText.horizontalAlignmentMode = .left
         dialogueText.numberOfLines = 2
         dialogueText.alpha = 0
         let fadeToRight = SKAction.group([
