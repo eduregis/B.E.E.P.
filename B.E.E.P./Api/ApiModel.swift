@@ -20,15 +20,10 @@ struct DialoguesModel: Codable {
 }
 
 struct StageDesignModel: Codable {
-    let number: Int
-    let width: Int
-    let height: Int
-    let tabStyle: String
-    let initialDirection: String
-    let initialPosition: [Int]
-    let boxes: [Int]
-    let dropZones: [Int]
-    let infectedRobots: [Int]
+    let dropZones, infectedRobots: [Int]
+    let initialDirection, tabStyle: String
+    let boxes, initialPosition: [Int]
+    let number, height, width: Int
     
     init(number: Int, width: Int, height: Int, tabStyle: String, initialDirection: String, initialPosition: [Int], boxes: [Int], dropZones: [Int], infectedRobots: [Int]){
         self.number = number

@@ -15,6 +15,18 @@ class GameScene: SKScene {
     var boxes: [CGPoint] = [
         CGPoint(x: 3, y: 1)
     ]
+    
+    //
+    var countBoxes = -1
+    let boxFloor = DefaultObject(name: "box-fill-floor")
+    var identifierBox: Int?
+    var verificationBox = false
+    var boxesCopy: [DefaultObject] = []
+    var boxesChangeable: [CGPoint] = []
+    
+    
+    
+    
     var boxDropZones: [CGPoint] = [
         CGPoint(x: 4, y: 1)
     ]
@@ -68,7 +80,7 @@ class GameScene: SKScene {
     var conditionalElseDropZoneIsTouched: Bool = false
     
     var commandBlocks: [DraggableBlock] = []
-    var stopButton = HubButton(name: "stop-button")
+    var stopButton = HudButton(name: "stop-button")
     
     // arrays que vão permitir uma movimentação linear do robot e do lightFloor
     var arrayMoveRobot: [SKAction] = []
@@ -131,11 +143,12 @@ class GameScene: SKScene {
         
         if (boxes.count > 0){ drawBoxes() }
         if (boxDropZones.count > 0){ drawBoxDropZones() }
-        
-        drawDialogues()
+
+        drawDialogues(won: false)
     }
     
-    func addElementFunc(){
+    func addElementFunc(count: Double) -> Double{
+        var countMove = count
         for block in functionBlocks{
             if let spriteComponent = block.component(ofType: SpriteComponent.self) {
                 // usando o trecho "-dropped-" para separar obtermos o nome original e seu índice
@@ -145,13 +158,27 @@ class GameScene: SKScene {
                 case "walk-block":
                     if !moveRobot() {
                         print("nao deu")
+                    }else{
+                        countMove += 0.9
                     }
                 case "turn-right-block":
                     arrayMoveRobot.append(turnRobot(direction: "right"))
+                    countMove += 0.6
                 case "turn-left-block":
                     arrayMoveRobot.append(turnRobot(direction: "left"))
-                    /*case "grab-block"
-                     
+                    countMove += 0.6
+                case "grab-block":
+                    if verificationBox {
+                        countMove += 0.2
+                        if !putBox(countMove: countMove){
+                             print("nao deu")
+                        }
+                    }else{
+                        if !grabBox(countMove: countMove){
+                             print("nao deu")
+                        }
+                    }
+                    /*
                      case "save-block"
                      
                      */
@@ -162,6 +189,7 @@ class GameScene: SKScene {
             }
             
         }
+        return countMove
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -176,6 +204,7 @@ class GameScene: SKScene {
                 // caso não seja o objeto que queremos, esvaziamos o selectedItem
                 selectedItem = nil
                 if self.atPoint(location).name == "play-button" {
+                    var countMove = 0.0
                     resetMoveRobot()
                     /*verificar se o array commandBlocks está vazio
                      - Se tem algum block na dropZone*/
@@ -190,20 +219,35 @@ class GameScene: SKScene {
                                 case "walk-block":
                                     if !moveRobot() {
                                         print("nao deu")
+                                    }else{
+                                        countMove += 0.9
                                     }
                                 case "turn-right-block":
                                     arrayMoveRobot.append(turnRobot(direction: "right"))
+                                    countMove += 0.6
                                 case "turn-left-block":
                                     arrayMoveRobot.append(turnRobot(direction: "left"))
+                                    countMove += 0.6
                                 case "function-block":
-                                    addElementFunc()
-                                    /*case "grab-block"
+                                    countMove += addElementFunc(count: countMove)
+                                case "grab-block":
+                                    if verificationBox {
+                                        countMove += 0.2
+                                        if !putBox(countMove: countMove){
+                                             print("nao deu")
+                                        }
+                                    }else{
+                                        if !grabBox(countMove: countMove){
+                                             print("nao deu")
+                                        }
+                                    }
+                                    /*
                                      
                                      case "save-block"
                                      
                                      */
                                 case "loop-block":
-                                    addElementLoop()
+                                    countMove += addElementLoop(count: countMove)
                                 case "conditional-block":
                                     addElementConditional()
                                 default:
@@ -222,8 +266,10 @@ class GameScene: SKScene {
                 } else if (self.atPoint(location).name == "play-dialogue") {
                     updateText()
                 } else if (self.atPoint(location).name == "skip-button") {
-                    skipText()
-                } else if (self.atPoint(location).name == "hint-button") {
+                    skipText(next: false)
+                } else if (self.atPoint(location).name == "next-button") {
+                    skipText(next: true)
+                }else if (self.atPoint(location).name == "hint-button") {
                     hintStage()
                 } else if (self.atPoint(location).name == "command-clear-tab") {
                     clearTab(tabName: "command")

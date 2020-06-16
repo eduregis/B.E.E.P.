@@ -10,8 +10,9 @@ import SpriteKit
 import GameplayKit
 
 extension GameScene {
-    
-    func drawDialogues() {
+
+    func drawDialogues(won: Bool) {
+
         dialogueIndex = 0
         let animateDuration = 0.3
         let animateVector = 50
@@ -51,10 +52,15 @@ extension GameScene {
             spriteComponent.node.run(fadeToRight)
         }
         entityManager.add(dialogueTab)
-        
-        dialogueText = SKLabelNode(text: dialogues[dialogueIndex])
+
+        if !won {
+            dialogueText = SKLabelNode(text: dialogues[dialogueIndex])
+            dialogueText.fontSize = 14.0
+        } else{
+            dialogueText = SKLabelNode(text: "Perfeito!")
+            dialogueText.fontSize = 18.0
+        }
         dialogueText.fontName = "8bitoperator"
-        dialogueText.fontSize = 14.0
         dialogueText.fontColor = .textRoyal
         dialogueText.zPosition = ZPositionsCategories.dialogueItems
         dialogueText.position = CGPoint(x: dialogueAnchor.x - 138 + CGFloat(animateVector), y: dialogueAnchor.y + 20)
@@ -68,8 +74,16 @@ extension GameScene {
         dialogueText.run(fadeToRight)
         addChild(dialogueText)
         
+
+        let namePlay: String
+        if won {
+            namePlay = "next-button"
+        }else{
+            namePlay = "play-dialogue"
+        }
         // adiciona botão para avançar para o próximo diálogo
-        dialogueButton = DefaultObject(name: "play-dialogue")
+        dialogueButton = DefaultObject(name: namePlay, spriteName: "play-dialogue")
+
         if let spriteComponent = dialogueButton.component(ofType: SpriteComponent.self) {
             spriteComponent.node.position = CGPoint(x: dialogueAnchor.x + 380 + CGFloat(animateVector), y: dialogueAnchor.y - 45)
             spriteComponent.node.zPosition = ZPositionsCategories.dialogueItems
@@ -84,20 +98,25 @@ extension GameScene {
             //            spriteComponent.node.run(SKAction.repeatForever(pulsed))
         }
         entityManager.add(dialogueButton)
-        
+    
         // adiciona botão para avançar para o próximo diálogo
-        dialogueSkip = DefaultObject(name: "skip-button")
-        if let spriteComponent = dialogueSkip.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: dialogueAnchor.x + 378 + CGFloat(animateVector), y: dialogueAnchor.y - 125)
-            spriteComponent.node.zPosition = ZPositionsCategories.dialogueItems
-            spriteComponent.node.alpha = 0
-            let fadeToRight = SKAction.group([
-                SKAction.move(by: CGVector(dx: -animateVector, dy: 0), duration: animateDuration),
-                SKAction.fadeAlpha(to: 1, duration: 0.5)])
-            spriteComponent.node.run(fadeToRight)
-        }
         
-        entityManager.add(dialogueSkip)
+        if !won {
+            dialogueSkip = DefaultObject(name: "skip-button")
+            if let spriteComponent = dialogueSkip.component(ofType: SpriteComponent.self) {
+                spriteComponent.node.position = CGPoint(x: dialogueAnchor.x + 378 + CGFloat(animateVector), y: dialogueAnchor.y - 125)
+                spriteComponent.node.zPosition = ZPositionsCategories.dialogueItems
+                spriteComponent.node.alpha = 0
+                let fadeToRight = SKAction.group([
+                    SKAction.move(by: CGVector(dx: -animateVector, dy: 0), duration: animateDuration),
+                    SKAction.fadeAlpha(to: 1, duration: 0.5)])
+                spriteComponent.node.run(fadeToRight)
+            }
+            
+            entityManager.add(dialogueSkip)
+        }
+
+
     }
     
     func updateText () {
@@ -105,15 +124,20 @@ extension GameScene {
             dialogueIndex = dialogueIndex + 1
             dialogueText.text = dialogues[dialogueIndex]
         } else {
-            skipText()
+
+            skipText(next: false)
+
         }
     }
     
     func hintStage () {
-        drawDialogues()
+
+        drawDialogues(won: false)
     }
     
-    func skipText () {
+    func skipText (next: Bool) {
+
+
         let animateDuration = 0.3
         let animateVector = 50
         if let spriteComponent = dialogueBackground.component(ofType: SpriteComponent.self) {
@@ -158,6 +182,12 @@ extension GameScene {
             SKAction.fadeAlpha(to: 0, duration: animateDuration)])
         dialogueText.run(backToRight) {
             self.dialogueText.removeFromParent()
+
+            if next {
+                self.returnToMap()
+            }
+
+
         }
     }
 }
