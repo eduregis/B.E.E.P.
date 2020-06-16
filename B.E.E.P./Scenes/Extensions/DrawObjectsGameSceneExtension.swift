@@ -48,7 +48,6 @@ extension GameScene {
             let y = gameplayAnchor.y + 200 - CGFloat(16 * (xPosition)) - CGFloat(16 * (yPosition))
             spriteComponent.node.position = CGPoint(x: x, y: y)
             spriteComponent.node.zPosition = CGFloat(xPosition + yPosition) + 3
-            print(CGFloat(xPosition + yPosition) + 3)
             spriteComponent.node.alpha = 0.6
         }
         entityManager.add(lightFloor)
@@ -300,8 +299,17 @@ extension GameScene {
             }
             boxesCopy.append(box)
             entityManager.add(box)
+            
+            
+            
+            // MARK: Clone Boxes
+            let position = CGPoint(x: boxes[i].x, y: boxes[i].y)
+            boxesChangeable.append(position)
         }
+        countBoxes = boxes.count
     }
+    
+    
     
     // MARK: Draw Box Drop zones
     func drawBoxDropZones () {
