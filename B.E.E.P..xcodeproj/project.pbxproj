@@ -249,8 +249,8 @@
 		5632E8E7248ED9C50011B5ED /* B.E.E.P.Tests */ = {
 			isa = PBXGroup;
 			children = (
-				5632E8EA248ED9C50011B5ED /* Info.plist */,
 				56CE66AE24983BB400BE371E /* RobotActionsTests.swift */,
+				5632E8EA248ED9C50011B5ED /* Info.plist */,
 			);
 			path = B.E.E.P.Tests;
 			sourceTree = "<group>";
