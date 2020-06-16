@@ -57,4 +57,34 @@ class RobotActionsTests: XCTestCase {
         //then
         XCTAssertNoThrow(output1)
     }
+    
+    func test_robotMoveComponent_robotMoveImages_changeImages() {
+        //given
+        let sut = RobotMoveComponent()
+        let input1 = "left"
+        //when
+        let output1 = sut.move(direction: input1)
+        
+        //then
+        XCTAssertNoThrow(output1)
+    }
+    
+    func test_robotMoveComponent_turnRobot_animateMovement() {
+        //given
+        let sut = RobotMoveComponent()
+        let input1 = "left"
+        
+        //when
+        let output1 = sut.turn(direction: input1)
+        
+        //then
+        XCTAssertNoThrow(output1)
+    }
+    
+    func test_conditional_addElement() {
+        let sut = GameScene()
+        
+        XCTAssertNoThrow(sut.addElementConditional())
+    }
+    
 }
