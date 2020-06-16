@@ -48,7 +48,6 @@ extension GameScene {
             let y = gameplayAnchor.y + 200 - CGFloat(16 * (xPosition)) - CGFloat(16 * (yPosition))
             spriteComponent.node.position = CGPoint(x: x, y: y)
             spriteComponent.node.zPosition = CGFloat(xPosition + yPosition) + 3
-            print(CGFloat(xPosition + yPosition) + 3)
             spriteComponent.node.alpha = 0.6
         }
         entityManager.add(lightFloor)

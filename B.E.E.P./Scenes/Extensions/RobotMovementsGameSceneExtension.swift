@@ -146,7 +146,6 @@ extension GameScene {
         if let spriteComponent = lightFloor.component(ofType: SpriteComponent.self) {
             spriteComponent.node.zPosition = spriteComponent.node.zPosition + newZPosition
         }
-        print(actualPosition.x, actualPosition.y)
          return true
      }
      
