@@ -47,11 +47,11 @@ class MapScene:SKScene {
         let tilesetReference5 = CGPoint(x: frame.midX+1028, y: frame.midY+124)
         
         
-        drawnMaps(height: 3, width: 5, tilesetReference: tilesetReference1, status: "available", showRobot:false)
+        drawnMaps(height: 3, width: 5, tilesetReference: tilesetReference1, status: "available", showRobot:true)
         
-        drawnFilament(filamentReference: filamentReference1, status: "available")
+        drawnFilament(filamentReference: filamentReference1, status: "unavailable")
         
-        drawnMaps(height: 5, width: 5, tilesetReference: tilesetReference2, status: "available", showRobot:true)
+        drawnMaps(height: 5, width: 5, tilesetReference: tilesetReference2, status: "unavailable", showRobot:false)
         drawnFilament(filamentReference: filamentReference2, status: "unavailable")
         
         drawnMaps(height: 3, width: 5, tilesetReference: tilesetReference3, status: "unavailable", showRobot:false)

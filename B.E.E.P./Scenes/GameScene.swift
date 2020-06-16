@@ -15,6 +15,7 @@ class GameScene: SKScene {
     ]
     
     
+    let boxFloor = DefaultObject(name: "box-fill-floor")
     var identifierBox: Int?
     var verificationBox = false
     var boxesCopy: [DefaultObject] = []
@@ -127,7 +128,8 @@ class GameScene: SKScene {
         if (boxDropZones.count > 0){ drawBoxDropZones() }
     }
     
-    func addElementFunc(){
+    func addElementFunc(count: Double) -> Double{
+        var countMove = count
         for block in functionBlocks{
             if let spriteComponent = block.component(ofType: SpriteComponent.self) {
                 // usando o trecho "-dropped-" para separar obtermos o nome original e seu índice
@@ -137,13 +139,27 @@ class GameScene: SKScene {
                 case "walk-block":
                     if !moveRobot() {
                         print("nao deu")
+                    }else{
+                        countMove += 0.9
                     }
                 case "turn-right-block":
                     arrayMoveRobot.append(turnRobot(direction: "right"))
+                    countMove += 0.6
                 case "turn-left-block":
                     arrayMoveRobot.append(turnRobot(direction: "left"))
-                    /*case "grab-block"
-                     
+                    countMove += 0.6
+                case "grab-block":
+                    if verificationBox {
+                        countMove += 0.2
+                        if !putBox(countMove: countMove){
+                             print("nao deu")
+                        }
+                    }else{
+                        if !grabBox(countMove: countMove){
+                             print("nao deu")
+                        }
+                    }
+                    /*
                      case "save-block"
                      
                      */
@@ -154,6 +170,7 @@ class GameScene: SKScene {
             }
             
         }
+        return countMove
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -168,7 +185,7 @@ class GameScene: SKScene {
                 // caso não seja o objeto que queremos, esvaziamos o selectedItem
                 selectedItem = nil
                 if self.atPoint(location).name == "play-button" {
-                    var countMove = 0
+                    var countMove = 0.0
                     resetMoveRobot()
                     /*verificar se o array commandBlocks está vazio
                      - Se tem algum block na dropZone*/
@@ -184,19 +201,26 @@ class GameScene: SKScene {
                                     if !moveRobot() {
                                         print("nao deu")
                                     }else{
-                                        countMove += 1
+                                        countMove += 0.9
                                     }
                                 case "turn-right-block":
                                     arrayMoveRobot.append(turnRobot(direction: "right"))
-                                    countMove += 1
+                                    countMove += 0.6
                                 case "turn-left-block":
                                     arrayMoveRobot.append(turnRobot(direction: "left"))
-                                    countMove += 1
+                                    countMove += 0.6
                                 case "function-block":
-                                    addElementFunc()
+                                    countMove += addElementFunc(count: countMove)
                                 case "grab-block":
-                                    if !grabBox(countMove: countMove){
-                                         print("nao deu")
+                                    if verificationBox {
+                                        countMove += 0.2
+                                        if !putBox(countMove: countMove){
+                                             print("nao deu")
+                                        }
+                                    }else{
+                                        if !grabBox(countMove: countMove){
+                                             print("nao deu")
+                                        }
                                     }
                                     /*
                                      
@@ -204,7 +228,7 @@ class GameScene: SKScene {
                                      
                                      */
                                 case "loop-block":
-                                    addElementLoop()
+                                    countMove += addElementLoop(count: countMove)
                                 case "conditional-block":
                                     addElementConditional()
                                 default:

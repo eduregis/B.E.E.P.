@@ -32,7 +32,7 @@ class RobotMoveComponent: GKComponent {
             break
         }
         move = SKAction.move(by: CGVector(dx: 0, dy: 0), duration: 0.6)
-        let animate = SKAction.animate(with: texture, timePerFrame: 0.3)
+        let animate = SKAction.animate(with: texture, timePerFrame: 0)
         return SKAction.group([move, animate])
     }
     
@@ -73,7 +73,7 @@ class RobotMoveComponent: GKComponent {
                 textures = []
             }
         }
-        let animate = SKAction.animate(with: textures, timePerFrame: 0.2, resize: false, restore: false)
+        let animate = SKAction.animate(with: textures, timePerFrame: 0.3, resize: false, restore: false)
         
          //node.run(SKAction.group([move, animate]))*/
         
