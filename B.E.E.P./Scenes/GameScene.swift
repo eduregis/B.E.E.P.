@@ -17,6 +17,17 @@ class GameScene: SKScene {
         CGPoint(x: 4, y: 1)
     ]
     var infectedRobots: [CGPoint] = []
+    // array de falas do B.E.E.P.
+    var dialogues: [String] = ["Parece que não tem nenhum robô infectado aqui,\n mas tem uma caixa de informações fora do lugar. \nVamos arrumar isso!",
+    "Ela está em linha reta, parece que os comandos ‘Andar’ e ‘Pegar/Soltar caixas’ serão o suficiente. Coloque a caixa na área cinza.",
+    "Arraste os blocos da aba de ‘Ações’ para a aba de ‘Comandos’, e aperte o ‘botão de play’ para que o robozinho execute os comandos.",
+    "Lembre-se que o robozinho tem pouca memória, seu limite é de 6 comandos!",
+    "Se achar que errou algo, pode pressionar o ícone de lixeira, do lado do nome da aba pra limpar a aba e recomeçar.",
+    "Conto com você!"]
+    
+    var dialogueBackground: DefaultObject!
+    var beep: DefaultObject!
+    var dialogueText = SKLabelNode(text: "")
     
     // criamos a referência o gerenciador de entidades
     var entityManager: EntityManager!
@@ -114,6 +125,8 @@ class GameScene: SKScene {
         
         if (boxes.count > 0){ drawBoxes() }
         if (boxDropZones.count > 0){ drawBoxDropZones() }
+        
+        drawDialogues()
     }
     
     func addElementFunc(){
