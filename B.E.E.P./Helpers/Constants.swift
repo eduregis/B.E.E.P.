@@ -11,7 +11,7 @@ import SpriteKit
 
 var blockTypes = ["walk-block","turn-left-block","turn-right-block","grab-block","save-block"]
 
-// ZPositions
+
 enum ZPositionsCategories {
     static let background:         CGFloat = 0
     static let tab:                CGFloat = 1
@@ -33,4 +33,8 @@ extension UIColor {
     }
 }
 
-// 
+enum Direction {
+    case backward
+    case forward
+}
+

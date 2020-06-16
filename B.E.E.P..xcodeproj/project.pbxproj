@@ -32,13 +32,15 @@
 		2EF6C527248C12B40040F927 /* SpriteComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF6C526248C12B40040F927 /* SpriteComponent.swift */; };
 		2EF6C52A248C13EB0040F927 /* Tileset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF6C529248C13EB0040F927 /* Tileset.swift */; };
 		2EF6C52C248C14FE0040F927 /* EntityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF6C52B248C14FE0040F927 /* EntityManager.swift */; };
-		5632E8E9248ED9C50011B5ED /* B_E_E_P_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5632E8E8248ED9C50011B5ED /* B_E_E_P_Tests.swift */; };
-		5632E8F7248EDA1A0011B5ED /* B_E_E_P_UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5632E8F6248EDA1A0011B5ED /* B_E_E_P_UITests.swift */; };
+		569145AD24985F3100A5A660 /* LightFloorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569145AC24985F3100A5A660 /* LightFloorTests.swift */; };
+		569145AF24985FBE00A5A660 /* GameViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569145AE24985FBE00A5A660 /* GameViewControllerTests.swift */; };
+		569145B1249860A700A5A660 /* ApiModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569145B0249860A700A5A660 /* ApiModelTests.swift */; };
 		56B459D7249148C2007D82D2 /* Filament.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56B459D6249148C2007D82D2 /* Filament.swift */; };
 		56B459DB24925780007D82D2 /* StageUnavailable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56B459DA24925780007D82D2 /* StageUnavailable.swift */; };
 		56C9EE84249043A7007924BA /* MapScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C9EE83249043A7007924BA /* MapScene.swift */; };
 		56C9EE862490459A007924BA /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C9EE852490459A007924BA /* MapViewController.swift */; };
 		56C9EE8824906479007924BA /* HudButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C9EE8724906479007924BA /* HudButton.swift */; };
+		56CE66AF24983BB400BE371E /* RobotActionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56CE66AE24983BB400BE371E /* RobotActionsTests.swift */; };
 		7B07CF3B2497ED7500EAA181 /* ConfigScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B07CF3A2497ED7500EAA181 /* ConfigScene.swift */; };
 		7B07CF3D2497ED9200EAA181 /* ConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B07CF3C2497ED9200EAA181 /* ConfigViewController.swift */; };
 		7B32A9BF2496BE2D00BB939F /* ApiModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B32A9BE2496BE2D00BB939F /* ApiModel.swift */; };
@@ -92,16 +94,18 @@
 		2EF6C529248C13EB0040F927 /* Tileset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tileset.swift; sourceTree = "<group>"; };
 		2EF6C52B248C14FE0040F927 /* EntityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityManager.swift; sourceTree = "<group>"; };
 		5632E8E6248ED9C50011B5ED /* B.E.E.P.Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = B.E.E.P.Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		5632E8E8248ED9C50011B5ED /* B_E_E_P_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = B_E_E_P_Tests.swift; sourceTree = "<group>"; };
 		5632E8EA248ED9C50011B5ED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5632E8F4248EDA1A0011B5ED /* B.E.E.P.UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = B.E.E.P.UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		5632E8F6248EDA1A0011B5ED /* B_E_E_P_UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = B_E_E_P_UITests.swift; sourceTree = "<group>"; };
 		5632E8F8248EDA1A0011B5ED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		569145AC24985F3100A5A660 /* LightFloorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightFloorTests.swift; sourceTree = "<group>"; };
+		569145AE24985FBE00A5A660 /* GameViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewControllerTests.swift; sourceTree = "<group>"; };
+		569145B0249860A700A5A660 /* ApiModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiModelTests.swift; sourceTree = "<group>"; };
 		56B459D6249148C2007D82D2 /* Filament.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filament.swift; sourceTree = "<group>"; };
 		56B459DA24925780007D82D2 /* StageUnavailable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StageUnavailable.swift; sourceTree = "<group>"; };
 		56C9EE83249043A7007924BA /* MapScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapScene.swift; sourceTree = "<group>"; };
 		56C9EE852490459A007924BA /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		56C9EE8724906479007924BA /* HudButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HudButton.swift; sourceTree = "<group>"; };
+		56CE66AE24983BB400BE371E /* RobotActionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RobotActionsTests.swift; sourceTree = "<group>"; };
 		7B07CF3A2497ED7500EAA181 /* ConfigScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigScene.swift; sourceTree = "<group>"; };
 		7B07CF3C2497ED9200EAA181 /* ConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigViewController.swift; sourceTree = "<group>"; };
 		7B32A9BE2496BE2D00BB939F /* ApiModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiModel.swift; sourceTree = "<group>"; };
@@ -254,7 +258,10 @@
 		5632E8E7248ED9C50011B5ED /* B.E.E.P.Tests */ = {
 			isa = PBXGroup;
 			children = (
-				5632E8E8248ED9C50011B5ED /* B_E_E_P_Tests.swift */,
+				56CE66AE24983BB400BE371E /* RobotActionsTests.swift */,
+				569145AC24985F3100A5A660 /* LightFloorTests.swift */,
+				569145B0249860A700A5A660 /* ApiModelTests.swift */,
+				569145AE24985FBE00A5A660 /* GameViewControllerTests.swift */,
 				5632E8EA248ED9C50011B5ED /* Info.plist */,
 			);
 			path = B.E.E.P.Tests;
@@ -263,7 +270,6 @@
 		5632E8F5248EDA1A0011B5ED /* B.E.E.P.UITests */ = {
 			isa = PBXGroup;
 			children = (
-				5632E8F6248EDA1A0011B5ED /* B_E_E_P_UITests.swift */,
 				5632E8F8248EDA1A0011B5ED /* Info.plist */,
 			);
 			path = B.E.E.P.UITests;
@@ -350,6 +356,7 @@
 					};
 					5632E8E5248ED9C50011B5ED = {
 						CreatedOnToolsVersion = 11.5;
+						LastSwiftMigration = 1150;
 						TestTargetID = 2EF6C509248C0DE00040F927;
 					};
 					5632E8F3248EDA1A0011B5ED = {
@@ -449,7 +456,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5632E8E9248ED9C50011B5ED /* B_E_E_P_Tests.swift in Sources */,
+				569145B1249860A700A5A660 /* ApiModelTests.swift in Sources */,
+				56CE66AF24983BB400BE371E /* RobotActionsTests.swift in Sources */,
+				569145AF24985FBE00A5A660 /* GameViewControllerTests.swift in Sources */,
+				569145AD24985F3100A5A660 /* LightFloorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -457,7 +467,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5632E8F7248EDA1A0011B5ED /* B_E_E_P_UITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -644,6 +653,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2KUGC5CZ6Z;
 				INFOPLIST_FILE = B.E.E.P.Tests/Info.plist;
@@ -654,6 +664,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.eduardoregis.B-E-E-P-Tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/B.E.E.P..app/B.E.E.P.";
@@ -664,6 +675,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2KUGC5CZ6Z;
 				INFOPLIST_FILE = B.E.E.P.Tests/Info.plist;
