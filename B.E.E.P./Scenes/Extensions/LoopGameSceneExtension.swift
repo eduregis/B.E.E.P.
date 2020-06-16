@@ -90,7 +90,7 @@ extension GameScene {
         loopText = SKLabelNode(text: "\(loopValue)x")
         loopText.fontName = "8bitoperator"
         loopText.fontSize = 30.0
-        loopText.fontColor = .magenta
+        loopText.fontColor = .textRoyal
         loopText.zPosition = ZPositionsCategories.button
         loopText.position = CGPoint(x: auxiliaryAnchor.x + 54, y: auxiliaryAnchor.y + 87)
         addChild(loopText)

@@ -65,6 +65,7 @@ extension GameScene {
         for o in 0..<boxesChangeable.count{
             boxesChangeable[o] = boxes[o]
         }
+        countBoxes = boxes.count
      }
      
     // MARK: Turn Robot
@@ -130,29 +131,31 @@ extension GameScene {
     }
     // MARK: Put Box
     func putBox(countMove: Double) -> Bool{
-        print("atualD \(actualDirection)")
         let positionBox: CGPoint
         switch actualDirection {
+        // sabendo a direcao do robot
+            // é verificado se o robot está na extremidade ou se onde ele quer soltar o box tem caixa
+            // caso alguns dessas seja vdd nao será possivel colocar o box
         case "up":
-           if actualPosition.y == 0 {
+           if actualPosition.y == 0 || boxesChangeable.contains(CGPoint(x: actualPosition.x, y: actualPosition.y - 1)) {
                 return false
             } else {
                 positionBox = CGPoint(x: actualPosition.x, y: actualPosition.y - 1)
             }
         case "left":
-            if actualPosition.x == 0 {
+            if actualPosition.x == 0 || boxesChangeable.contains(CGPoint(x: actualPosition.x - 1, y: actualPosition.y)) {
                 return false
             } else {
                 positionBox = CGPoint(x: actualPosition.x - 1, y: actualPosition.y)
             }
         case "down":
-            if actualPosition.y == stageDimensions.height - 1 {
+            if actualPosition.y == stageDimensions.height - 1 || boxesChangeable.contains(CGPoint(x: actualPosition.x, y: actualPosition.y + 1)) {
                 return false
             } else {
                 positionBox = CGPoint(x: actualPosition.x, y: actualPosition.y + 1)
             }
         case "right":
-            if actualPosition.x == stageDimensions.width - 1 {
+            if actualPosition.x == stageDimensions.width - 1 || boxesChangeable.contains(CGPoint(x: actualPosition.x + 1, y: actualPosition.y)) {
                return false
             } else {
                 positionBox = CGPoint(x: actualPosition.x + 1, y: actualPosition.y)
@@ -161,30 +164,52 @@ extension GameScene {
             positionBox = CGPoint(x: 0, y: 0)
             return false
         }
-        print("position \(positionBox)")
+        //print("position \(positionBox)")
         boxesChangeable[identifierBox!] = positionBox
         if let box = boxesCopy[identifierBox!].component(ofType: SpriteComponent.self){
-            print("------------------------------------------")
+            // x, y e z sao para setar a nova posicao do box
             let x = gameplayAnchor.x + CGFloat(32 * (positionBox.x - 1)) - CGFloat(32 * (positionBox.y - 1))
             let y = gameplayAnchor.y + 182 - CGFloat(16 * (positionBox.x - 1)) - CGFloat(16 * (positionBox.y - 1))
-            let z = stageDimensions.width + stageDimensions.height + CGFloat(positionBox.x + positionBox.y) + 10
+            let z = stageDimensions.width + stageDimensions.height + CGFloat(positionBox.x + positionBox.y) + 1.2
+            
+            //mudar de robot com box para robot sem box, lenvando em conta tambem sua direcao
             textureRobotDirection()
             
+            // verificar se onde a caixa foi deixada corresponde a algum das boxDropZones
             for drop in boxDropZones{
+                
                 if positionBox == drop {
+                    // caso vdd
+                    // diminui um countBoxes que representa a quantidade de boxDropZones
+                    countBoxes -= 1
+                    
                     if let boxFloor = boxFloor.component(ofType: SpriteComponent.self){
-                        let xposition = gameplayAnchor.x + CGFloat(32 * (positionBox.x - 1)) - CGFloat(32 * (positionBox.y - 1))
-                        let ypositon = gameplayAnchor.y + 168 - CGFloat(16 * (positionBox.x - 1)) - CGFloat(16 * (positionBox.y - 1))
-                        let zposition = stageDimensions.width + stageDimensions.height + CGFloat(positionBox.x + positionBox.y) + 2
+                        // verBoxes serve para verificar se o todas as boxDropZone ja foram acionadas
+                        var verBoxes = false
+                        if countBoxes == 0 {
+                            verBoxes = true
+                        }
+                        
+                        let xfloor = gameplayAnchor.x + CGFloat(32 * (positionBox.x - 1)) - CGFloat(32 * (positionBox.y - 1))
+                        let yfloor = gameplayAnchor.y + 168 - CGFloat(16 * (positionBox.x - 1)) - CGFloat(16 * (positionBox.y - 1))
+                        let zfloor = stageDimensions.width + stageDimensions.height + CGFloat(positionBox.x + positionBox.y) + 1.1
                         
                         boxFloor.node.run(SKAction.wait(forDuration: countMove + 0.1)){
-                            boxFloor.node.position = CGPoint(x: xposition, y: ypositon)
-                            boxFloor.node.zPosition = zposition
+                            boxFloor.node.position = CGPoint(x: xfloor, y: yfloor)
+                            boxFloor.node.zPosition = zfloor
+                            if verBoxes {
+                                self.drawDialogues(won: verBoxes)
+                            }
                         }
                     }
+                    
                 }
+                
             }
-            
+            if let boxCopy = boxesCopy[identifierBox!].component(ofType: SpriteComponent.self){
+                boxCopy.node.name = "box (\(positionBox.x) - \(positionBox.y)"
+            }
+            // posiciona o box no local indicado
             box.node.run(SKAction.wait(forDuration: countMove)){
                 box.node.name = "box (\(positionBox.x) - \(positionBox.y)"
                 box.node.position = CGPoint(x: x, y: y)
@@ -193,6 +218,7 @@ extension GameScene {
             }
         }
         
+        // volta a indicar que o robot nao está com box
         verificationBox = false
         return true
     }
@@ -235,20 +261,26 @@ extension GameScene {
         }
         
         var i = 0
+        // saber qual box o robot está pegando
         for box in boxesCopy{
             if let component = box.component(ofType: SpriteComponent.self){
                 if component.node.name == "box (\(positionBox.x) - \(positionBox.y)" {
+                    // guardando no idenfierBox o indice do box
                     identifierBox = i
+                    print("Achou")
                     component.node.run(SKAction.wait(forDuration: countMove)){
+                        //escondendo o box, pois ele foi capturado
                         component.node.zPosition = -1
                     }
                 }
             }
             i+=1
         }
-        
+        //muda a posicao do box para o mesma do robot permitindo assim a
+        //o robot de andar por onde a caixa tava sem restricao
         boxesChangeable[identifierBox!] = actualPosition
         
+        //indica que o robot está com um box
         verificationBox = true
         return true
     }
@@ -289,6 +321,11 @@ extension GameScene {
          default:
              actualPosition = CGPoint(x: actualPosition.x, y: actualPosition.y)
          }
+        // caso o robot esteja com um box
+        // a position do box deve ser igual a do robot
+        if verificationBox {
+            boxesChangeable[identifierBox!] = actualPosition
+        }
         
          //Caso ele possa andar
          // adicionamos a SKAction referente a direção atual no arrayMoveRobot
@@ -310,7 +347,6 @@ extension GameScene {
         if let spriteComponent = lightFloor.component(ofType: SpriteComponent.self) {
             spriteComponent.node.zPosition = spriteComponent.node.zPosition + newZPosition
         }
-        print(actualPosition.x, actualPosition.y)
          return true
      }
      
@@ -320,7 +356,7 @@ extension GameScene {
              lightFloorMoveComponent.moveComplete(move: arrayMovelightFloor)
          }
          if let robotMoveComponent = robot.component(ofType: RobotMoveComponent.self) {
-             robotMoveComponent.moveComplete(move: arrayMoveRobot, button: stopButton)
+            robotMoveComponent.moveComplete(move: arrayMoveRobot, button: stopButton)
          }
      }
 }
