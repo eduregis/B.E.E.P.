@@ -5,15 +5,21 @@ import GameplayKit
 class Tileset: GKEntity {
 
     override init() {
-    super.init()
-
-    // Utiliza o componente SpriteComponent para gerar o sprite da entidade
+        super.init()
+        // Utiliza o componente SpriteComponent para gerar o sprite da entidade
         let spriteComponent = SpriteComponent(texture: SKTexture(imageNamed: "tileset"), name: "tileset")
         
-    addComponent(spriteComponent)
-  }
+        addComponent(spriteComponent)
+    }
+    init(status:String){
+        super.init()
+        
+        let spriteComponent = SpriteComponent(texture: SKTexture(imageNamed: "tileset-\(status)"), name: "tileset")
+        
+        addComponent(spriteComponent)
+    }
   
-  required init?(coder aDecoder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }

@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //inicio da configuração pra colocar a controller na tela (view code)
         let window = UIWindow(frame: UIScreen.main.bounds)
         
-        let controller = GameViewController()
+        let controller = MapViewController()
         window.rootViewController = controller
         
         self.window = window
