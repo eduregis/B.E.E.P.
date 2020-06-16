@@ -12,6 +12,7 @@ import GameplayKit
 extension GameScene {
     
     func drawDialogues(won: Bool) {
+
         dialogueIndex = 0
         let animateDuration = 0.3
         let animateVector = 50
@@ -51,6 +52,7 @@ extension GameScene {
             spriteComponent.node.run(fadeToRight)
         }
         entityManager.add(dialogueTab)
+
         if !won {
             dialogueText = SKLabelNode(text: dialogues[dialogueIndex])
             dialogueText.fontSize = 14.0
@@ -72,6 +74,7 @@ extension GameScene {
         dialogueText.run(fadeToRight)
         addChild(dialogueText)
         
+
         let namePlay: String
         if won {
             namePlay = "next-button"
@@ -80,6 +83,7 @@ extension GameScene {
         }
         // adiciona botão para avançar para o próximo diálogo
         dialogueButton = DefaultObject(name: namePlay, spriteName: "play-dialogue")
+
         if let spriteComponent = dialogueButton.component(ofType: SpriteComponent.self) {
             spriteComponent.node.position = CGPoint(x: dialogueAnchor.x + 380 + CGFloat(animateVector), y: dialogueAnchor.y - 45)
             spriteComponent.node.zPosition = ZPositionsCategories.dialogueItems
@@ -95,6 +99,7 @@ extension GameScene {
         }
         entityManager.add(dialogueButton)
         
+
         
         // adiciona botão para avançar para o próximo diálogo
         
@@ -112,6 +117,7 @@ extension GameScene {
             
             entityManager.add(dialogueSkip)
         }
+
     }
     
     func updateText () {
@@ -124,10 +130,12 @@ extension GameScene {
     }
     
     func hintStage () {
+
         drawDialogues(won: false)
     }
     
     func skipText (next: Bool) {
+
         let animateDuration = 0.3
         let animateVector = 50
         if let spriteComponent = dialogueBackground.component(ofType: SpriteComponent.self) {
@@ -172,9 +180,11 @@ extension GameScene {
             SKAction.fadeAlpha(to: 0, duration: animateDuration)])
         dialogueText.run(backToRight) {
             self.dialogueText.removeFromParent()
+
             if next {
                 self.returnToMap()
             }
+
         }
     }
 }

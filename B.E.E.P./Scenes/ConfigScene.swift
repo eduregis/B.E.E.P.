@@ -7,9 +7,7 @@ class ConfigScene:SKScene {
     lazy var backName:String = {return self.userData?["backSaved"] as? String ?? "configScene"}()
     
    
-    var posicao:Int = 0
-    var locationAnterior:CGPoint = CGPoint(x: 0, y: 0)
-    
+
     var touchesBeganLocation = CGPoint(x: 0, y: 0)
     
      // criamos a referência o gerenciador de entidades
@@ -19,26 +17,94 @@ class ConfigScene:SKScene {
         
         // cria uma instância do gerenciador de entidades
         entityManager = EntityManager(scene: self)
-        drawBackground()
-        drawnReturnButton()
+
+        
+        drawView()
         
  }
-    
-    func drawBackground() {
+
+    func drawView(){
+        //adiciona background
         let background = SKSpriteNode(imageNamed: "background")
         background.name = "background"
         background.position = CGPoint(x: size.width/2, y: size.height/2)
         background.size = CGSize(width: size.width, height: size.height)
         addChild(background)
-    }
 
-    func drawnReturnButton() {
+        
+        //adiciona botão return
         let returnButton = HudButton(name: "return-button")
         if let spriteComponent = returnButton.component(ofType: SpriteComponent.self) {
             spriteComponent.node.position = CGPoint(x: frame.minX + 50, y: frame.maxY - 50)
             spriteComponent.node.zPosition = ZPositionsCategories.button
         }
         entityManager.add(returnButton)
+
+        
+        // adiciona a aba de configurações
+        let settingsTab = DefaultObject(name: "settings-tab")
+        if let spriteComponent = settingsTab.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = CGPoint(x: size.width/2, y: size.height/2)
+            spriteComponent.node.zPosition = ZPositionsCategories.tab
+        }
+        entityManager.add(settingsTab)
+        
+        //adiciona botão sound left
+        let settingsLeft = HudButton(name: "settings-sound-button-left")
+        if let spriteComponent = settingsLeft.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = CGPoint(x: size.width/2, y: size.height/2 + 27)
+            spriteComponent.node.zPosition = ZPositionsCategories.button
+        }
+        entityManager.add(settingsLeft)
+        
+        //adiciona barra sound
+        let settingsSound = HudButton(name: "settings-sound-button")
+        if let spriteComponent = settingsSound.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = CGPoint(x: size.width/2 + 80, y: size.height/2 + 27)
+            spriteComponent.node.zPosition = ZPositionsCategories.button
+        }
+        entityManager.add(settingsSound)
+        
+        //adiciona botão sound right
+        let settingsRight = HudButton(name: "settings-sound-button-right")
+        if let spriteComponent = settingsRight.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = CGPoint(x: size.width/2 + 160, y: size.height/2 + 27)
+            spriteComponent.node.zPosition = ZPositionsCategories.button
+        }
+        entityManager.add(settingsRight)
+        
+        //adiciona nameImput
+        let settingsName = HudButton(name: "settings-name-input-text")
+        if let spriteComponent = settingsName.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = CGPoint(x: size.width/2 + 80, y: size.height/2 - 18)
+            spriteComponent.node.zPosition = ZPositionsCategories.button
+        }
+        entityManager.add(settingsName)
+        
+        //adiciona container Name
+        let confirmContainerName = HudButton(name: "confirm-container")
+        if let spriteComponent = confirmContainerName.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = CGPoint(x: size.width/2 + 160, y: size.height/2 - 18)
+            spriteComponent.node.zPosition = ZPositionsCategories.button
+        }
+        entityManager.add(confirmContainerName)
+        
+        //adiciona check Name
+        let checkName = HudButton(name: "confirm-checkmark")
+        if let spriteComponent = checkName.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = CGPoint(x: size.width/2 + 160, y: size.height/2 - 18)
+            spriteComponent.node.zPosition = ZPositionsCategories.button
+        }
+        entityManager.add(checkName)
+        
+        //adiciona botão de reset progresso
+        let resetProgress = HudButton(name: "settings-reset-progress-button")
+        if let spriteComponent = resetProgress.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.position = CGPoint(x: size.width/2 - 95, y: size.height/2 - 60)
+            spriteComponent.node.zPosition = ZPositionsCategories.button
+        }
+        entityManager.add(resetProgress)
+        
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
