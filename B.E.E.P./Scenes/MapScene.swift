@@ -22,6 +22,7 @@ class MapScene:SKScene {
     var map = ["stage-available","stage-unavailable","filament-available","filament-unavailable","light-floor-stage-available","robot-stage-available"]
     
     override func didMove(to view: SKView) {
+
         entityManager = EntityManager(scene: self)
         
         drawBackground()
@@ -107,7 +108,6 @@ class MapScene:SKScene {
         let tilesetReference5 = CGPoint(x: frame.midX+1028, y: frame.midY+124)
         
         //drawn stage 1
-
         drawnMaps(height: 3, width: 5, tilesetReference: tilesetReference1, status: "available", showRobot:true)
         //drawn filament
         addEntity(entity: Filament(status: "unavailable"), nodeName: "filament-unavailable", position: filamentReference1, zPosition: 2, alpha: 0.35)

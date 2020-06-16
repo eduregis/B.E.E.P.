@@ -143,11 +143,8 @@ class GameScene: SKScene {
         
         if (boxes.count > 0){ drawBoxes() }
         if (boxDropZones.count > 0){ drawBoxDropZones() }
-        
 
         drawDialogues(won: false)
-
-
     }
     
     func addElementFunc(count: Double) -> Double{

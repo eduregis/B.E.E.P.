@@ -29,6 +29,7 @@ class ConfigScene:SKScene {
         background.position = CGPoint(x: size.width/2, y: size.height/2)
         background.size = CGSize(width: size.width, height: size.height)
         addChild(background)
+
    
         //adiciona botão return
         let returnButton = HudButton(name: "return-button")
@@ -50,7 +51,9 @@ class ConfigScene:SKScene {
         
         //adiciona botão sound left
 
+
         let settingsLeft = HudButton(name: "settings-sound-button-left")
+
 
         if let spriteComponent = settingsLeft.component(ofType: SpriteComponent.self) {
             spriteComponent.node.position = CGPoint(x: size.width/2, y: size.height/2 + 27)
@@ -59,6 +62,7 @@ class ConfigScene:SKScene {
         entityManager.add(settingsLeft)
         
         //adiciona barra sound
+
 
         let settingsSound = HudButton(name: "settings-sound-button")
 
@@ -70,6 +74,7 @@ class ConfigScene:SKScene {
         
         //adiciona botão sound right
 
+
         let settingsRight = HudButton(name: "settings-sound-button-right")
 
         if let spriteComponent = settingsRight.component(ofType: SpriteComponent.self) {
@@ -79,6 +84,7 @@ class ConfigScene:SKScene {
         entityManager.add(settingsRight)
         
         //adiciona nameImput
+
 
         let settingsName = HudButton(name: "settings-name-input-text")
 
@@ -90,6 +96,7 @@ class ConfigScene:SKScene {
         
         //adiciona container Name
 
+
         let confirmContainerName = HudButton(name: "confirm-container")
 
         if let spriteComponent = confirmContainerName.component(ofType: SpriteComponent.self) {
@@ -100,6 +107,7 @@ class ConfigScene:SKScene {
         
         //adiciona check Name
 
+
         let checkName = HudButton(name: "confirm-checkmark")
 
         if let spriteComponent = checkName.component(ofType: SpriteComponent.self) {
@@ -109,6 +117,7 @@ class ConfigScene:SKScene {
         entityManager.add(checkName)
         
         //adiciona botão de reset progresso
+
 
         let resetProgress = HudButton(name: "settings-reset-progress-button")
 

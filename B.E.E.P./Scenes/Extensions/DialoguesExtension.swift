@@ -10,7 +10,7 @@ import SpriteKit
 import GameplayKit
 
 extension GameScene {
-   
+
     func drawDialogues(won: Bool) {
 
         dialogueIndex = 0
@@ -52,6 +52,7 @@ extension GameScene {
             spriteComponent.node.run(fadeToRight)
         }
         entityManager.add(dialogueTab)
+
         if !won {
             dialogueText = SKLabelNode(text: dialogues[dialogueIndex])
             dialogueText.fontSize = 14.0
@@ -60,7 +61,6 @@ extension GameScene {
             dialogueText.fontSize = 18.0
         }
         dialogueText.fontName = "8bitoperator"
-
         dialogueText.fontColor = .textRoyal
         dialogueText.zPosition = ZPositionsCategories.dialogueItems
         dialogueText.position = CGPoint(x: dialogueAnchor.x - 138 + CGFloat(animateVector), y: dialogueAnchor.y + 20)
@@ -74,6 +74,7 @@ extension GameScene {
         dialogueText.run(fadeToRight)
         addChild(dialogueText)
         
+
         let namePlay: String
         if won {
             namePlay = "next-button"
@@ -115,6 +116,7 @@ extension GameScene {
             entityManager.add(dialogueSkip)
         }
 
+
     }
     
     func updateText () {
@@ -122,15 +124,19 @@ extension GameScene {
             dialogueIndex = dialogueIndex + 1
             dialogueText.text = dialogues[dialogueIndex]
         } else {
+
             skipText(next: false)
+
         }
     }
     
     func hintStage () {
+
         drawDialogues(won: false)
     }
     
     func skipText (next: Bool) {
+
 
         let animateDuration = 0.3
         let animateVector = 50
@@ -180,6 +186,7 @@ extension GameScene {
             if next {
                 self.returnToMap()
             }
+
 
         }
     }
