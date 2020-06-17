@@ -63,7 +63,7 @@ class RobotActionsTests: XCTestCase {
         let sut = RobotMoveComponent()
         let input1 = "left"
         //when
-        let output1 = sut.move(direction: input1)
+        let output1 = sut.move(direction: input1, box: false)
         
         //then
         XCTAssertNoThrow(output1)
@@ -75,7 +75,7 @@ class RobotActionsTests: XCTestCase {
         let input1 = "left"
         
         //when
-        let output1 = sut.turn(direction: input1)
+        let output1 = sut.turn(direction: input1, box: false)
         
         //then
         XCTAssertNoThrow(output1)
