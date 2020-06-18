@@ -12,8 +12,6 @@ import GameplayKit
 
 class MapViewController:UIViewController {
     
-    var api = ApiManager()
-    
     override func loadView() {
         let view = SKView(frame: UIScreen.main.bounds)
         let scene = MapScene(size: view.bounds.size)
@@ -38,14 +36,14 @@ class MapViewController:UIViewController {
                 print(error.localizedDescription)
             }
         }*/
-        api.designApi { (result) in
-            switch result{
-            case .success(let apiDesign):
-                print(apiDesign)
-                
-            case .failure(let erro):
-                print(erro.localizedDescription)
-            }
-        }
+//        api.designApi { (result) in
+//            switch result{
+//            case .success(let apiDesign):
+//                print(apiDesign)
+//                
+//            case .failure(let erro):
+//                print(erro.localizedDescription)
+//            }
+//        }
     }
 }
