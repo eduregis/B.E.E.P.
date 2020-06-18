@@ -2,17 +2,17 @@
 import SpriteKit
 import GameplayKit
 
-class ConfigScene:SKScene, UITextFieldDelegate{
+class ConfigScene:SKScene, UITextFieldDelegate {
     
     lazy var backName:String = {return self.userData?["backSaved"] as? String ?? "configScene"}()
     
     let defalts = UserDefaults.standard
     var soundText = SKLabelNode()
+    var userName: String? = ""
+    
     
     // criamos referência a UITextFild do Name
     var textFieldName: UITextField!
-    let nameText = SKLabelNode(fontNamed: "8bitoperator")
-
     
     // criamos a referência o gerenciador de entidades
     var entityManager: EntityManager!
@@ -22,13 +22,27 @@ class ConfigScene:SKScene, UITextFieldDelegate{
         // cria uma instância do gerenciador de entidades
         entityManager = EntityManager(scene: self)
         
-        if defalts.bool(forKey: "SettingsSound") {
-            soundText.name = "Sim"
-            print("estou sim")
-        } else {
-            soundText.name = "Não"
+        //implementa persistência
+        
+        if  defalts.object(forKey: "userGame") != nil {
+            userName = defalts.object(forKey: "userGame") as? String
             
+            //adiciona botão check
+            let checkName = HudButton(name: "confirm-checkmark")
+            if let spriteComponent = checkName.component(ofType: SpriteComponent.self) {
+                spriteComponent.node.position = CGPoint(x: size.width/2 + 160, y: size.height/2 - 18)
+                spriteComponent.node.zPosition = ZPositionsCategories.configOptions
+            }
+            entityManager.add(checkName)
         }
+        
+        if  defalts.object(forKey: "SettingsSound") != nil {
+            soundText.text = defalts.object(forKey: "SettingsSound") as? String
+        } else {
+            soundText.text = "Sim"
+        }
+        defalts.set(soundText.text, forKey: "SettingsSound")
+        soundText.name = soundText.text
         
         drawView()
         
@@ -37,7 +51,7 @@ class ConfigScene:SKScene, UITextFieldDelegate{
         let textFieldName = UITextField(frame: textFieldFrame)
         view.addSubview(textFieldName)
         textFieldName.delegate = self
-        
+        textFieldName.text = userName
         textFieldName.borderStyle = UITextField.BorderStyle.roundedRect
         textFieldName.backgroundColor = UIColor.clear
         textFieldName.textColor = UIColor(displayP3Red: 73/255, green: 64/255, blue: 115/255, alpha: 1.0)
@@ -48,12 +62,6 @@ class ConfigScene:SKScene, UITextFieldDelegate{
         textFieldName.autocapitalizationType = UITextAutocapitalizationType.allCharacters
         self.view!.addSubview(textFieldName)
         
-        //add sklabel para visuializar texto do uitextfild
-        nameText.fontSize = 14
-        nameText.position = CGPoint(x: size.width/2 + 25, y: size.height/2 + 2)
-        nameText.text = "your text will show here"
-        nameText.name = "textFieldName"
-        addChild(nameText)
 
  }
 
@@ -140,7 +148,7 @@ class ConfigScene:SKScene, UITextFieldDelegate{
         entityManager.add(resetProgress)
         
         //adiciona soundText
-        soundText.name = "Sim"
+       // soundText.name = "Sim"
         soundText.fontColor = UIColor(displayP3Red: 116/255, green: 255/255, blue: 234/255, alpha: 1.0)
         soundText.fontSize = 14
         soundText.fontName = "8bitoperator"
@@ -163,11 +171,33 @@ class ConfigScene:SKScene, UITextFieldDelegate{
                     soundText.text = "Sim"
                     soundText.name = "Sim"
                 }
-                if soundText.name == "Sim" {
-                    defalts.set(true, forKey: "SettingsSound")
-                }else{
-                    defalts.set(false, forKey: "SettingsSound")
+                defalts.set(soundText.text, forKey: "SettingsSound")
+                
+            }
+            
+            if (self.atPoint(location).name == "settings-reset-progress-button") {
+                
+                let alert = UIAlertController(title: "Reseting", message: "Are you sure?", preferredStyle: UIAlertController.Style.alert)
+                
+                alert.addAction(UIAlertAction(title: "Yes", style: .destructive, handler: .some({ (alert: UIAlertAction!) in
+                    self.defalts.set(0 , forKey: "indexStage")
+                    self.defalts.synchronize()
+                    print("estou aqui")
+                })))
+                
+                alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+                
+                
+                if let popoverController = alert.popoverPresentationController {
+                    popoverController.sourceView = self.view
+                    popoverController.sourceRect = CGRect(x: self.view?.bounds.midX ?? 17, y: self.view?.bounds.midY ?? 0, width: 0, height: 0)
+                    popoverController.permittedArrowDirections = []
                 }
+                
+                if let vc = self.scene?.view?.window?.rootViewController {
+                    vc.present(alert, animated: true, completion: nil)
+                }
+         
             }
             
         }
@@ -203,7 +233,11 @@ class ConfigScene:SKScene, UITextFieldDelegate{
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        nameText.text = textField.text
+        // aplico persitência de nome
+        let userName = textField.text
+        defalts.set(userName , forKey: "userGame")
+        
+        //adiciona botão check
         let checkName = HudButton(name: "confirm-checkmark")
         if let spriteComponent = checkName.component(ofType: SpriteComponent.self) {
             spriteComponent.node.position = CGPoint(x: size.width/2 + 160, y: size.height/2 - 18)
@@ -215,5 +249,4 @@ class ConfigScene:SKScene, UITextFieldDelegate{
     }
     
 }
-
 
