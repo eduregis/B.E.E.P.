@@ -13,7 +13,7 @@ class BaseOfStages {
     static func salvar(stage: StageModel) {
         let data:Data = NSKeyedArchiver.archivedData(withRootObject: stage)
         
-        UserDefaults.standard.set(data, forKey: "\(stage.stageData.number)")
+        UserDefaults.standard.set(data, forKey: "\(stage.number)")
     }
     
     static func buscar(id: String) -> StageDesignModel? {

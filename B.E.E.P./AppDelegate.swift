@@ -23,7 +23,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 switch result{
                 case .success(let apiDesign):
                     for fase in apiDesign {
-                        //implementar persistencia aqui
+                        if fase.number == 1 {
+                            let stage = StageModel(isAtualFase: true, status: "available", number: fase.number, width: fase.width, height: fase.height, tabStyle: fase.tabStyle, initialDirection: fase.initialDirection, initialPosition: fase.initialPosition, boxes: fase.boxes, dropZones: fase.dropZones, infectedRobots: fase.infectedRobots)
+                            BaseOfStages.salvar(stage: stage)
+                            
+                        } else {
+                            let stage = StageModel(isAtualFase: false, status: "unavailable", number: fase.number, width: fase.width, height: fase.height, tabStyle: fase.tabStyle, initialDirection: fase.initialDirection, initialPosition: fase.initialPosition, boxes: fase.boxes, dropZones: fase.dropZones, infectedRobots: fase.infectedRobots)
+                            BaseOfStages.salvar(stage: stage)
+                        }
                     }
                     
                 case .failure(let erro):
