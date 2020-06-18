@@ -9,12 +9,12 @@ import Foundation
 
 class StageModel: NSObject, NSCoding {
     
-    var atualFase:Int
+    var isAtualFase:Bool
     var status:String
     let stageData:StageDesignModel
 
-    init(atualFase: Int, status: String, stageData: StageDesignModel) {
-        self.atualFase = atualFase
+    init(isAtualFase: Bool, status: String, stageData: StageDesignModel) {
+        self.isAtualFase = isAtualFase
         self.status = status
         self.stageData = stageData
     }
@@ -22,13 +22,13 @@ class StageModel: NSObject, NSCoding {
     func encode(with coder: NSCoder) {
         coder.encode(self.stageData, forKey: "stageData")
         coder.encode(self.status, forKey: "status")
-        coder.encode(self.atualFase, forKey: "atualFase")
+        coder.encode(self.isAtualFase, forKey: "isAtualFase")
     }
 
     required init(coder: NSCoder) {
         self.stageData = coder.decodeObject(forKey: "stageData") as! StageDesignModel
         self.status = coder.decodeObject(forKey: "status") as! String
-        self.atualFase = coder.decodeInteger(forKey: "atualFase")
+        self.isAtualFase = coder.decodeBool(forKey: "isAtualFase")
 
     }
 

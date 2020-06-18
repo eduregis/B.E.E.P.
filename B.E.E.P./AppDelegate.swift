@@ -22,7 +22,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             api.designApi { (result) in
                 switch result{
                 case .success(let apiDesign):
-                    print(apiDesign)
+                    for fase in apiDesign {
+                        //implementar persistencia aqui
+                    }
                     
                 case .failure(let erro):
                     print(erro.localizedDescription)
