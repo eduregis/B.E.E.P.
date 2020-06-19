@@ -75,8 +75,7 @@ func designApi(completion: @escaping (Result< [StageDesignModel], ApiError>)-> V
                 if let designList = try? JSONDecoder().decode([StageDesignModel].self, from: data) {
                     completion(.success(designList))
                     print(designList.description)
-//                    let map = MapScene()
-//                    map.buildMap()
+                    UserDefaults.standard.set(true, forKey: "buildMap")
                 } else {
                     completion(.failure(ApiError.couldNotDecode))
                 }

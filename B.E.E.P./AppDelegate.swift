@@ -19,6 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         if UserDefaults.standard.bool(forKey: "First Launch") == false {
             print("entrou aqui")
+            UserDefaults.standard.set(false, forKey: "buildMap")
             api.designApi { (result) in
                 switch result{
                 case .success(let apiDesign):

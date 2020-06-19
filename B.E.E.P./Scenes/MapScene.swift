@@ -33,7 +33,13 @@ class MapScene:SKScene {
         //drawn config button
         addEntity(entity: HudButton(name: "config-button"), nodeName: "config-button", position: CGPoint(x: frame.maxX-150, y: frame.maxY-50), zPosition: 2, alpha: 1.0)
 
-        buildMap()
+        while true {
+            if UserDefaults.standard.bool(forKey: "buildMap") == true {
+                buildMap()
+                break
+            }
+        }
+        
     }
     
     func drawBackground() {
@@ -96,27 +102,25 @@ class MapScene:SKScene {
         
         let filamentReferences = [CGPoint(x: frame.midX-69, y: frame.midY+16),CGPoint(x: frame.midX+278, y: frame.midY+16), CGPoint(x: frame.midX+602, y: frame.midY+2)]
         
-        
-        //drawn stage 1
-        drawnMaps(height: 3, width: 5, tilesetReference: tilesetReferences[0], status: "available", showRobot:true)
-        //drawn filament
-        addEntity(entity: Filament(status: "unavailable"), nodeName: "filament-unavailable", position: filamentReferences[0], zPosition: 2, alpha: 0.35)
-        
-        //drawn stage 2
-        drawnMaps(height: 5, width: 5, tilesetReference: tilesetReferences[1], status: "unavailable", showRobot:false)
-
-        //drawn filament
-        addEntity(entity: Filament(status: "unavailable"), nodeName: "filament-unavailable", position: filamentReferences[1], zPosition: 2, alpha: 0.35)
-        
-        //drawn stage 3
-        drawnMaps(height: 3, width: 5, tilesetReference: tilesetReferences[2], status: "unavailable", showRobot:false)
-        //drawn filament
-        addEntity(entity: Filament(status: "unavailable"), nodeName: "filament-unavailable", position: filamentReferences[2], zPosition: 2, alpha: 0.35)
-        
-        //drawn stage 4
-        drawnMaps(height: 3, width: 5, tilesetReference: tilesetReferences[3], status: "unavailable", showRobot:false)
-        
-        
+        for i in 1...4 {
+            let stage = BaseOfStages.buscar(id: "\(i)")
+            
+            let height = stage?.height ?? 0
+            let width = stage?.width ?? 0
+            let status = stage?.status ?? ""
+            let showRobot = stage?.isAtualFase ?? false
+            
+            drawnMaps(height: height, width: width, tilesetReference: tilesetReferences[i-1], status: status, showRobot: showRobot)
+            
+            if i != 4 {
+                let stage = BaseOfStages.buscar(id: "\(i+1)")
+                if stage?.status == "unavailable" {
+                    addEntity(entity: Filament(status: "unavailable"), nodeName: "filament-unavailable", position: filamentReferences[i-1], zPosition: 2, alpha: 0.35)
+                } else {
+                    addEntity(entity: Filament(status: "available"), nodeName: "filament-available", position: filamentReferences[i-1], zPosition: 2, alpha: 1)
+                }
+            }
+        }
 
     }
     
