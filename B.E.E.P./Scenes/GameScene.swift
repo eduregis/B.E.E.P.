@@ -12,10 +12,8 @@ class GameScene: SKScene {
     var auxiliaryAnchor: CGPoint!
     var actualDirection = "right"
     var tabStyle = "conditional"
-    var boxes: [CGPoint] = [
-        CGPoint(x: 3, y: 1),
-        CGPoint(x: 1, y: 2)
-    ]
+
+    var boxes: [CGPoint] = []
     
     //
     var countBoxes = -1
@@ -25,13 +23,8 @@ class GameScene: SKScene {
     var boxesCopy: [DefaultObject] = []
     var boxesChangeable: [CGPoint] = []
     
-    
-    
-    
-    var boxDropZones: [CGPoint] = [
-        CGPoint(x: 4, y: 1),
-        CGPoint(x: 0, y: 2)
-    ]
+
+    var boxDropZones: [CGPoint] = []
     var infectedRobots: [CGPoint] = []
     // array de falas do B.E.E.P.
     var dialogues: [String] = ["Parece que não tem nenhum robô infectado aqui,\n mas tem uma caixa de informações fora do lugar. \nVamos arrumar isso!",
@@ -69,7 +62,7 @@ class GameScene: SKScene {
     var loopDropZoneIsTouched: Bool = false
     
     var conditionalValue = 0
-    var conditions = ["Inimigo\n à frente", "Caixa\n à frente", "Abismo\n a frente", "Encaixe\n à frente"]
+    var conditions = ["Inimigo\nà frente", "Caixa\nà frente", "Abismo\nà frente", "Encaixe\nà frente"]
     var conditionalArrows: [DefaultObject] = []
     var conditionalText = SKLabelNode(text: "")
     
@@ -109,6 +102,30 @@ class GameScene: SKScene {
     var draggingItem: SKSpriteNode?
     
     override func didMove(to view: SKView) {
+        
+        let faseAtual = UserDefaults.standard.object(forKey: "selectedFase")
+        let stageOptional = BaseOfStages.buscar(id: "\(faseAtual!)")
+        
+        guard let stage = stageOptional else {
+            return
+        }
+        
+        actualPosition = CGPoint(x: stage.initialPosition[0], y: stage.initialPosition[1])
+        stageDimensions = CGSize(width: stage.width, height: stage.height)
+        actualDirection = stage.initialDirection
+        tabStyle = stage.tabStyle
+        if !stage.boxes.isEmpty {
+            boxes = [CGPoint(x: stage.boxes[0], y: stage.boxes[1])]
+        }
+        
+        if !stage.dropZones.isEmpty {
+            boxDropZones = [CGPoint(x: stage.dropZones[0], y: stage.dropZones[1])]
+        }
+        
+        if !stage.infectedRobots.isEmpty {
+            infectedRobots = [CGPoint(x: stage.infectedRobots[0], y: stage.infectedRobots[1])]
+        }
+        
         // posiciona os elementos de acordo como tipo de fase
         switch tabStyle {
         case "default":
@@ -116,7 +133,7 @@ class GameScene: SKScene {
             auxiliaryAnchor = CGPoint(x: size.width/2, y: size.height/2)
         case "function", "antivirus", "loop", "conditional":
             gameplayAnchor = CGPoint(x: size.width/3, y: size.height/2)
-            auxiliaryAnchor = CGPoint(x: 3*size.width/4, y: size.height/2)
+            auxiliaryAnchor = CGPoint(x: 3*size.width/4, y: (size.height/2) - 39)
         default:
             gameplayAnchor = CGPoint(x: size.width/2, y: size.height/2)
             auxiliaryAnchor = CGPoint(x: size.width/2, y: size.height/2)
