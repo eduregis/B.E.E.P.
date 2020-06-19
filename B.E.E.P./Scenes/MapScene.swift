@@ -39,8 +39,29 @@ class MapScene:SKScene {
             }
         }
         
+        updatePosition()
+        
     }
     
+    func updatePosition() {
+        let faseAtual = UserDefaults.standard.object(forKey: "selectedFase") as! Int
+        
+        switch faseAtual {
+        case 1:
+            self.posicao = 0
+        case 2:
+            self.posicao = 0
+        case 3:
+            self.posicao = 50
+        case 4:
+            self.posicao = 100
+        default:
+            self.posicao = 0
+        }
+        
+        moveMap(direction: Direction.forward, x: CGFloat(self.posicao*5))
+        
+    }
     
     func drawBackground() {
         let background = SKSpriteNode(imageNamed: "background")
@@ -125,32 +146,32 @@ class MapScene:SKScene {
 
     }
     
-    func moveMap(direction: Direction) {
+    func moveMap(direction: Direction, x: CGFloat) {
         
         self.enumerateChildNodes(withName: "stage-available[1-4]", using: ({
             (node,error) in
             if direction == Direction.backward {
-                node.position.x += 5
+                node.position.x += x
             } else {
-                node.position.x -= 5
+                node.position.x -= x
             }
         }))
         
         self.enumerateChildNodes(withName: "stage-unavailable[1-4]", using: ({
             (node,error) in
             if direction == Direction.backward {
-                node.position.x += 5
+                node.position.x += x
             } else {
-                node.position.x -= 5
+                node.position.x -= x
             }
         }))
         
         self.enumerateChildNodes(withName: "filament", using: ({
             (node,error) in
             if direction == Direction.backward {
-                node.position.x += 5
+                node.position.x += x
             } else {
-                node.position.x -= 5
+                node.position.x -= x
             }
         }))
         
@@ -169,12 +190,12 @@ class MapScene:SKScene {
             let location = touch.location(in: self)
             if locationAnterior.x < location.x {
                 if self.posicao > 0 {
-                    moveMap(direction: Direction.backward)
+                    moveMap(direction: Direction.backward, x: 5)
                     self.posicao -= 1
                 }
             } else {
                 if self.posicao < 105 {
-                    moveMap(direction: Direction.forward)
+                    moveMap(direction: Direction.forward, x: 5)
                     self.posicao += 1
                 }
             }

@@ -20,6 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if UserDefaults.standard.bool(forKey: "First Launch") == false {
             print("entrou aqui")
             UserDefaults.standard.set(false, forKey: "buildMap")
+            UserDefaults.standard.set(1, forKey: "selectedFase")
             api.designApi { (result) in
                 switch result{
                 case .success(let apiDesign):
