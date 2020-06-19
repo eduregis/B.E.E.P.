@@ -57,6 +57,22 @@ extension GameScene {
             dialogueText = SKLabelNode(text: dialogues[dialogueIndex])
             dialogueText.fontSize = 14.0
         } else{
+            //modelo de atualização dos dados do banco
+            let faseAtual = UserDefaults.standard.object(forKey: "selectedFase")
+            let stageOptional = BaseOfStages.buscar(id: "\(faseAtual!)")
+            let nextStageOptional = BaseOfStages.buscar(id: "\(faseAtual as! Int + 1)")
+            
+            guard let stage = stageOptional else { return  }
+            
+            if let nextStage = nextStageOptional {
+                stage.isAtualFase = false
+                BaseOfStages.salvar(stage: stage)
+                
+                nextStage.status = "available"
+                nextStage.isAtualFase = true
+                BaseOfStages.salvar(stage: nextStage)
+            }
+            //fim do modelo
             dialogueText = SKLabelNode(text: "Perfeito!")
             dialogueText.fontSize = 18.0
         }
