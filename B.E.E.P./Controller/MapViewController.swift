@@ -28,11 +28,5 @@ class MapViewController:UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        let map = MapScene()
-//        map.buildMap()
-//        for i in 1...4{
-//            let stage = BaseOfStages.buscar(id: "\(i)")
-//            print(stage?.height)
-//        }
     }
 }
