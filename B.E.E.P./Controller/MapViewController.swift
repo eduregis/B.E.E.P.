@@ -28,22 +28,11 @@ class MapViewController:UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-          /*  api.dialoguesApi { (result) in
-            switch result {
-            case .success(let dialogues):
-                print(dialogues)
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
-        }*/
-//        api.designApi { (result) in
-//            switch result{
-//            case .success(let apiDesign):
-//                print(apiDesign)
-//                
-//            case .failure(let erro):
-//                print(erro.localizedDescription)
-//            }
+//        let map = MapScene()
+//        map.buildMap()
+//        for i in 1...4{
+//            let stage = BaseOfStages.buscar(id: "\(i)")
+//            print(stage?.height)
 //        }
     }
 }

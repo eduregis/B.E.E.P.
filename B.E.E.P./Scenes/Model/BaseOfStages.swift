@@ -16,10 +16,10 @@ class BaseOfStages {
         UserDefaults.standard.set(data, forKey: "\(stage.number)")
     }
     
-    static func buscar(id: String) -> StageDesignModel? {
+    static func buscar(id: String) -> StageModel? {
         
         if let salvo:Data = UserDefaults.standard.object(forKey: id) as? Data {
-            if let stage = NSKeyedUnarchiver.unarchiveObject(with: salvo) as? StageDesignModel {
+            if let stage = NSKeyedUnarchiver.unarchiveObject(with: salvo) as? StageModel {
                 return stage
             }
         }

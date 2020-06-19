@@ -92,44 +92,32 @@ class MapScene:SKScene {
     }
     
     func buildMap() {
-        let tilesetReference1 = CGPoint(x: frame.midX-280, y: frame.midY+170)
-        let filamentReference1 = CGPoint(x: frame.midX-69, y: frame.midY+16)
+        let tilesetReferences = [CGPoint(x: frame.midX-280, y: frame.midY+170),CGPoint(x: frame.midX+101.5, y: frame.midY-28),CGPoint(x: frame.midX+393, y: frame.midY+155),CGPoint(x: frame.midX+741, y: frame.midY-59)]
         
-        let tilesetReference2 = CGPoint(x: frame.midX+101.5, y: frame.midY-28)
-        let filamentReference2 = CGPoint(x: frame.midX+278, y: frame.midY+16)
+        let filamentReferences = [CGPoint(x: frame.midX-69, y: frame.midY+16),CGPoint(x: frame.midX+278, y: frame.midY+16), CGPoint(x: frame.midX+602, y: frame.midY+2)]
         
-        let tilesetReference3 = CGPoint(x: frame.midX+393, y: frame.midY+155)
-        let filamentReference3 = CGPoint(x: frame.midX+602, y: frame.midY+2)
-        
-        
-        let tilesetReference4 = CGPoint(x: frame.midX+741, y: frame.midY-59)
-        let filamentReference4 = CGPoint(x: frame.midX+914, y: frame.midY-14)
-        
-        let tilesetReference5 = CGPoint(x: frame.midX+1028, y: frame.midY+124)
         
         //drawn stage 1
-        drawnMaps(height: 3, width: 5, tilesetReference: tilesetReference1, status: "available", showRobot:true)
+        drawnMaps(height: 3, width: 5, tilesetReference: tilesetReferences[0], status: "available", showRobot:true)
         //drawn filament
-        addEntity(entity: Filament(status: "unavailable"), nodeName: "filament-unavailable", position: filamentReference1, zPosition: 2, alpha: 0.35)
+        addEntity(entity: Filament(status: "unavailable"), nodeName: "filament-unavailable", position: filamentReferences[0], zPosition: 2, alpha: 0.35)
         
         //drawn stage 2
-        drawnMaps(height: 5, width: 5, tilesetReference: tilesetReference2, status: "unavailable", showRobot:false)
+        drawnMaps(height: 5, width: 5, tilesetReference: tilesetReferences[1], status: "unavailable", showRobot:false)
 
         //drawn filament
-        addEntity(entity: Filament(status: "unavailable"), nodeName: "filament-unavailable", position: filamentReference2, zPosition: 2, alpha: 0.35)
+        addEntity(entity: Filament(status: "unavailable"), nodeName: "filament-unavailable", position: filamentReferences[1], zPosition: 2, alpha: 0.35)
         
         //drawn stage 3
-        drawnMaps(height: 3, width: 5, tilesetReference: tilesetReference3, status: "unavailable", showRobot:false)
+        drawnMaps(height: 3, width: 5, tilesetReference: tilesetReferences[2], status: "unavailable", showRobot:false)
         //drawn filament
-        addEntity(entity: Filament(status: "unavailable"), nodeName: "filament-unavailable", position: filamentReference3, zPosition: 2, alpha: 0.35)
+        addEntity(entity: Filament(status: "unavailable"), nodeName: "filament-unavailable", position: filamentReferences[2], zPosition: 2, alpha: 0.35)
         
         //drawn stage 4
-        drawnMaps(height: 3, width: 5, tilesetReference: tilesetReference4, status: "unavailable", showRobot:false)
-        //drawn filament
-        addEntity(entity: Filament(status: "unavailable"), nodeName: "filament-unavailable", position: filamentReference4, zPosition: 2, alpha: 0.35)
+        drawnMaps(height: 3, width: 5, tilesetReference: tilesetReferences[3], status: "unavailable", showRobot:false)
         
-        //drawn stage 5
-        drawnMaps(height: 3, width: 5, tilesetReference: tilesetReference5, status: "unavailable", showRobot:false)
+        
+
     }
     
     func moveMap(direction: Direction) {
@@ -162,7 +150,7 @@ class MapScene:SKScene {
                     self.posicao -= 1
                 }
             } else {
-                if self.posicao < 150 {
+                if self.posicao < 105 {
                     moveMap(direction: Direction.forward)
                     self.posicao += 1
                 }
