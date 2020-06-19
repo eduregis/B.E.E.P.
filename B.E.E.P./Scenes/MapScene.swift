@@ -16,10 +16,9 @@ class MapScene:SKScene {
     var posicao:Int = 0
     var locationAnterior:CGPoint = CGPoint(x: 0, y: 0)
     var touchesBeganLocation = CGPoint(x: 0, y: 0)
+    let totalDeFases = 4
     
     lazy var backName:String = {return self.userData?["backSaved"] as? String ?? "mapScene"}()
-    
-    var map = ["stage-available","stage-unavailable","filament-available","filament-unavailable","light-floor-stage-available","robot-stage-available"]
     
     override func didMove(to view: SKView) {
 
@@ -33,7 +32,35 @@ class MapScene:SKScene {
         //drawn config button
         addEntity(entity: HudButton(name: "config-button"), nodeName: "config-button", position: CGPoint(x: frame.maxX-150, y: frame.maxY-50), zPosition: 2, alpha: 1.0)
 
-        buildMap()
+        while true {
+            if UserDefaults.standard.bool(forKey: "buildMap") == true {
+                buildMap()
+                break
+            }
+        }
+        
+        updatePosition()
+        
+    }
+    
+    func updatePosition() {
+        let faseAtual = UserDefaults.standard.object(forKey: "selectedFase") as! Int
+        
+        switch faseAtual {
+        case 1:
+            self.posicao = 0
+        case 2:
+            self.posicao = 0
+        case 3:
+            self.posicao = 50
+        case 4:
+            self.posicao = 100
+        default:
+            self.posicao = 0
+        }
+        
+        moveMap(direction: Direction.forward, x: CGFloat(self.posicao*5))
+        
     }
     
     func drawBackground() {
@@ -44,7 +71,7 @@ class MapScene:SKScene {
         addChild(background)
     }
     
-    func drawnMaps(height:Int, width:Int, tilesetReference: CGPoint, status:String, showRobot:Bool) {
+    func drawnMaps(height:Int, width:Int, tilesetReference: CGPoint, status:String, showRobot:Bool, numberFase: Int) {
         var lightFloorPosition = CGPoint(x: 0, y: 0)
         var stageUnavailablePosition = CGPoint(x: 0, y: 0)
         for i in 1...width {
@@ -53,15 +80,15 @@ class MapScene:SKScene {
                 let x = (CGFloat(32*(i - 1)) - CGFloat(32*(j - 1))) + tilesetReference.x
                 let y = (CGFloat(-16*(i - 1)) - CGFloat(16*(j - 1))) + tilesetReference.y
                 
-                addEntity(entity:Tileset(status: status), nodeName: "stage-\(status)", position: CGPoint(x: x, y: y), zPosition: CGFloat(i + j), alpha: 1.0)
+                addEntity(entity:Tileset(status: status), nodeName: "stage-\(status)\(numberFase)", position: CGPoint(x: x, y: y), zPosition: CGFloat(i + j), alpha: 1.0)
     
                 if (i-1) == (width-1)/2 && (j-1) == (height-1)/2 {
                     if showRobot {
                         lightFloorPosition = CGPoint(x: x, y: y)
                         //desenhando o robo
-                        addEntity(entity:Robot(), nodeName: "robot-stage-available", position: CGPoint(x: lightFloorPosition.x, y: lightFloorPosition.y+31), zPosition: 101, alpha: 1.0)
+                        addEntity(entity:Robot(), nodeName: "stage-\(status)\(numberFase)", position: CGPoint(x: lightFloorPosition.x, y: lightFloorPosition.y+31), zPosition: 101, alpha: 1.0)
                         //desenhando o light floor
-                        addEntity(entity: LightFloor(), nodeName: "light-floor-stage-available", position: lightFloorPosition, zPosition: 100, alpha: 0.7)
+                        addEntity(entity: LightFloor(), nodeName: "stage-\(status)\(numberFase)", position: lightFloorPosition, zPosition: 100, alpha: 0.7)
                     } else {
                         stageUnavailablePosition = CGPoint(x: x, y: y+21)
                       }
@@ -69,7 +96,7 @@ class MapScene:SKScene {
             }
         }
         if status == "unavailable" {
-            addEntity(entity: StageUnavailable(), nodeName: "stage-unavailable", position: stageUnavailablePosition, zPosition: 100, alpha: 1.0)
+            addEntity(entity: StageUnavailable(), nodeName: "stage-\(status)\(numberFase)", position: stageUnavailablePosition, zPosition: 100, alpha: 1.0)
         }
     }
     
@@ -92,57 +119,62 @@ class MapScene:SKScene {
     }
     
     func buildMap() {
-        let tilesetReference1 = CGPoint(x: frame.midX-280, y: frame.midY+170)
-        let filamentReference1 = CGPoint(x: frame.midX-69, y: frame.midY+16)
+        let tilesetReferences = [CGPoint(x: frame.midX-280, y: frame.midY+170),CGPoint(x: frame.midX+101.5, y: frame.midY-28),CGPoint(x: frame.midX+393, y: frame.midY+155),CGPoint(x: frame.midX+741, y: frame.midY-59)]
         
-        let tilesetReference2 = CGPoint(x: frame.midX+101.5, y: frame.midY-28)
-        let filamentReference2 = CGPoint(x: frame.midX+278, y: frame.midY+16)
+        let filamentReferences = [CGPoint(x: frame.midX-69, y: frame.midY+16),CGPoint(x: frame.midX+278, y: frame.midY+16), CGPoint(x: frame.midX+602, y: frame.midY+2)]
         
-        let tilesetReference3 = CGPoint(x: frame.midX+393, y: frame.midY+155)
-        let filamentReference3 = CGPoint(x: frame.midX+602, y: frame.midY+2)
-        
-        
-        let tilesetReference4 = CGPoint(x: frame.midX+741, y: frame.midY-59)
-        let filamentReference4 = CGPoint(x: frame.midX+914, y: frame.midY-14)
-        
-        let tilesetReference5 = CGPoint(x: frame.midX+1028, y: frame.midY+124)
-        
-        //drawn stage 1
-        drawnMaps(height: 3, width: 5, tilesetReference: tilesetReference1, status: "available", showRobot:true)
-        //drawn filament
-        addEntity(entity: Filament(status: "unavailable"), nodeName: "filament-unavailable", position: filamentReference1, zPosition: 2, alpha: 0.35)
-        
-        //drawn stage 2
-        drawnMaps(height: 5, width: 5, tilesetReference: tilesetReference2, status: "unavailable", showRobot:false)
+        for i in 1...totalDeFases {
+            let stage = BaseOfStages.buscar(id: "\(i)")
+            
+            let height = stage?.height ?? 0
+            let width = stage?.width ?? 0
+            let status = stage?.status ?? ""
+            let showRobot = stage?.isAtualFase ?? false
+            let number = stage?.number ?? 1
+            
+            drawnMaps(height: height, width: width, tilesetReference: tilesetReferences[i-1], status: status, showRobot: showRobot, numberFase: number)
+            
+            if i != totalDeFases {
+                let stage = BaseOfStages.buscar(id: "\(i+1)")
+                if stage?.status == "unavailable" {
+                    addEntity(entity: Filament(status: "unavailable"), nodeName: "filament", position: filamentReferences[i-1], zPosition: 2, alpha: 0.35)
+                } else {
+                    addEntity(entity: Filament(status: "available"), nodeName: "filament", position: filamentReferences[i-1], zPosition: 2, alpha: 1)
+                }
+            }
+        }
 
-        //drawn filament
-        addEntity(entity: Filament(status: "unavailable"), nodeName: "filament-unavailable", position: filamentReference2, zPosition: 2, alpha: 0.35)
-        
-        //drawn stage 3
-        drawnMaps(height: 3, width: 5, tilesetReference: tilesetReference3, status: "unavailable", showRobot:false)
-        //drawn filament
-        addEntity(entity: Filament(status: "unavailable"), nodeName: "filament-unavailable", position: filamentReference3, zPosition: 2, alpha: 0.35)
-        
-        //drawn stage 4
-        drawnMaps(height: 3, width: 5, tilesetReference: tilesetReference4, status: "unavailable", showRobot:false)
-        //drawn filament
-        addEntity(entity: Filament(status: "unavailable"), nodeName: "filament-unavailable", position: filamentReference4, zPosition: 2, alpha: 0.35)
-        
-        //drawn stage 5
-        drawnMaps(height: 3, width: 5, tilesetReference: tilesetReference5, status: "unavailable", showRobot:false)
     }
     
-    func moveMap(direction: Direction) {
-        for item in map {
-            self.enumerateChildNodes(withName: item, using: ({
-                (node,error) in
-                if direction == Direction.backward {
-                    node.position.x += 5
-                } else {
-                    node.position.x -= 5
-                }
-            }))
-        }
+    func moveMap(direction: Direction, x: CGFloat) {
+        
+        self.enumerateChildNodes(withName: "stage-available[1-4]", using: ({
+            (node,error) in
+            if direction == Direction.backward {
+                node.position.x += x
+            } else {
+                node.position.x -= x
+            }
+        }))
+        
+        self.enumerateChildNodes(withName: "stage-unavailable[1-4]", using: ({
+            (node,error) in
+            if direction == Direction.backward {
+                node.position.x += x
+            } else {
+                node.position.x -= x
+            }
+        }))
+        
+        self.enumerateChildNodes(withName: "filament", using: ({
+            (node,error) in
+            if direction == Direction.backward {
+                node.position.x += x
+            } else {
+                node.position.x -= x
+            }
+        }))
+        
         
     }
     
@@ -158,12 +190,12 @@ class MapScene:SKScene {
             let location = touch.location(in: self)
             if locationAnterior.x < location.x {
                 if self.posicao > 0 {
-                    moveMap(direction: Direction.backward)
+                    moveMap(direction: Direction.backward, x: 5)
                     self.posicao -= 1
                 }
             } else {
-                if self.posicao < 150 {
-                    moveMap(direction: Direction.forward)
+                if self.posicao < 105 {
+                    moveMap(direction: Direction.forward, x: 5)
                     self.posicao += 1
                 }
             }
@@ -177,6 +209,11 @@ class MapScene:SKScene {
             if location == touchesBeganLocation {
                 let nodes = self.nodes(at: location)
                 if nodes[0].name?.contains("stage-available") ?? false {
+                    for i in 1...totalDeFases {
+                        if nodes[0].name?.contains("\(i)") ?? false {
+                            UserDefaults.standard.set(i, forKey: "selectedFase")
+                        }
+                    }
                     let gameScene = GameScene(size: view!.bounds.size)
                     view!.presentScene(gameScene)
                 }

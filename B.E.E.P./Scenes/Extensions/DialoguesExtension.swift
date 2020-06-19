@@ -57,6 +57,31 @@ extension GameScene {
             dialogueText = SKLabelNode(text: dialogues[dialogueIndex])
             dialogueText.fontSize = 14.0
         } else{
+            //modelo de atualização dos dados do banco //ta feio mas é o que tem pra agora
+            let faseAtual = UserDefaults.standard.object(forKey: "selectedFase")
+            let stageOptional = BaseOfStages.buscar(id: "\(faseAtual!)")
+            let nextStageOptional = BaseOfStages.buscar(id: "\(faseAtual as! Int + 1)")
+            
+            guard let stage = stageOptional else { return  }
+            
+            //gambiarra por causa do bug quando repete de fase
+            for i in 1...4 {
+                let stage = BaseOfStages.buscar(id: "\(i)")
+                stage?.isAtualFase = false
+                BaseOfStages.salvar(stage: stage!)
+            }
+            //fim da gambiarra
+            
+            if let nextStage = nextStageOptional {
+                UserDefaults.standard.set(nextStage.number, forKey: "selectedFase")
+                nextStage.status = "available"
+                nextStage.isAtualFase = true
+                BaseOfStages.salvar(stage: nextStage)
+            } else {
+                stage.isAtualFase = true
+                BaseOfStages.salvar(stage: stage)
+            }
+            //fim do modelo
             dialogueText = SKLabelNode(text: "Perfeito!")
             dialogueText.fontSize = 18.0
         }
