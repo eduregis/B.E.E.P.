@@ -91,13 +91,16 @@ class RobotMoveComponent: GKComponent {
         }
     }
     
-    func turn(direction: String, box: Bool) -> SKAction{
+    func turn(direction: String) -> SKAction{
         let textures: [SKTexture]
-        if box {
-            textures = [SKTexture(imageNamed: "robot-grab-box-\(direction)")]
-        } else {
-            textures = [SKTexture(imageNamed: "robot-idle-\(direction)-2")]
-        }
+        textures = [SKTexture(imageNamed: "robot-idle-\(direction)-2")]
+        let animate = SKAction.animate(with: textures, timePerFrame: 0.6, resize: false, restore: false)
+        return animate
+    }
+    
+    func turnBox(direction: String) -> SKAction{
+        let textures: [SKTexture]
+        textures = [SKTexture(imageNamed: "robot-grab-box-\(direction)")]
         let animate = SKAction.animate(with: textures, timePerFrame: 0.6, resize: false, restore: false)
         return animate
     }

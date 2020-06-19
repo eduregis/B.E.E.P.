@@ -103,7 +103,12 @@ extension GameScene {
              break
          }
          if let robotMoveComponent = robot.component(ofType: RobotMoveComponent.self) {
-             elementArrayMove = robotMoveComponent.turn(direction: actualDirection, box: verificationBox)
+            if verificationBox {
+                elementArrayMove = robotMoveComponent.turnBox(direction: actualDirection)
+            }else{
+                elementArrayMove = robotMoveComponent.turn(direction: actualDirection)
+            }
+             
          }
          // adicionamos uma -move da lightFloor default- para igualar o tempo de reação do lightFloor com a do robot
          if let lightFloorMoveComponent = lightFloor.component(ofType: LightFloorMoveComponent.self) {
@@ -127,7 +132,9 @@ extension GameScene {
         }
         let animate = SKAction.animate(with: texture, timePerFrame: 0.2)
         arrayMoveRobot.append(animate)
-        
+        if let floor = lightFloor.component(ofType: LightFloorMoveComponent.self){
+            arrayMovelightFloor.append(floor.move(direction: ""))
+        }
     }
     // MARK: Put Box
     func putBox(countMove: Double) -> Bool{
