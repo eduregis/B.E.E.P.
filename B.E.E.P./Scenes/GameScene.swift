@@ -13,7 +13,8 @@ class GameScene: SKScene {
     var actualDirection = "right"
     var tabStyle = "conditional"
     var boxes: [CGPoint] = [
-        CGPoint(x: 3, y: 1)
+        CGPoint(x: 3, y: 1),
+        CGPoint(x: 1, y: 2)
     ]
     
     //
@@ -28,7 +29,8 @@ class GameScene: SKScene {
     
     
     var boxDropZones: [CGPoint] = [
-        CGPoint(x: 4, y: 1)
+        CGPoint(x: 4, y: 1),
+        CGPoint(x: 0, y: 2)
     ]
     var infectedRobots: [CGPoint] = []
     // array de falas do B.E.E.P.
@@ -249,7 +251,7 @@ class GameScene: SKScene {
                                 case "loop-block":
                                     countMove += addElementLoop(count: countMove)
                                 case "conditional-block":
-                                    addElementConditional()
+                                    countMove += addElementConditional(count: countMove)
                                 default:
                                     break;
                                 }
@@ -494,7 +496,7 @@ class GameScene: SKScene {
                 }
                 // detecta a dropzone da aba de repetição
                 if(loopBlocks.count < 4) && (emptyLoopBlocks.count > 0) {
-                    if (location.y > auxiliaryAnchor.y + 1) && (location.y < auxiliaryAnchor.y + 51) && (location.x > auxiliaryAnchor.x - 55 + 50*CGFloat(functionBlocks.count)) && (location.x < auxiliaryAnchor.x + 155){
+                    if (location.y > auxiliaryAnchor.y + 1) && (location.y < auxiliaryAnchor.y + 51) && (location.x > auxiliaryAnchor.x - 55 + 50*CGFloat(loopBlocks.count)) && (location.x < auxiliaryAnchor.x + 155){
                         for i in 0...loopBlocks.count {
                             if let spriteComponent = emptyLoopBlocks[i].component(ofType: SpriteComponent.self) {
                                 spriteComponent.node.alpha = 0.6
@@ -538,7 +540,7 @@ class GameScene: SKScene {
                         }
                         conditionalElseDropZoneIsTouched = true
                     } else {
-                        for i in 0...conditionalIfBlocks.count {
+                        for i in 0...conditionalElseBlocks.count {
                             if let spriteComponent = emptyConditionalElseBlocks[i].component(ofType: SpriteComponent.self) {
                                 spriteComponent.node.alpha = 0.1
                             }

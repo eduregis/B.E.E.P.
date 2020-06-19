@@ -56,7 +56,7 @@ extension GameScene {
                 }
             }
         }
-        return countMove
+        return (countMove - count)
     }
     
     

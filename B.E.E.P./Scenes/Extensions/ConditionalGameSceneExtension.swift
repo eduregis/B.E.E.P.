@@ -12,7 +12,8 @@ import SpriteKit
 extension GameScene {
     
     // MARK: Add Element
-    func addElementConditional(){
+    func addElementConditional(count: Double) -> Double{
+        var countMove = count
         var conditionalBlocks: [DraggableBlock] = []
         switch conditionalValue {
         case 0:
@@ -51,14 +52,30 @@ extension GameScene {
                 case "walk-block":
                     if !moveRobot() {
                         print("nao deu")
+                    }else{
+                        countMove += 0.9
                     }
                 case "turn-right-block":
                     arrayMoveRobot.append(turnRobot(direction: "right"))
+                    countMove += 0.6
                 case "turn-left-block":
                     arrayMoveRobot.append(turnRobot(direction: "left"))
-                    /*case "grab-block"
+                    countMove += 0.6
+                case "function-block":
+                    countMove += addElementFunc(count: countMove)
+                case "grab-block":
+                    if verificationBox {
+                        countMove += 0.2
+                        if !putBox(countMove: countMove){
+                             print("nao deu")
+                        }
+                    }else{
+                        if !grabBox(countMove: countMove){
+                             print("nao deu")
+                        }
+                    }
                      
-                     case "save-block"
+                     /*case "save-block"
                      
                      */
                 default:
@@ -66,6 +83,7 @@ extension GameScene {
                 }
             }
         }
+        return countMove - count
     }
     
     // MARK: Conditions
