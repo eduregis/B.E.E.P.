@@ -10,7 +10,7 @@ import XCTest
 
 @testable import B_E_E_P_
 
-class GameViewControllerTests: XCTestCase {
+class ViewControllerTests: XCTestCase {
     
     func test_GameViewController_loadView() {
         //given
@@ -26,5 +26,21 @@ class GameViewControllerTests: XCTestCase {
         
         //then
         XCTAssertNoThrow(sut.viewDidLoad())
+    }
+    
+    func test_ConfigViewController_viewDidLoad() {
+        //given
+        let sut = ConfigViewController()
+        
+        //then
+        XCTAssertNoThrow(sut.viewDidLoad())
+    }
+    
+    func test_ConfigViewController_loadView() {
+        //given
+        let sut = ConfigViewController()
+        
+        //then
+        XCTAssertNoThrow(sut.loadView())
     }
 }
