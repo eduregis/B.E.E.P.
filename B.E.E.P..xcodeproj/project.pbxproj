@@ -35,6 +35,8 @@
 		569145AD24985F3100A5A660 /* LightFloorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569145AC24985F3100A5A660 /* LightFloorTests.swift */; };
 		569145AF24985FBE00A5A660 /* GameViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569145AE24985FBE00A5A660 /* GameViewControllerTests.swift */; };
 		569145B1249860A700A5A660 /* ApiModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569145B0249860A700A5A660 /* ApiModelTests.swift */; };
+		56A8BEC1249C047F001278A6 /* BaseOfStages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56A8BEC0249C047F001278A6 /* BaseOfStages.swift */; };
+		56A8BEC4249C0B57001278A6 /* StageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56A8BEC3249C0B57001278A6 /* StageModel.swift */; };
 		56B459D7249148C2007D82D2 /* Filament.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56B459D6249148C2007D82D2 /* Filament.swift */; };
 		56B459DB24925780007D82D2 /* StageUnavailable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56B459DA24925780007D82D2 /* StageUnavailable.swift */; };
 		56C9EE84249043A7007924BA /* MapScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C9EE83249043A7007924BA /* MapScene.swift */; };
@@ -100,6 +102,8 @@
 		569145AC24985F3100A5A660 /* LightFloorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightFloorTests.swift; sourceTree = "<group>"; };
 		569145AE24985FBE00A5A660 /* GameViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewControllerTests.swift; sourceTree = "<group>"; };
 		569145B0249860A700A5A660 /* ApiModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiModelTests.swift; sourceTree = "<group>"; };
+		56A8BEC0249C047F001278A6 /* BaseOfStages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseOfStages.swift; sourceTree = "<group>"; };
+		56A8BEC3249C0B57001278A6 /* StageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StageModel.swift; sourceTree = "<group>"; };
 		56B459D6249148C2007D82D2 /* Filament.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filament.swift; sourceTree = "<group>"; };
 		56B459DA24925780007D82D2 /* StageUnavailable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StageUnavailable.swift; sourceTree = "<group>"; };
 		56C9EE83249043A7007924BA /* MapScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapScene.swift; sourceTree = "<group>"; };
@@ -237,6 +241,7 @@
 		2EF6C52D248C16DC0040F927 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				56A8BEC2249C0B32001278A6 /* Model */,
 				2EE8D1EE249481E20090F971 /* Extensions */,
 				2EF6C513248C0DE00040F927 /* GameScene.swift */,
 				56C9EE83249043A7007924BA /* MapScene.swift */,
@@ -273,6 +278,15 @@
 				5632E8F8248EDA1A0011B5ED /* Info.plist */,
 			);
 			path = B.E.E.P.UITests;
+			sourceTree = "<group>";
+		};
+		56A8BEC2249C0B32001278A6 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				56A8BEC3249C0B57001278A6 /* StageModel.swift */,
+				56A8BEC0249C047F001278A6 /* BaseOfStages.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		7B32A9BD2496BE0100BB939F /* Api */ = {
@@ -435,6 +449,7 @@
 				2EE8AABA248C5B9A00B652E3 /* Robot.swift in Sources */,
 				56C9EE862490459A007924BA /* MapViewController.swift in Sources */,
 				2EF6C52A248C13EB0040F927 /* Tileset.swift in Sources */,
+				56A8BEC4249C0B57001278A6 /* StageModel.swift in Sources */,
 				56B459DB24925780007D82D2 /* StageUnavailable.swift in Sources */,
 				2EE8AAC5248C6CE100B652E3 /* RobotMoveComponent.swift in Sources */,
 				2EEF855E2492F53A00C10CB2 /* DefaultObject.swift in Sources */,
@@ -443,6 +458,7 @@
 				56C9EE8824906479007924BA /* HudButton.swift in Sources */,
 				7B32A9CF2496E0F400BB939F /* ApiError.swift in Sources */,
 				2EE8D1F0249482030090F971 /* RobotMovementsGameSceneExtension.swift in Sources */,
+				56A8BEC1249C047F001278A6 /* BaseOfStages.swift in Sources */,
 				7B07CF3B2497ED7500EAA181 /* ConfigScene.swift in Sources */,
 				2EF6C50E248C0DE00040F927 /* AppDelegate.swift in Sources */,
 				2EE8D1F2249482AC0090F971 /* DrawObjectsGameSceneExtension.swift in Sources */,
