@@ -210,9 +210,14 @@ class MapScene:SKScene {
                 let nodes = self.nodes(at: location)
                 if nodes[0].name?.contains("stage-available") ?? false {
                     for i in 1...totalDeFases {
+                        let stage = BaseOfStages.buscar(id: "\(i)")
+                        stage?.isAtualFase = false
+                        
                         if nodes[0].name?.contains("\(i)") ?? false {
+                            stage?.isAtualFase = true
                             UserDefaults.standard.set(i, forKey: "selectedFase")
                         }
+                        BaseOfStages.salvar(stage: stage!)
                     }
                     let gameScene = GameScene(size: view!.bounds.size)
                     view!.presentScene(gameScene)
