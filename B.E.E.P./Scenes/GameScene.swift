@@ -20,13 +20,19 @@ class GameScene: SKScene {
 
     var boxes: [CGPoint] = []
     
-    //
+    // contadores para a condição de vitoria
     var countBoxes = -1
+    var countInfected = -1
+    
+    // Os objetivoss do jogo o boxfloor é aciondo quando o box e clocado no lugar indicado
+    // e robot infected e cured sao pera fazer a transicao quando o save for acionado
     let boxFloor = DefaultObject(name: "box-fill-floor")
+    let robotInfected = DefaultObject(name:  "robotInfected")
+    let robotCured = DefaultObject(name:  "robotCured")
+    
     var identifierBox: Int?
     var verificationBox = false
     var boxesCopy: [DefaultObject] = []
-    var boxesChangeable: [CGPoint] = []
     
 
     var boxDropZones: [CGPoint] = []
@@ -47,12 +53,13 @@ class GameScene: SKScene {
     var dialogueButton: DefaultObject!
     var dialogueSkip: DefaultObject!
     
+    
     // criamos a referência o gerenciador de entidades
     var entityManager: EntityManager!
     
     // instanciamos esse aqui fora porque precisamos deles depois que são desenhados
     let robot = Robot()
-    let lightFloor = LightFloor()
+    let lightFloor = DefaultObject(name: "light-floor")
     
     var functionBlocks: [DraggableBlock] = []
     var emptyFunctionBlocks: [EmptyBlock] = []
@@ -81,11 +88,6 @@ class GameScene: SKScene {
     
     var commandBlocks: [DraggableBlock] = []
     var stopButton = HudButton(name: "stop-button")
-    
-    // arrays que vão permitir uma movimentação linear do robot e do lightFloor
-    var arrayMoveRobot: [SKAction] = []
-    var arrayMovelightFloor: [SKAction] = []
-    var elementArrayMove: SKAction?
     
     var emptyBlocks: [EmptyBlock] = []
     var commandDropZoneIsTouched: Bool = false
@@ -144,6 +146,7 @@ class GameScene: SKScene {
             auxiliaryAnchor = CGPoint(x: size.width/2, y: size.height/2)
         }
         
+        
         // adiciona o background
         let background = SKSpriteNode(imageNamed: "background")
         background.position = CGPoint(x: size.width/2, y: size.height/2)
@@ -164,7 +167,10 @@ class GameScene: SKScene {
         
         drawTilesets(width: Int(stageDimensions.width), height: Int(stageDimensions.height))
         drawRobot(xPosition: Int(actualPosition.x), yPosition: Int(actualPosition.y))
-        
+        if !infectedRobots.isEmpty{
+            countInfected = infectedRobots.count
+            drawRobotInfected(xPosition: Int(infectedRobots[0].x), yPosition: Int(infectedRobots[0].y))
+        }
         drawTabs()
         drawAuxiliaryTab()
         
@@ -192,10 +198,10 @@ class GameScene: SKScene {
                         countMove += 0.9
                     }
                 case "turn-right-block":
-                    arrayMoveRobot.append(turnRobot(direction: "right"))
+                    turnRobot(direction: "right")
                     countMove += 0.6
                 case "turn-left-block":
-                    arrayMoveRobot.append(turnRobot(direction: "left"))
+                    turnRobot(direction: "left")
                     countMove += 0.6
                 case "grab-block":
                     if verificationBox {
@@ -208,10 +214,10 @@ class GameScene: SKScene {
                              print("nao deu")
                         }
                     }
-                    /*
-                     case "save-block"
-                     
-                     */
+                case "save-block":
+                    if !save(countMove: countMove){
+                        print("nao deu")
+                    }
                 default:
                     break;
                 }
@@ -253,10 +259,10 @@ class GameScene: SKScene {
                                         countMove += 0.9
                                     }
                                 case "turn-right-block":
-                                    arrayMoveRobot.append(turnRobot(direction: "right"))
+                                    turnRobot(direction: "right")
                                     countMove += 0.6
                                 case "turn-left-block":
-                                    arrayMoveRobot.append(turnRobot(direction: "left"))
+                                    turnRobot(direction: "left")
                                     countMove += 0.6
                                 case "function-block":
                                     countMove += addElementFunc(count: countMove)
@@ -271,11 +277,10 @@ class GameScene: SKScene {
                                              print("nao deu")
                                         }
                                     }
-                                    /*
-                                     
-                                     case "save-block"
-                                     
-                                     */
+                                case "save-block":
+                                    if !save(countMove: countMove){
+                                        print("nao deu")
+                                    }
                                 case "loop-block":
                                     countMove += addElementLoop(count: countMove)
                                 case "conditional-block":
