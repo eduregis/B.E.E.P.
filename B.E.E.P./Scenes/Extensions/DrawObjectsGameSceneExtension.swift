@@ -55,7 +55,7 @@ extension GameScene {
         // desenha o robô
         if let spriteComponent = robot.component(ofType: SpriteComponent.self) {
             let x = gameplayAnchor.x + CGFloat(32 * (xPosition)) - CGFloat(32 * (yPosition))
-            let y = gameplayAnchor.y + 236 - CGFloat(16 * (xPosition)) - CGFloat(16 * (yPosition))
+            let y = gameplayAnchor.y + 232 - CGFloat(16 * (xPosition)) - CGFloat(16 * (yPosition))
             spriteComponent.node.position = CGPoint(x: x, y: y)
             spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(xPosition + yPosition + 1)
         }

@@ -39,7 +39,7 @@ extension GameScene {
          if let spriteComponent = robot.component(ofType: SpriteComponent.self) {
              spriteComponent.node.texture = SKTexture(imageNamed: "robot-idle-\(actualDirection)-2")
              let x = gameplayAnchor.x + CGFloat(32 * (actualPosition.x)) - CGFloat(32 * (actualPosition.y))
-             let y = gameplayAnchor.y + 236 - CGFloat(16 * (actualPosition.x)) - CGFloat(16 * (actualPosition.y))
+             let y = gameplayAnchor.y + 232 - CGFloat(16 * (actualPosition.x)) - CGFloat(16 * (actualPosition.y))
              spriteComponent.node.position = CGPoint(x: x, y: y)
              spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(actualPosition.x + actualPosition.y + 1)
          }
