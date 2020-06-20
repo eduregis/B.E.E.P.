@@ -62,6 +62,32 @@ extension GameScene {
         entityManager.add(robot)
     }
     
+    // MARK: Draw Robots Infected
+    func drawRobotInfected (xPosition: Int, yPosition: Int) {
+        // desenha o robô infectado
+        print(xPosition, yPosition)
+        //robotInfected = DefaultObject(name: "robotInfected", spriteName: "infected-right", size: CGSize(width: 64, height: 64))
+       if let spriteComponent = robotInfected.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.texture = SKTexture(imageNamed: "infected-right")
+            spriteComponent.node.size = CGSize(width: 64, height: 64)
+            let x = gameplayAnchor.x + CGFloat(32 * (xPosition)) - CGFloat(32 * (yPosition))
+            let y = gameplayAnchor.y + 236 - CGFloat(16 * (xPosition)) - CGFloat(16 * (yPosition))
+            spriteComponent.node.position = CGPoint(x: x, y: y)
+            spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(xPosition + yPosition + 1)
+       }
+        //robotCured = DefaultObject(name: "robotCured", spriteName: "robot-idle-right-2", size: CGSize(width: 64, height: 64))
+        if let spriteComponent = robotCured.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.texture = SKTexture(imageNamed: "robot-idle-right-2")
+            spriteComponent.node.size = CGSize(width: 64, height: 64)
+            let x = gameplayAnchor.x + CGFloat(32 * (xPosition)) - CGFloat(32 * (yPosition))
+            let y = gameplayAnchor.y + 236 - CGFloat(16 * (xPosition)) - CGFloat(16 * (yPosition))
+            spriteComponent.node.position = CGPoint(x: x, y: y)
+            spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(xPosition + yPosition)
+        }
+        entityManager.add(robotCured)
+        entityManager.add(robotInfected)
+    }
+    
     // MARK: Draw Tabs
     func drawTabs () {
         // adiciona a aba de comandos
@@ -303,12 +329,7 @@ extension GameScene {
             }
             boxesCopy.append(box)
             entityManager.add(box)
-            
-            
-            
-            // MARK: Clone Boxes
-            let position = CGPoint(x: boxes[i].x, y: boxes[i].y)
-            boxesChangeable.append(position)
+    
         }
         countBoxes = boxes.count
     }
@@ -328,7 +349,13 @@ extension GameScene {
             entityManager.add(boxDropZone)
         }
         if let boxFloor = boxFloor.component(ofType: SpriteComponent.self){
+            let x = gameplayAnchor.x + CGFloat(32 * (boxDropZones[0].x - 1)) - CGFloat(32 * (boxDropZones[0].y - 1))
+            let y = gameplayAnchor.y + 168 - CGFloat(16 * (boxDropZones[0].x - 1)) - CGFloat(16 * (boxDropZones[0].y - 1))
+            boxFloor.node.position = CGPoint(x: x, y: y)
             boxFloor.node.zPosition = -1
+        }
+        if let robot = robot.component(ofType: RobotMoveComponent.self){
+            robot.boxFloor = boxFloor
         }
         entityManager.add(boxFloor)
     }

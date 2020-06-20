@@ -10,9 +10,7 @@ class LightFloor: GKEntity {
     // Utiliza o componente SpriteComponent para gerar o sprite da entidade
     let spriteComponent = SpriteComponent(texture: SKTexture(imageNamed: "light-floor"), name: "light-floor")
     addComponent(spriteComponent)
-        
-    let lightFloorMoveComponent = LightFloorMoveComponent()
-    addComponent(lightFloorMoveComponent)
+     
   }
   
   required init?(coder aDecoder: NSCoder) {

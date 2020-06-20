@@ -10,100 +10,196 @@ class RobotMoveComponent: GKComponent {
         return node
     }
     
+    var arrayClosures:[(Int, String, Bool)->Void] = []
+    var arrayDirection:[String] = []
+    var arrayCheckerBox:[Bool] = []
+    var arrayBox: [DefaultObject] = []
+    
+    var i = 0
+    var arrayActualPosition: [CGPoint] = []
+    var arrayPositionBox: [CGPoint] = []
+    var boxFloor: DefaultObject!
+    
+    var robotInfected: DefaultObject!
+    var stopButton: HudButton!
+    var lightFloor: DefaultObject!
+    
+    
     override init() {
         super.init()
     }
     
-    func moveBoxe(direction: String) -> SKAction{
-        let move: SKAction
-        let texture: [SKTexture]
-        
-        switch direction {
-        case "up":
-            texture = [SKTexture(imageNamed: "robot-grab-box-up")]
-        case "left":
-            texture = [SKTexture(imageNamed: "robot-grab-box-up")]
-        case "down":
-            texture = [SKTexture(imageNamed: "robot-grab-box-down")]
-        case "right":
-            texture = [SKTexture(imageNamed: "robot-grab-box-right")]
-        default:
-            texture = []
-            break
+    func grabBox(identifier: Int, direction: String, box: Bool){
+        let textures: [SKTexture] = [SKTexture(imageNamed: "robot-grab-box-\(direction)")]
+        let animate = SKAction.animate(with: textures, timePerFrame: 0.1, resize: false, restore: false)
+        if let floor = self.lightFloor.component(ofType: SpriteComponent.self){
+            floor.node.run(SKAction.wait(forDuration: 0.1))
         }
-        move = SKAction.move(by: CGVector(dx: 0, dy: 0), duration: 0.6)
-        let animate = SKAction.animate(with: texture, timePerFrame: 0)
-        return SKAction.group([move, animate])
+        node.run(animate){
+            if identifier+1 < self.arrayClosures.count{
+                self.arrayClosures[identifier+1](identifier+1, self.arrayDirection[identifier+1], self.arrayCheckerBox[identifier+1])
+            }else{
+                self.stop()
+            }
+        }
+        if let component = self.arrayBox[0].component(ofType: SpriteComponent.self){
+            component.node.run(SKAction.fadeOut(withDuration: 0))
+        }
+        
     }
     
-    func move(direction: String, box: Bool) -> SKAction{
+    func putBox(identifier: Int, direction: String, box: Bool){
+        let faseAtual = UserDefaults.standard.object(forKey: "selectedFase")
+        let stageOptional = BaseOfStages.buscar(id: "\(faseAtual!)")
+        
+        guard let stage = stageOptional else {
+            return
+        }
+        let textures: [SKTexture] = [SKTexture(imageNamed: "robot-idle-\(direction)-2")]
+        let animate = SKAction.animate(with: textures, timePerFrame: 0.1, resize: false, restore: false)
+        if let floor = self.lightFloor.component(ofType: SpriteComponent.self){
+            floor.node.run(SKAction.wait(forDuration: 0.1))
+        }
+        node.run(animate){
+            if identifier+1 < self.arrayClosures.count{
+                self.arrayClosures[identifier+1](identifier+1, self.arrayDirection[identifier+1], self.arrayCheckerBox[identifier+1])
+            }else{
+                self.stop()
+            }
+        }
+        if let component = self.arrayBox[0].component(ofType: SpriteComponent.self){
+            component.node.position = self.arrayActualPosition[self.i]
+            component.node.zPosition = self.node.zPosition - 0.2
+            component.node.run(SKAction.fadeIn(withDuration: 0))
+            for box in self.arrayPositionBox{
+                print(Int(box.x), stage.dropZones[0],Int(box.y), stage.dropZones[1], stage.dropZones.count)
+                if Int(box.x) == stage.dropZones[0] && Int(box.y) == stage.dropZones[1] {
+                    if let floor = self.boxFloor.component(ofType: SpriteComponent.self){
+                        floor.node.zPosition = self.node.zPosition - 0.3
+                    }
+                }
+            }
+            self.i += 1
+        }
+        
+    }
+        
+    
+    
+    func move(identifier: Int, direction: String, box: Bool) -> Void {
              
         let move: SKAction
         let textures: [SKTexture]
         if box {
             switch direction {
                case "up":
-                   move = SKAction.move(by: CGVector(dx: 32, dy: 16), duration: 0.6)
+                   move = SKAction.move(by: CGVector(dx: 32, dy: 16), duration: 0.8)
                case "left":
-                   move = SKAction.move(by: CGVector(dx: -32, dy: 16), duration: 0.6)
+                   move = SKAction.move(by: CGVector(dx: -32, dy: 16), duration: 0.8)
                case "down":
-                   move = SKAction.move(by: CGVector(dx: -32, dy: -16), duration: 0.6)
+                   move = SKAction.move(by: CGVector(dx: -32, dy: -16), duration: 0.8)
                case "right":
-                   move = SKAction.move(by: CGVector(dx: 32, dy: -16), duration: 0.6)
+                   move = SKAction.move(by: CGVector(dx: 32, dy: -16), duration: 0.8)
                default:
-                   move = SKAction.move(by: CGVector(dx: 0, dy: 0), duration: 0.6)
+                   move = SKAction.move(by: CGVector(dx: 0, dy: 0), duration: 0.8)
            }
             textures = [SKTexture(imageNamed: "robot-grab-box-\(direction)")]
         } else {
             switch direction {
             case "up":
-                move = SKAction.move(by: CGVector(dx: 32, dy: 16), duration: 0.6)
-                textures = [SKTexture(imageNamed: "robot-idle-up-1"), SKTexture(imageNamed: "robot-idle-up-2"), SKTexture(imageNamed: "robot-idle-up-3")]
+                move = SKAction.move(by: CGVector(dx: 32, dy: 16), duration: 0.8)
+                textures = [SKTexture(imageNamed: "robot-idle-up-1"), SKTexture(imageNamed: "robot-idle-up-2"), SKTexture(imageNamed: "robot-idle-up-3"), SKTexture(imageNamed: "robot-idle-up-2")]
             case "left":
-                move = SKAction.move(by: CGVector(dx: -32, dy: 16), duration: 0.6)
-                textures = [SKTexture(imageNamed: "robot-idle-left-1"), SKTexture(imageNamed: "robot-idle-left-2"), SKTexture(imageNamed: "robot-idle-left-3")]
+                move = SKAction.move(by: CGVector(dx: -32, dy: 16), duration: 0.8)
+                textures = [SKTexture(imageNamed: "robot-idle-left-1"), SKTexture(imageNamed: "robot-idle-left-2"), SKTexture(imageNamed: "robot-idle-left-3"), SKTexture(imageNamed: "robot-idle-left-2")]
             case "down":
-                move = SKAction.move(by: CGVector(dx: -32, dy: -16), duration: 0.6)
-                textures = [SKTexture(imageNamed: "robot-idle-down-1"), SKTexture(imageNamed: "robot-idle-down-2"), SKTexture(imageNamed: "robot-idle-down-3")]
+                move = SKAction.move(by: CGVector(dx: -32, dy: -16), duration: 0.8)
+                textures = [SKTexture(imageNamed: "robot-idle-down-1"), SKTexture(imageNamed: "robot-idle-down-2"), SKTexture(imageNamed: "robot-idle-down-3"), SKTexture(imageNamed: "robot-idle-down-2")]
             case "right":
-                move = SKAction.move(by: CGVector(dx: 32, dy: -16), duration: 0.6)
-                textures = [SKTexture(imageNamed: "robot-idle-right-1"), SKTexture(imageNamed: "robot-idle-right-2"), SKTexture(imageNamed: "robot-idle-right-3")]
+                move = SKAction.move(by: CGVector(dx: 32, dy: -16), duration: 0.8)
+                textures = [SKTexture(imageNamed: "robot-idle-right-1"), SKTexture(imageNamed: "robot-idle-right-2"), SKTexture(imageNamed: "robot-idle-right-3"), SKTexture(imageNamed: "robot-idle-right-2")]
             default:
-                move = SKAction.move(by: CGVector(dx: 0, dy: 0), duration: 0.6)
+                move = SKAction.move(by: CGVector(dx: 0, dy: 0), duration: 0.8)
                 textures = []
             }
         }
-        let animate = SKAction.animate(with: textures, timePerFrame: 0.3, resize: false, restore: false)
-        
-         //node.run(SKAction.group([move, animate]))*/
-        
-        return SKAction.group([move, animate])
+        let animate = SKAction.animate(with: textures, timePerFrame: 0.2, resize: false, restore: false)
+        if let floor = self.lightFloor.component(ofType: SpriteComponent.self){
+            floor.node.run(SKAction.group([SKAction.wait(forDuration: 0.8), move]))
+        }
+        node.run(SKAction.group([move, animate])){
+            if identifier+1 < self.arrayClosures.count{
+                self.arrayClosures[identifier+1](identifier+1, self.arrayDirection[identifier+1], self.arrayCheckerBox[identifier+1])
+            }else{
+                self.stop()
+            }
+        }
+        //return SKAction.group([move, animate])
     }
     
-    func moveComplete(move: [SKAction], button: HudButton){
+    func moveComplete(arrayBox: [DefaultObject], stopButton: HudButton, robotInfected: DefaultObject, lightFloor: DefaultObject){
         
-        let sequence = SKAction.sequence(move)
+        self.arrayBox = arrayBox
+        self.stopButton = stopButton
+        self.robotInfected = robotInfected
+        self.lightFloor = lightFloor
+        if let floor = self.lightFloor.component(ofType: SpriteComponent.self){
+            floor.node.zPosition = self.node.zPosition - 0.1
+        }
+        if !self.arrayClosures.isEmpty{
+            self.arrayClosures[0](0, self.arrayDirection[0], self.arrayCheckerBox[0])
+        }else{
+            self.stop()
+        }
         
-        node.run(sequence){
-            if let button = button.component(ofType: SpriteComponent.self){
-                button.node.zPosition = 0
+    }
+    
+    func stop(){
+        if let sprite = self.stopButton.component(ofType: SpriteComponent.self){
+            sprite.node.zPosition = -1
+        }
+    }
+    
+    func turn(identifier: Int, direction: String, box: Bool) -> Void{
+        let textures: [SKTexture]
+        if box {
+            textures = [SKTexture(imageNamed: "robot-grab-box-\(direction)")]
+        }else{
+            textures = [SKTexture(imageNamed: "robot-idle-\(direction)-2")]
+        }
+        let animate = SKAction.animate(with: textures, timePerFrame: 0.6, resize: false, restore: false)
+        if let floor = self.lightFloor.component(ofType: SpriteComponent.self){
+            floor.node.run(SKAction.wait(forDuration: 0.6))
+        }
+        node.run(animate){
+            if identifier+1 < self.arrayClosures.count{
+                self.arrayClosures[identifier+1](identifier+1, self.arrayDirection[identifier+1], self.arrayCheckerBox[identifier+1])
+            }else{
+                self.stop()
             }
         }
     }
     
-    func turn(direction: String) -> SKAction{
+    func saveRobot(identifier: Int, direction: String, box: Bool){
         let textures: [SKTexture]
-        textures = [SKTexture(imageNamed: "robot-idle-\(direction)-2")]
+        textures = [SKTexture(imageNamed: "save-\(direction)")]
         let animate = SKAction.animate(with: textures, timePerFrame: 0.6, resize: false, restore: false)
-        return animate
+        if let floor = self.lightFloor.component(ofType: SpriteComponent.self){
+            floor.node.run(SKAction.wait(forDuration: 0.6))
+        }
+        node.run(animate){
+            if identifier+1 < self.arrayClosures.count{
+                self.arrayClosures[identifier+1](identifier+1, self.arrayDirection[identifier+1], self.arrayCheckerBox[identifier+1])
+            }else{
+                self.stop()
+            }
+        }
+        if let infected = robotInfected.component(ofType: SpriteComponent.self){
+            infected.node.run(SKAction.fadeOut(withDuration: 0.6))
+        }
+        
     }
     
-    func turnBox(direction: String) -> SKAction{
-        let textures: [SKTexture]
-        textures = [SKTexture(imageNamed: "robot-grab-box-\(direction)")]
-        let animate = SKAction.animate(with: textures, timePerFrame: 0.6, resize: false, restore: false)
-        return animate
-    }
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

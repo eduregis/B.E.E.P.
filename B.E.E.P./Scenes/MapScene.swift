@@ -88,7 +88,7 @@ class MapScene:SKScene {
                         //desenhando o robo
                         addEntity(entity:Robot(), nodeName: "stage-\(status)\(numberFase)", position: CGPoint(x: lightFloorPosition.x, y: lightFloorPosition.y+31), zPosition: 101, alpha: 1.0)
                         //desenhando o light floor
-                        addEntity(entity: LightFloor(), nodeName: "stage-\(status)\(numberFase)", position: lightFloorPosition, zPosition: 100, alpha: 0.7)
+                        addEntity(entity: DefaultObject(name: "light-floor"), nodeName: "stage-\(status)\(numberFase)", position: lightFloorPosition, zPosition: 100, alpha: 0.7)
                     } else {
                         stageUnavailablePosition = CGPoint(x: x, y: y+21)
                       }
