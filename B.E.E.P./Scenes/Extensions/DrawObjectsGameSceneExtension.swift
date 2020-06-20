@@ -125,7 +125,11 @@ extension GameScene {
         entityManager.add(actionTab)
         
         // adiciona os blocos de ações
-        for i in 1...blockTypes.count {
+        var blockTypesLength = blockTypes.count
+        if (tabStyle == "default") || (tabStyle == "function") {
+            blockTypesLength = blockTypesLength - 1
+        }
+        for i in 1...blockTypesLength {
             let block = DraggableBlock(name: blockTypes[i - 1])
             if let spriteComponent = block.component(ofType: SpriteComponent.self) {
                 spriteComponent.node.position = CGPoint(x: gameplayAnchor.x - 150 + CGFloat(i - 1)*75, y: gameplayAnchor.y - 255)
