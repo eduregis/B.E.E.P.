@@ -46,6 +46,7 @@
 		56A8BEC4249C0B57001278A6 /* StageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56A8BEC3249C0B57001278A6 /* StageModel.swift */; };
 		56B459D7249148C2007D82D2 /* Filament.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56B459D6249148C2007D82D2 /* Filament.swift */; };
 		56B459DB24925780007D82D2 /* StageUnavailable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56B459DA24925780007D82D2 /* StageUnavailable.swift */; };
+		56C7EBB2249E57ED009AABBE /* BaseOfDialogues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C7EBB1249E57ED009AABBE /* BaseOfDialogues.swift */; };
 		56C9EE84249043A7007924BA /* MapScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C9EE83249043A7007924BA /* MapScene.swift */; };
 		56C9EE862490459A007924BA /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C9EE852490459A007924BA /* MapViewController.swift */; };
 		56C9EE8824906479007924BA /* HudButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C9EE8724906479007924BA /* HudButton.swift */; };
@@ -120,6 +121,7 @@
 		56A8BEC3249C0B57001278A6 /* StageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StageModel.swift; sourceTree = "<group>"; };
 		56B459D6249148C2007D82D2 /* Filament.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filament.swift; sourceTree = "<group>"; };
 		56B459DA24925780007D82D2 /* StageUnavailable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StageUnavailable.swift; sourceTree = "<group>"; };
+		56C7EBB1249E57ED009AABBE /* BaseOfDialogues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseOfDialogues.swift; sourceTree = "<group>"; };
 		56C9EE83249043A7007924BA /* MapScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapScene.swift; sourceTree = "<group>"; };
 		56C9EE852490459A007924BA /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		56C9EE8724906479007924BA /* HudButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HudButton.swift; sourceTree = "<group>"; };
@@ -270,7 +272,8 @@
 		2EF6C52D248C16DC0040F927 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
-				56A8BEC2249C0B32001278A6 /* Model */,
+				56C7EBB0249E5657009AABBE /* Bases */,
+				56A8BEC2249C0B32001278A6 /* Models */,
 				2EE8D1EE249481E20090F971 /* Extensions */,
 				2EF6C513248C0DE00040F927 /* GameScene.swift */,
 				56C9EE83249043A7007924BA /* MapScene.swift */,
@@ -309,13 +312,21 @@
 			path = B.E.E.P.UITests;
 			sourceTree = "<group>";
 		};
-		56A8BEC2249C0B32001278A6 /* Model */ = {
+		56A8BEC2249C0B32001278A6 /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				56A8BEC3249C0B57001278A6 /* StageModel.swift */,
-				56A8BEC0249C047F001278A6 /* BaseOfStages.swift */,
 			);
-			path = Model;
+			path = Models;
+			sourceTree = "<group>";
+		};
+		56C7EBB0249E5657009AABBE /* Bases */ = {
+			isa = PBXGroup;
+			children = (
+				56A8BEC0249C047F001278A6 /* BaseOfStages.swift */,
+				56C7EBB1249E57ED009AABBE /* BaseOfDialogues.swift */,
+			);
+			path = Bases;
 			sourceTree = "<group>";
 		};
 		7B32A9BD2496BE0100BB939F /* Api */ = {
@@ -472,6 +483,7 @@
 				56B459D7249148C2007D82D2 /* Filament.swift in Sources */,
 				2EF6C514248C0DE00040F927 /* GameScene.swift in Sources */,
 				2EEA5F6724911BAC006452ED /* ClearTab.swift in Sources */,
+				56C7EBB2249E57ED009AABBE /* BaseOfDialogues.swift in Sources */,
 				2EEB11F9249684D500A997F7 /* ConditionalGameSceneExtension.swift in Sources */,
 				2EE8AAC8248C70F300B652E3 /* Constants.swift in Sources */,
 				2EF6C516248C0DE00040F927 /* GameViewController.swift in Sources */,

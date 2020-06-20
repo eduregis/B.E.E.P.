@@ -39,6 +39,13 @@ class MapScene:SKScene {
             }
         }
         
+        while true {
+            if UserDefaults.standard.bool(forKey: "showDialogues") == true {
+                showDialogues()
+                break
+            }
+        }
+        
         updatePosition()
         
     }
@@ -174,6 +181,16 @@ class MapScene:SKScene {
                 node.position.x -= x
             }
         }))
+        
+        
+    }
+    
+    func showDialogues() {
+        let arrayNames = ["introduction","menu-stage-1","stage-1","menu-stage-2","stage-2","menu-stage-3","stage-3","menu-stage-4","stage-4","stage-replay","stage-complete"]
+        
+        for name in arrayNames {
+            print(BaseOfDialogues.buscar(id: name)?.text)
+        }
         
         
     }
