@@ -344,7 +344,7 @@ extension GameScene {
                 let x = gameplayAnchor.x + CGFloat(32 * (boxDropZones[i].x - 1)) - CGFloat(32 * (boxDropZones[i].y - 1))
                 let y = gameplayAnchor.y + 168 - CGFloat(16 * (boxDropZones[i].x - 1)) - CGFloat(16 * (boxDropZones[i].y - 1))
                 spriteComponent.node.position = CGPoint(x: x, y: y)
-                spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(boxDropZones[i].x + boxDropZones[i].y) + 1
+                spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat( Int(actualPosition.x) +  Int(actualPosition.y))  - 0.4
             }
             entityManager.add(boxDropZone)
         }
