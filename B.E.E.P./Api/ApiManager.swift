@@ -36,6 +36,7 @@ func dialoguesApi(completion: @escaping (Result< [DialoguesModel], ApiError>)-> 
             if let data = data {
                 if let dialoguesList = try? JSONDecoder().decode([DialoguesModel].self, from: data) {
                     completion(.success(dialoguesList))
+                    UserDefaults.standard.set(true, forKey: "showDialogues")
                     print(dialoguesList.description)
                 } else {
                     completion(.failure(ApiError.couldNotDecode))

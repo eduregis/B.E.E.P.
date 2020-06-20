@@ -21,6 +21,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("entrou aqui")
             UserDefaults.standard.set(false, forKey: "buildMap")
             UserDefaults.standard.set(1, forKey: "selectedFase")
+            UserDefaults.standard.set(false, forKey: "showDialogues")
+            
+            api.dialoguesApi { (result) in
+                switch result {
+                case .success(let apiDialogues):
+                    for dialogue in apiDialogues {
+                        let dialogue = DialoguesModel(name: dialogue.name, text: dialogue.text)
+                        BaseOfDialogues.salvar(dialogue: dialogue)
+                    }
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+            
             api.designApi { (result) in
                 switch result{
                 case .success(let apiDesign):

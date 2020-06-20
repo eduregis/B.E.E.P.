@@ -75,7 +75,7 @@ class RobotActionsTests: XCTestCase {
         let input1 = "left"
         
         //when
-        let output1 = sut.turn(direction: input1, box: false)
+        let output1 = sut.turn(direction: input1)
         
         //then
         XCTAssertNoThrow(output1)
@@ -84,7 +84,7 @@ class RobotActionsTests: XCTestCase {
     func test_conditional_addElement() {
         let sut = GameScene()
         
-        XCTAssertNoThrow(sut.addElementConditional())
+        XCTAssertNoThrow(sut.addElementConditional(count: 2))
     }
     
 }

@@ -17,6 +17,7 @@ class MapScene:SKScene {
     var locationAnterior:CGPoint = CGPoint(x: 0, y: 0)
     var touchesBeganLocation = CGPoint(x: 0, y: 0)
     let totalDeFases = 4
+    let arrayNames = ["introduction","menu-stage-1","stage-1","menu-stage-2","stage-2","menu-stage-3","stage-3","menu-stage-4","stage-4","stage-replay","stage-complete"]
     
     lazy var backName:String = {return self.userData?["backSaved"] as? String ?? "mapScene"}()
     
@@ -210,9 +211,14 @@ class MapScene:SKScene {
                 let nodes = self.nodes(at: location)
                 if nodes[0].name?.contains("stage-available") ?? false {
                     for i in 1...totalDeFases {
+                        let stage = BaseOfStages.buscar(id: "\(i)")
+                        stage?.isAtualFase = false
+                        
                         if nodes[0].name?.contains("\(i)") ?? false {
+                            stage?.isAtualFase = true
                             UserDefaults.standard.set(i, forKey: "selectedFase")
                         }
+                        BaseOfStages.salvar(stage: stage!)
                     }
                     let gameScene = GameScene(size: view!.bounds.size)
                     view!.presentScene(gameScene)
