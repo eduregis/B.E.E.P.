@@ -9,12 +9,10 @@
 /* Begin PBXBuildFile section */
 		2EE8AAB8248C523A00B652E3 /* Light.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE8AAB7248C523A00B652E3 /* Light.swift */; };
 		2EE8AABA248C5B9A00B652E3 /* Robot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE8AAB9248C5B9A00B652E3 /* Robot.swift */; };
-		2EE8AABC248C61A200B652E3 /* LightFloor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE8AABB248C61A200B652E3 /* LightFloor.swift */; };
 		2EE8AAC5248C6CE100B652E3 /* RobotMoveComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE8AAC4248C6CE100B652E3 /* RobotMoveComponent.swift */; };
 		2EE8AAC8248C70F300B652E3 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE8AAC7248C70F300B652E3 /* Constants.swift */; };
 		2EE8D1F0249482030090F971 /* RobotMovementsGameSceneExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE8D1EF249482030090F971 /* RobotMovementsGameSceneExtension.swift */; };
 		2EE8D1F2249482AC0090F971 /* DrawObjectsGameSceneExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE8D1F1249482AC0090F971 /* DrawObjectsGameSceneExtension.swift */; };
-		2EE9C13D248C93F3002E6A14 /* LightFloorMoveComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE9C13C248C93F3002E6A14 /* LightFloorMoveComponent.swift */; };
 		2EEA5F6724911BAC006452ED /* ClearTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEA5F6624911BAC006452ED /* ClearTab.swift */; };
 		2EEA8E2F248D6098008FE216 /* DraggableBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEA8E2E248D6098008FE216 /* DraggableBlock.swift */; };
 		2EEA8E31248D6D24008FE216 /* EmptyBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEA8E30248D6D24008FE216 /* EmptyBlock.swift */; };
@@ -70,12 +68,10 @@
 /* Begin PBXFileReference section */
 		2EE8AAB7248C523A00B652E3 /* Light.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Light.swift; sourceTree = "<group>"; };
 		2EE8AAB9248C5B9A00B652E3 /* Robot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Robot.swift; sourceTree = "<group>"; };
-		2EE8AABB248C61A200B652E3 /* LightFloor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightFloor.swift; sourceTree = "<group>"; };
 		2EE8AAC4248C6CE100B652E3 /* RobotMoveComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RobotMoveComponent.swift; sourceTree = "<group>"; };
 		2EE8AAC7248C70F300B652E3 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		2EE8D1EF249482030090F971 /* RobotMovementsGameSceneExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RobotMovementsGameSceneExtension.swift; sourceTree = "<group>"; };
 		2EE8D1F1249482AC0090F971 /* DrawObjectsGameSceneExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawObjectsGameSceneExtension.swift; sourceTree = "<group>"; };
-		2EE9C13C248C93F3002E6A14 /* LightFloorMoveComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightFloorMoveComponent.swift; sourceTree = "<group>"; };
 		2EEA5F6624911BAC006452ED /* ClearTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearTab.swift; sourceTree = "<group>"; };
 		2EEA8E2E248D6098008FE216 /* DraggableBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraggableBlock.swift; sourceTree = "<group>"; };
 		2EEA8E30248D6D24008FE216 /* EmptyBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyBlock.swift; sourceTree = "<group>"; };
@@ -213,7 +209,6 @@
 			children = (
 				2EF6C526248C12B40040F927 /* SpriteComponent.swift */,
 				2EE8AAC4248C6CE100B652E3 /* RobotMoveComponent.swift */,
-				2EE9C13C248C93F3002E6A14 /* LightFloorMoveComponent.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -225,7 +220,6 @@
 				2EF6C52B248C14FE0040F927 /* EntityManager.swift */,
 				2EE8AAB7248C523A00B652E3 /* Light.swift */,
 				2EE8AAB9248C5B9A00B652E3 /* Robot.swift */,
-				2EE8AABB248C61A200B652E3 /* LightFloor.swift */,
 				2EEA8E2E248D6098008FE216 /* DraggableBlock.swift */,
 				2EEA8E30248D6D24008FE216 /* EmptyBlock.swift */,
 				56C9EE8724906479007924BA /* HudButton.swift */,
@@ -453,7 +447,6 @@
 				56B459DB24925780007D82D2 /* StageUnavailable.swift in Sources */,
 				2EE8AAC5248C6CE100B652E3 /* RobotMoveComponent.swift in Sources */,
 				2EEF855E2492F53A00C10CB2 /* DefaultObject.swift in Sources */,
-				2EE9C13D248C93F3002E6A14 /* LightFloorMoveComponent.swift in Sources */,
 				2EE8AAB8248C523A00B652E3 /* Light.swift in Sources */,
 				56C9EE8824906479007924BA /* HudButton.swift in Sources */,
 				7B32A9CF2496E0F400BB939F /* ApiError.swift in Sources */,
@@ -462,7 +455,6 @@
 				7B07CF3B2497ED7500EAA181 /* ConfigScene.swift in Sources */,
 				2EF6C50E248C0DE00040F927 /* AppDelegate.swift in Sources */,
 				2EE8D1F2249482AC0090F971 /* DrawObjectsGameSceneExtension.swift in Sources */,
-				2EE8AABC248C61A200B652E3 /* LightFloor.swift in Sources */,
 				7B32A9D12496EDC500BB939F /* ApiManager.swift in Sources */,
 				7B32A9BF2496BE2D00BB939F /* ApiModel.swift in Sources */,
 			);
