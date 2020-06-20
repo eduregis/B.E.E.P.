@@ -204,7 +204,6 @@ extension GameScene {
             // x, y e z sao para setar a nova posicao do box
             let x = gameplayAnchor.x + CGFloat(32 * (positionBox.x - 1)) - CGFloat(32 * (positionBox.y - 1))
             let y = gameplayAnchor.y + 182 - CGFloat(16 * (positionBox.x - 1)) - CGFloat(16 * (positionBox.y - 1))
-            let z = stageDimensions.width + stageDimensions.height + CGFloat(positionBox.x + positionBox.y) + 1.2
             
             //box.node.position = CGPoint(x: x, y: y)
             box.node.name = "box (\(positionBox.x) - \(positionBox.y)"

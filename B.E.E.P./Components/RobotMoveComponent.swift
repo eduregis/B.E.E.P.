@@ -69,13 +69,13 @@ class RobotMoveComponent: GKComponent {
         }
         if let component = self.arrayBox[0].component(ofType: SpriteComponent.self){
             component.node.position = self.arrayActualPosition[self.i]
-            component.node.zPosition = self.node.zPosition - 0.2
+            component.node.zPosition = self.node.zPosition - 0.1
             component.node.run(SKAction.fadeIn(withDuration: 0))
             for box in self.arrayPositionBox{
                 print(Int(box.x), stage.dropZones[0],Int(box.y), stage.dropZones[1], stage.dropZones.count)
                 if Int(box.x) == stage.dropZones[0] && Int(box.y) == stage.dropZones[1] {
                     if let floor = self.boxFloor.component(ofType: SpriteComponent.self){
-                        floor.node.zPosition = self.node.zPosition - 0.3
+                        floor.node.zPosition = self.node.zPosition - 0.2
                     }
                 }
             }
@@ -144,7 +144,7 @@ class RobotMoveComponent: GKComponent {
         self.robotInfected = robotInfected
         self.lightFloor = lightFloor
         if let floor = self.lightFloor.component(ofType: SpriteComponent.self){
-            floor.node.zPosition = self.node.zPosition - 0.1
+            floor.node.zPosition = self.node.zPosition - 0.3
         }
         if !self.arrayClosures.isEmpty{
             self.arrayClosures[0](0, self.arrayDirection[0], self.arrayCheckerBox[0])
