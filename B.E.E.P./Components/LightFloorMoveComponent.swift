@@ -32,14 +32,7 @@ class LightFloorMoveComponent: GKComponent {
             
         }
         
-        let sequence = SKAction.sequence([SKAction.wait(forDuration: 0.6), move])
-        /*node.run(sequence) {
-            if direction == "left" || direction == "up" {
-                self.node.zPosition = self.node.zPosition - 1
-            } else {
-                self.node.zPosition = self.node.zPosition + 1
-            }
-        }*/
+        let sequence = SKAction.sequence([SKAction.wait(forDuration: 0.7), move])
         return sequence
     }
     func moveComplete(move: [SKAction]){
