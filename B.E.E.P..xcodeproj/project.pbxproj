@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2EA0009A249D9A3900ADB3AF /* save-infected.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2EA00093249D9A3700ADB3AF /* save-infected.mp3 */; };
+		2EA0009B249D9A3900ADB3AF /* robot-move.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2EA00094249D9A3700ADB3AF /* robot-move.mp3 */; };
+		2EA0009C249D9A3900ADB3AF /* telecom-leeRosevere.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2EA00095249D9A3800ADB3AF /* telecom-leeRosevere.mp3 */; };
+		2EA0009D249D9A3900ADB3AF /* play-command-tab.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2EA00096249D9A3800ADB3AF /* play-command-tab.mp3 */; };
+		2EA0009E249D9A3900ADB3AF /* garage-monplaisir.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2EA00097249D9A3800ADB3AF /* garage-monplaisir.mp3 */; };
+		2EA0009F249D9A3900ADB3AF /* drop-block.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2EA00098249D9A3900ADB3AF /* drop-block.mp3 */; };
+		2EA000A0249D9A3900ADB3AF /* drop-box-in-zone.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2EA00099249D9A3900ADB3AF /* drop-box-in-zone.mp3 */; };
 		2EE8AAB8248C523A00B652E3 /* Light.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE8AAB7248C523A00B652E3 /* Light.swift */; };
 		2EE8AABA248C5B9A00B652E3 /* Robot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE8AAB9248C5B9A00B652E3 /* Robot.swift */; };
 		2EE8AABC248C61A200B652E3 /* LightFloor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE8AABB248C61A200B652E3 /* LightFloor.swift */; };
@@ -68,6 +75,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2EA00093249D9A3700ADB3AF /* save-infected.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "save-infected.mp3"; sourceTree = "<group>"; };
+		2EA00094249D9A3700ADB3AF /* robot-move.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "robot-move.mp3"; sourceTree = "<group>"; };
+		2EA00095249D9A3800ADB3AF /* telecom-leeRosevere.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "telecom-leeRosevere.mp3"; sourceTree = "<group>"; };
+		2EA00096249D9A3800ADB3AF /* play-command-tab.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "play-command-tab.mp3"; sourceTree = "<group>"; };
+		2EA00097249D9A3800ADB3AF /* garage-monplaisir.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "garage-monplaisir.mp3"; sourceTree = "<group>"; };
+		2EA00098249D9A3900ADB3AF /* drop-block.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "drop-block.mp3"; sourceTree = "<group>"; };
+		2EA00099249D9A3900ADB3AF /* drop-box-in-zone.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "drop-box-in-zone.mp3"; sourceTree = "<group>"; };
 		2EE8AAB7248C523A00B652E3 /* Light.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Light.swift; sourceTree = "<group>"; };
 		2EE8AAB9248C5B9A00B652E3 /* Robot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Robot.swift; sourceTree = "<group>"; };
 		2EE8AABB248C61A200B652E3 /* LightFloor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightFloor.swift; sourceTree = "<group>"; };
@@ -142,6 +156,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2EA00092249D98A200ADB3AF /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Sounds;
+			sourceTree = "<group>";
+		};
 		2EE8AAC6248C70DE00B652E3 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -193,6 +214,14 @@
 		2EF6C50C248C0DE00040F927 /* B.E.E.P. */ = {
 			isa = PBXGroup;
 			children = (
+				2EA00098249D9A3900ADB3AF /* drop-block.mp3 */,
+				2EA00099249D9A3900ADB3AF /* drop-box-in-zone.mp3 */,
+				2EA00097249D9A3800ADB3AF /* garage-monplaisir.mp3 */,
+				2EA00096249D9A3800ADB3AF /* play-command-tab.mp3 */,
+				2EA00094249D9A3700ADB3AF /* robot-move.mp3 */,
+				2EA00093249D9A3700ADB3AF /* save-infected.mp3 */,
+				2EA00095249D9A3800ADB3AF /* telecom-leeRosevere.mp3 */,
+				2EA00092249D98A200ADB3AF /* Sounds */,
 				7B32A9BD2496BE0100BB939F /* Api */,
 				2EEAEB282495C46100501FBB /* Fonts */,
 				2EE8AAC6248C70DE00B652E3 /* Helpers */,
@@ -404,9 +433,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2EA0009C249D9A3900ADB3AF /* telecom-leeRosevere.mp3 in Resources */,
 				2EF6C51B248C0DE50040F927 /* Assets.xcassets in Resources */,
 				2EEAEB2A2495C4C000501FBB /* 8bitoperator.ttf in Resources */,
+				2EA0009D249D9A3900ADB3AF /* play-command-tab.mp3 in Resources */,
+				2EA0009A249D9A3900ADB3AF /* save-infected.mp3 in Resources */,
+				2EA0009E249D9A3900ADB3AF /* garage-monplaisir.mp3 in Resources */,
 				2EF6C51E248C0DE50040F927 /* LaunchScreen.storyboard in Resources */,
+				2EA0009F249D9A3900ADB3AF /* drop-block.mp3 in Resources */,
+				2EA000A0249D9A3900ADB3AF /* drop-box-in-zone.mp3 in Resources */,
+				2EA0009B249D9A3900ADB3AF /* robot-move.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
