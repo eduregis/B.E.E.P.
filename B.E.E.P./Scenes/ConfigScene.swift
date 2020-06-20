@@ -9,6 +9,7 @@ class ConfigScene:SKScene, UITextFieldDelegate {
     let defalts = UserDefaults.standard
     var soundText = SKLabelNode()
     var userName: String? = ""
+    var userText = SKLabelNode()
     
     
     // criamos referência a UITextFild do Name
