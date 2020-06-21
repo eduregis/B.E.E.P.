@@ -157,6 +157,13 @@
 		2EA00092249D98A200ADB3AF /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				2EA00098249D9A3900ADB3AF /* drop-block.mp3 */,
+				2EA00099249D9A3900ADB3AF /* drop-box-in-zone.mp3 */,
+				2EA00097249D9A3800ADB3AF /* garage-monplaisir.mp3 */,
+				2EA00096249D9A3800ADB3AF /* play-command-tab.mp3 */,
+				2EA00094249D9A3700ADB3AF /* robot-move.mp3 */,
+				2EA00093249D9A3700ADB3AF /* save-infected.mp3 */,
+				2EA00095249D9A3800ADB3AF /* telecom-leeRosevere.mp3 */,
 			);
 			path = Sounds;
 			sourceTree = "<group>";
