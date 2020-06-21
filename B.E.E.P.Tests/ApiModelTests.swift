@@ -20,4 +20,22 @@ class ApiModelTests: XCTestCase {
         XCTAssertNoThrow(StageDesignModel(number: 0, width: 0, height: 0, tabStyle: "", initialDirection: "", initialPosition: [0], boxes: [0], dropZones: [0], infectedRobots: [0]))
         
     }
+    
+    func test_apiManager_callDesignApi_designFase() {
+        //given
+        let sut = ApiManager()
+        
+        //then
+        XCTAssertNoThrow(sut.designApi(completion: { (result) in
+        }))
+    }
+    
+    func teste_apiManager_callDialoguesApi_dialogues() {
+        //given
+        let sut = ApiManager()
+        
+        //then
+        XCTAssertNoThrow(sut.dialoguesApi(completion: { (result) in
+        }))
+    }
 }

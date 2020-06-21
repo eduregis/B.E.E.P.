@@ -8,13 +8,24 @@
 
 import Foundation
 
-struct DialoguesModel: Codable {
+class DialoguesModel: NSObject, Codable, NSCoding {
+    
     let name: String
     let text: [String]
     
     init (name: String, text: [String]){
         self.name = name
         self.text = text
+    }
+    
+    func encode(with coder: NSCoder) {
+        coder.encode(self.name, forKey: "name")
+        coder.encode(self.text, forKey: "text")
+    }
+    
+    required init?(coder: NSCoder) {
+        self.name = coder.decodeObject(forKey: "name") as! String
+        self.text = coder.decodeObject(forKey: "text") as! [String]
     }
     
 }
