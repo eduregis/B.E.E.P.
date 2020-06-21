@@ -28,13 +28,12 @@ extension GameScene {
                             countMove += 0.9
                         }
                     case "turn-right-block":
-                        arrayMoveRobot.append(turnRobot(direction: "right"))
+                        turnRobot(direction: "right")
                         countMove += 0.6
                     case "turn-left-block":
-                        arrayMoveRobot.append(turnRobot(direction: "left"))
+                        turnRobot(direction: "left")
                         countMove += 0.6
                     case "grab-block":
-                        print("ei")
                         if verificationBox {
                             countMove += 0.2
                             if !putBox(countMove: countMove){
@@ -45,18 +44,17 @@ extension GameScene {
                                  print("nao deu")
                             }
                         }
-                        /*case "grab-block"
-                         
-                         case "save-block"
-                         
-                         */
+                    case "save-block":
+                         if !save(countMove: countMove){
+                             print("nao deu")
+                         }
                     default:
                         break;
                     }
                 }
             }
         }
-        return countMove
+        return (countMove - count)
     }
     
     

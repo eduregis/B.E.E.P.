@@ -10,7 +10,7 @@ import SpriteKit
 import GameplayKit
 
 extension GameScene {
-    
+
     func drawDialogues(won: Bool) {
 
         dialogueIndex = 0
@@ -57,6 +57,31 @@ extension GameScene {
             dialogueText = SKLabelNode(text: dialogues[dialogueIndex])
             dialogueText.fontSize = 14.0
         } else{
+            //modelo de atualização dos dados do banco //ta feio mas é o que tem pra agora
+            let faseAtual = UserDefaults.standard.object(forKey: "selectedFase")
+            let stageOptional = BaseOfStages.buscar(id: "\(faseAtual!)")
+            let nextStageOptional = BaseOfStages.buscar(id: "\(faseAtual as! Int + 1)")
+            
+            guard let stage = stageOptional else { return  }
+            
+            //gambiarra por causa do bug quando repete de fase
+            for i in 1...4 {
+                let stage = BaseOfStages.buscar(id: "\(i)")
+                stage?.isAtualFase = false
+                BaseOfStages.salvar(stage: stage!)
+            }
+            //fim da gambiarra
+            
+            if let nextStage = nextStageOptional {
+                UserDefaults.standard.set(nextStage.number, forKey: "selectedFase")
+                nextStage.status = "available"
+                nextStage.isAtualFase = true
+                BaseOfStages.salvar(stage: nextStage)
+            } else {
+                stage.isAtualFase = true
+                BaseOfStages.salvar(stage: stage)
+            }
+            //fim do modelo
             dialogueText = SKLabelNode(text: "Perfeito!")
             dialogueText.fontSize = 18.0
         }
@@ -98,9 +123,7 @@ extension GameScene {
             //            spriteComponent.node.run(SKAction.repeatForever(pulsed))
         }
         entityManager.add(dialogueButton)
-        
-
-        
+    
         // adiciona botão para avançar para o próximo diálogo
         
         if !won {
@@ -118,6 +141,7 @@ extension GameScene {
             entityManager.add(dialogueSkip)
         }
 
+
     }
     
     func updateText () {
@@ -125,7 +149,9 @@ extension GameScene {
             dialogueIndex = dialogueIndex + 1
             dialogueText.text = dialogues[dialogueIndex]
         } else {
+
             skipText(next: false)
+
         }
     }
     
@@ -135,6 +161,7 @@ extension GameScene {
     }
     
     func skipText (next: Bool) {
+
 
         let animateDuration = 0.3
         let animateVector = 50
@@ -184,6 +211,7 @@ extension GameScene {
             if next {
                 self.returnToMap()
             }
+
 
         }
     }
