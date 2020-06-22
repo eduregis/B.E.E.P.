@@ -43,6 +43,9 @@ extension GameScene {
         verificationBox = false
         if !stage.boxes.isEmpty{
             boxes = [CGPoint(x: stage.boxes[0], y: stage.boxes[1])]
+            if let addElement = robot.component(ofType: RobotMoveComponent.self){
+                addElement.countBoxes = boxes.count
+            }
         }
         //redesenhar os boxes
         var i = 0
@@ -63,7 +66,7 @@ extension GameScene {
             boxFloor.node.zPosition = -1
         }
         
-        countBoxes = boxes.count
+        
         if let removeElement = robot.component(ofType: RobotMoveComponent.self){
             removeElement.arrayPositionBox.removeAll()
             removeElement.arrayActualPosition.removeAll()
@@ -76,7 +79,9 @@ extension GameScene {
             if let spriteComponent = robotInfected.component(ofType: SpriteComponent.self) {
                 spriteComponent.node.run(SKAction.fadeIn(withDuration: 0))
             }
-            countInfected = stage.infectedRobots.count/2
+            if let addElement = robot.component(ofType: RobotMoveComponent.self){
+                addElement.countInfected = infectedRobots.count
+            }
         }
         
      }
@@ -126,7 +131,7 @@ extension GameScene {
          }
      }
     // MARK: Save
-    func save(countMove: Double) -> Bool{
+    func save() -> Bool{
         switch actualDirection {
         case "up":
            if !infectedRobots.contains(CGPoint(x: actualPosition.x, y: actualPosition.y - 1)){
@@ -147,14 +152,6 @@ extension GameScene {
         default:
             return false
         }
-        countInfected -= 1
-        if countInfected == 0{
-            if let sprite = robot.component(ofType: SpriteComponent.self){
-                sprite.node.run(SKAction.wait(forDuration: countMove + 0.5)){
-                    self.drawDialogues(won: true)
-                }
-            }
-        }
         if let addElement = robot.component(ofType: RobotMoveComponent.self){
             addElement.arrayCheckerBox.append(false)
             addElement.arrayDirection.append(actualDirection)
@@ -164,7 +161,7 @@ extension GameScene {
         return true
     }
     // MARK: Put Box
-    func putBox(countMove: Double) -> Bool{
+    func putBox() -> Bool{
         let positionBox: CGPoint
         switch actualDirection {
         // sabendo a direcao do robot
@@ -207,16 +204,6 @@ extension GameScene {
             
             //box.node.position = CGPoint(x: x, y: y)
             box.node.name = "box (\(positionBox.x) - \(positionBox.y)"
-            for drop in boxDropZones{
-               if drop == positionBox {
-                    countBoxes -= 1
-                }
-            }
-            if countBoxes == 0{
-                box.node.run(SKAction.wait(forDuration: countMove)){
-                    self.drawDialogues(won: true)
-                }
-            }
             
             // posiciona o box no local indicado
             if let addElement = robot.component(ofType: RobotMoveComponent.self){
@@ -233,7 +220,7 @@ extension GameScene {
     }
     
     // MARK: Grab Box
-    func grabBox(countMove: Double) -> Bool{
+    func grabBox() -> Bool{
         let positionBox: CGPoint
         
         switch actualDirection {
@@ -352,8 +339,9 @@ extension GameScene {
      }
     // MARK: Move Light floor
      func moveCompleteRobotLightFloor(){
+        
          if let robotMoveComponent = robot.component(ofType: RobotMoveComponent.self) {
-            robotMoveComponent.moveComplete(arrayBox: boxesCopy, stopButton: stopButton, robotInfected: robotInfected, lightFloor: lightFloor)
+            robotMoveComponent.moveComplete(game: self, arrayBox: boxesCopy, stopButton: stopButton, robotInfected: robotInfected, lightFloor: lightFloor)
          }
      }
 }

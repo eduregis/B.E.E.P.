@@ -7,13 +7,13 @@ class ConfigScene:SKScene {
     lazy var backName:String = {return self.userData?["backSaved"] as? String ?? "configScene"}()
     var soundText = SKLabelNode(text: "Sim")
    
-
+    let backgroundSound = SKAudioNode(fileNamed: "telecom-leeRosevere")
     
      // criamos a referência o gerenciador de entidades
      var entityManager: EntityManager!
     
     override func didMove(to view: SKView) {
-        
+        startBackgroundSound()
         // cria uma instância do gerenciador de entidades
         entityManager = EntityManager(scene: self)
 

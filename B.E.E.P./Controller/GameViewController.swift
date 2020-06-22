@@ -11,7 +11,7 @@ import SpriteKit
 import GameplayKit
 
 class GameViewController: UIViewController {
-    
+
     override func loadView() {
         let view = SKView(frame: UIScreen.main.bounds) //cria uma sk view
         

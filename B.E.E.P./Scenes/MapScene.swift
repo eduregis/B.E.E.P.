@@ -11,6 +11,8 @@ import GameplayKit
 
 class MapScene:SKScene {
     
+    let backgroundSound = SKAudioNode(fileNamed: "telecom-leeRosevere")
+    
     var entityManager:EntityManager!
     var filamentScale:CGFloat = -1
     var posicao:Int = 0
@@ -22,7 +24,7 @@ class MapScene:SKScene {
     lazy var backName:String = {return self.userData?["backSaved"] as? String ?? "mapScene"}()
     
     override func didMove(to view: SKView) {
-
+        startBackgroundSound()
         entityManager = EntityManager(scene: self)
         
         drawBackground()

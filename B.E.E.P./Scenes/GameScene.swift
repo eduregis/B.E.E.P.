@@ -5,6 +5,8 @@ class GameScene: SKScene {
     
     lazy var backName:String = {return self.userData?["backSaved"] as? String ?? "gameScene"}()
     
+    let backgroundSound = SKAudioNode(fileNamed: "telecom-leeRosevere")
+    
     // variáveis que irão receber os valores da API
     var actualPosition = CGPoint(x: 1, y: 1)
     var stageDimensions = CGSize(width: 5, height: 3)
@@ -14,10 +16,6 @@ class GameScene: SKScene {
     var tabStyle = "conditional"
 
     var boxes: [CGPoint] = []
-    
-    // contadores para a condição de vitoria
-    var countBoxes = -1
-    var countInfected = -1
     
     // Os objetivoss do jogo o boxfloor é aciondo quando o box e clocado no lugar indicado
     // e robot infected e cured sao pera fazer a transicao quando o save for acionado
@@ -105,6 +103,8 @@ class GameScene: SKScene {
     
     override func didMove(to view: SKView) {
         
+        startBackgroundSound()
+        
         let faseAtual = UserDefaults.standard.object(forKey: "selectedFase")
         let stageOptional = BaseOfStages.buscar(id: "\(faseAtual!)")
         
@@ -157,8 +157,10 @@ class GameScene: SKScene {
         drawTilesets(width: Int(stageDimensions.width), height: Int(stageDimensions.height))
         drawRobot(xPosition: Int(actualPosition.x), yPosition: Int(actualPosition.y))
         if !infectedRobots.isEmpty{
-            countInfected = infectedRobots.count
             drawRobotInfected(xPosition: Int(infectedRobots[0].x), yPosition: Int(infectedRobots[0].y))
+            if let addElement = robot.component(ofType: RobotMoveComponent.self){
+                addElement.countInfected = infectedRobots.count
+            }
         }
         drawTabs()
         drawAuxiliaryTab()
@@ -166,14 +168,18 @@ class GameScene: SKScene {
         drawnConfigButton()
         drawnHintButton()
         
-        if (boxes.count > 0){ drawBoxes() }
+        if (boxes.count > 0){
+            drawBoxes()
+            if let addElement = robot.component(ofType: RobotMoveComponent.self){
+                addElement.countBoxes = boxes.count
+            }
+        }
         if (boxDropZones.count > 0){ drawBoxDropZones() }
 
         drawDialogues(won: false)
     }
     
-    func addElementFunc(count: Double) -> Double{
-        var countMove = count
+    func addElementFunc(){
         for block in functionBlocks{
             if let spriteComponent = block.component(ofType: SpriteComponent.self) {
                 // usando o trecho "-dropped-" para separar obtermos o nome original e seu índice
@@ -183,28 +189,23 @@ class GameScene: SKScene {
                 case "walk-block":
                     if !moveRobot() {
                         print("nao deu")
-                    }else{
-                        countMove += 0.9
                     }
                 case "turn-right-block":
                     turnRobot(direction: "right")
-                    countMove += 0.6
                 case "turn-left-block":
                     turnRobot(direction: "left")
-                    countMove += 0.6
                 case "grab-block":
                     if verificationBox {
-                        countMove += 0.2
-                        if !putBox(countMove: countMove){
+                        if !putBox(){
                              print("nao deu")
                         }
                     }else{
-                        if !grabBox(countMove: countMove){
+                        if !grabBox(){
                              print("nao deu")
                         }
                     }
                 case "save-block":
-                    if !save(countMove: countMove){
+                    if !save(){
                         print("nao deu")
                     }
                 default:
@@ -214,7 +215,6 @@ class GameScene: SKScene {
             }
             
         }
-        return countMove
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -229,8 +229,7 @@ class GameScene: SKScene {
                 // caso não seja o objeto que queremos, esvaziamos o selectedItem
                 selectedItem = nil
                 if self.atPoint(location).name == "play-button" {
-                    var countMove = 0.0
-                    resetMoveRobot()
+                    startPlaySound()
                     /*verificar se o array commandBlocks está vazio
                      - Se tem algum block na dropZone*/
                     if !commandBlocks.isEmpty {
@@ -244,36 +243,31 @@ class GameScene: SKScene {
                                 case "walk-block":
                                     if !moveRobot() {
                                         print("nao deu")
-                                    }else{
-                                        countMove += 0.9
                                     }
                                 case "turn-right-block":
                                     turnRobot(direction: "right")
-                                    countMove += 0.6
                                 case "turn-left-block":
                                     turnRobot(direction: "left")
-                                    countMove += 0.6
                                 case "function-block":
-                                    countMove += addElementFunc(count: countMove)
+                                    addElementFunc()
                                 case "grab-block":
                                     if verificationBox {
-                                        countMove += 0.2
-                                        if !putBox(countMove: countMove){
+                                        if !putBox(){
                                              print("nao deu")
                                         }
                                     }else{
-                                        if !grabBox(countMove: countMove){
+                                        if !grabBox(){
                                              print("nao deu")
                                         }
                                     }
                                 case "save-block":
-                                    if !save(countMove: countMove){
+                                    if !save(){
                                         print("nao deu")
                                     }
                                 case "loop-block":
-                                    countMove += addElementLoop(count: countMove)
+                                    addElementLoop()
                                 case "conditional-block":
-                                    countMove += addElementConditional(count: countMove)
+                                    addElementConditional()
                                 default:
                                     break;
                                 }
@@ -286,6 +280,15 @@ class GameScene: SKScene {
                         }
                         //execução do array actionMove que permitirar uma movimentação linear sem desvios
                         moveCompleteRobotLightFloor()
+                    }
+                } else if (self.atPoint(location).name == "stop-button") {
+                    if let stop = robot.component(ofType: RobotMoveComponent.self){
+                        stop.stop()
+                        /*if let pause = robot.component(ofType: SpriteComponent.self){
+                            pause.node.run(SKAction.wait(forDuration: 0.8)){
+                                self.resetMoveRobot()
+                            }
+                        }*/
                     }
                 } else if (self.atPoint(location).name == "play-dialogue") {
                     updateText()
