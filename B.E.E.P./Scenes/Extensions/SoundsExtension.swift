@@ -26,7 +26,6 @@ extension GameScene {
     }
     func startMoveSound() {
         let sound = SKAudioNode(fileNamed: "robot-move")
-        
         addChild(sound)
         do {
             try sound.avAudioNode?.engine?.start() // Called when you want to play sound
