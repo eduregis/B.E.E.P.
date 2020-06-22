@@ -34,7 +34,7 @@ class ConfigScene:SKScene, UITextFieldDelegate {
         //Set Anchor
         configAnchor = CGPoint(x: size.width/2, y: size.height/2)
         
-        //Verifica teclado 
+        //Verifica teclado
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard(_:)))
         self.view?.addGestureRecognizer(tapGesture)
         
@@ -243,7 +243,7 @@ class ConfigScene:SKScene, UITextFieldDelegate {
                     }
                 }
             }
-            //removeNotification()
+            removeNotification()
         }
     }
     
