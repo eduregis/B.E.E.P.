@@ -331,7 +331,8 @@ extension GameScene {
             entityManager.add(box)
     
         }
-        countBoxes = boxes.count
+        
+        
     }
     
     

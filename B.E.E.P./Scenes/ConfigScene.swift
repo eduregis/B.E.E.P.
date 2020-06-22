@@ -5,6 +5,9 @@ import GameplayKit
 class ConfigScene:SKScene, UITextFieldDelegate {
     
     lazy var backName:String = {return self.userData?["backSaved"] as? String ?? "configScene"}()
+
+    let backgroundSound = SKAudioNode(fileNamed: "telecom-leeRosevere")
+
     
     let defalts = UserDefaults.standard
     var soundText = SKLabelNode()
@@ -31,6 +34,9 @@ class ConfigScene:SKScene, UITextFieldDelegate {
     var entityManager: EntityManager!
     
     override func didMove(to view: SKView) {
+
+        startBackgroundSound()
+
         //Set Anchor
         configAnchor = CGPoint(x: size.width/2, y: size.height/2)
         

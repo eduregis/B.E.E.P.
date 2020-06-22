@@ -30,6 +30,7 @@
 		2EF6C527248C12B40040F927 /* SpriteComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF6C526248C12B40040F927 /* SpriteComponent.swift */; };
 		2EF6C52A248C13EB0040F927 /* Tileset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF6C529248C13EB0040F927 /* Tileset.swift */; };
 		2EF6C52C248C14FE0040F927 /* EntityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF6C52B248C14FE0040F927 /* EntityManager.swift */; };
+		39806A6B249EFBBF0046413C /* SoundsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39806A6A249EFBBF0046413C /* SoundsExtension.swift */; };
 		569145AD24985F3100A5A660 /* LightFloorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569145AC24985F3100A5A660 /* LightFloorTests.swift */; };
 		569145AF24985FBE00A5A660 /* ViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569145AE24985FBE00A5A660 /* ViewControllerTests.swift */; };
 		569145B1249860A700A5A660 /* ApiModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569145B0249860A700A5A660 /* ApiModelTests.swift */; };
@@ -92,6 +93,7 @@
 		2EF6C526248C12B40040F927 /* SpriteComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteComponent.swift; sourceTree = "<group>"; };
 		2EF6C529248C13EB0040F927 /* Tileset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tileset.swift; sourceTree = "<group>"; };
 		2EF6C52B248C14FE0040F927 /* EntityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityManager.swift; sourceTree = "<group>"; };
+		39806A6A249EFBBF0046413C /* SoundsExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundsExtension.swift; sourceTree = "<group>"; };
 		5632E8E6248ED9C50011B5ED /* B.E.E.P.Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = B.E.E.P.Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5632E8EA248ED9C50011B5ED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5632E8F4248EDA1A0011B5ED /* B.E.E.P.UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = B.E.E.P.UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -140,6 +142,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+
+		2EA00092249D98A200ADB3AF /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				2EA00098249D9A3900ADB3AF /* drop-block.mp3 */,
+				2EA00099249D9A3900ADB3AF /* drop-box-in-zone.mp3 */,
+				2EA00097249D9A3800ADB3AF /* garage-monplaisir.mp3 */,
+				2EA00096249D9A3800ADB3AF /* play-command-tab.mp3 */,
+				2EA00094249D9A3700ADB3AF /* robot-move.mp3 */,
+				2EA00093249D9A3700ADB3AF /* save-infected.mp3 */,
+				2EA00095249D9A3800ADB3AF /* telecom-leeRosevere.mp3 */,
+			);
+			path = Sounds;
+			sourceTree = "<group>";
+		};
+
 		2EE8AAC6248C70DE00B652E3 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -156,6 +174,7 @@
 				2EEB11F8249684D500A997F7 /* ConditionalGameSceneExtension.swift */,
 				2EEB11FA24968FF100A997F7 /* LoopGameSceneExtension.swift */,
 				2EF44C06249848C1009B2D5B /* DialoguesExtension.swift */,
+				39806A6A249EFBBF0046413C /* SoundsExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -191,6 +210,9 @@
 		2EF6C50C248C0DE00040F927 /* B.E.E.P. */ = {
 			isa = PBXGroup;
 			children = (
+
+				2EA00092249D98A200ADB3AF /* Sounds */,
+
 				7B32A9BD2496BE0100BB939F /* Api */,
 				2EEAEB282495C46100501FBB /* Fonts */,
 				2EE8AAC6248C70DE00B652E3 /* Helpers */,
@@ -453,6 +475,7 @@
 				2EF44C07249848C1009B2D5B /* DialoguesExtension.swift in Sources */,
 				2EF6C527248C12B40040F927 /* SpriteComponent.swift in Sources */,
 				2EE8AABA248C5B9A00B652E3 /* Robot.swift in Sources */,
+				39806A6B249EFBBF0046413C /* SoundsExtension.swift in Sources */,
 				56C9EE862490459A007924BA /* MapViewController.swift in Sources */,
 				2EF6C52A248C13EB0040F927 /* Tileset.swift in Sources */,
 				56A8BEC4249C0B57001278A6 /* StageModel.swift in Sources */,
