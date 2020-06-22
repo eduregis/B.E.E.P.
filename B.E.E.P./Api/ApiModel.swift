@@ -31,12 +31,13 @@ class DialoguesModel: NSObject, Codable, NSCoding {
 }
 
 struct StageDesignModel: Codable {
-    let dropZones, infectedRobots: [Int]
+    let dropZones, infectedRobots: [[Int]]
     let initialDirection, tabStyle: String
-    let boxes, initialPosition: [Int]
+    let initialPosition: [Int]
+    let boxes: [[Int]]
     let number, height, width: Int
     
-    init(number: Int, width: Int, height: Int, tabStyle: String, initialDirection: String, initialPosition: [Int], boxes: [Int], dropZones: [Int], infectedRobots: [Int]){
+    init(number: Int, width: Int, height: Int, tabStyle: String, initialDirection: String, initialPosition: [Int], boxes: [[Int]], dropZones: [[Int]], infectedRobots: [[Int]]){
         self.number = number
         self.width = width
         self.height = height
