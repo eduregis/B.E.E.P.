@@ -38,12 +38,7 @@ class GameScene: SKScene {
     var boxDropZones: [CGPoint] = []
     var infectedRobots: [CGPoint] = []
     // array de falas do B.E.E.P.
-    var dialogues: [String] = ["Parece que não tem nenhum robô infectado aqui,\n mas tem uma caixa de informações fora do lugar. \nVamos arrumar isso!",
-    "Ela está em linha reta, parece que os comandos ‘Andar’\n e ‘Pegar/Soltar caixas’ serão o suficiente. \nColoque a caixa na área cinza.",
-    "Arraste os blocos da aba de ‘Ações’ para a\n aba de ‘Comandos’, e aperte o ‘botão de play’\n para que o robozinho execute os comandos.",
-    "Lembre-se que o robozinho tem pouca memória,\n seu limite é de 6 comandos!",
-    "Se achar que errou algo, pode pressionar\n o ícone de lixeira, do lado do nome da aba pra limpar a \naba e recomeçar.",
-    "Conto com você!"]
+    var dialogues: [String] = []
     
     var dialogueIndex = 0
     var dialogueBackground: DefaultObject!
@@ -118,6 +113,13 @@ class GameScene: SKScene {
         }
         
         let faseAtual = UserDefaults.standard.object(forKey: "selectedFase")
+        
+        let dialoguesOpt = BaseOfDialogues.buscar(id: "stage-\(faseAtual!)")
+        
+        guard let dialogues = dialoguesOpt else { return  }
+        
+        self.dialogues = dialogues.text
+        
         let stageOptional = BaseOfStages.buscar(id: "\(faseAtual!)")
         
         guard let stage = stageOptional else {
