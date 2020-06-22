@@ -110,7 +110,7 @@ class GameScene: SKScene {
     
     override func didMove(to view: SKView) {
         
-        startBackgroundSound()
+        //startBackgroundSound()
         
         let faseAtual = UserDefaults.standard.object(forKey: "selectedFase")
         let stageOptional = BaseOfStages.buscar(id: "\(faseAtual!)")
@@ -178,7 +178,7 @@ class GameScene: SKScene {
         drawRobot(xPosition: Int(actualPosition.x), yPosition: Int(actualPosition.y))
       
         if !infectedRobots.isEmpty {
-            countInfected = infectedRobots.count
+            
             for infectedRobot in infectedRobots {
                 drawRobotInfected(xPosition: Int(infectedRobot.x), yPosition: Int(infectedRobot.y))
 
