@@ -53,7 +53,7 @@ func designApi(completion: @escaping (Result< [StageDesignModel], ApiError>)-> V
      
     var getComponents = URLComponents()
     getComponents.scheme = "https"
-    getComponents.host = "design-beep.herokuapp.com/stageDesign"
+    getComponents.host = "design-beep.herokuapp.com"
     getComponents.path = "/stageDesign"
  
     guard let getUrl = getComponents.url else {

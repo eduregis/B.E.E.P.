@@ -12,7 +12,6 @@ import AVFoundation
 
 extension GameScene {
     func startBackgroundSound() {
-        
         backgroundSound.isPositional = false
         addChild(backgroundSound)
         
@@ -96,7 +95,6 @@ extension GameScene {
 }
 extension MapScene {
     func startBackgroundSound() {
-        
         backgroundSound.isPositional = false
         addChild(backgroundSound)
         
