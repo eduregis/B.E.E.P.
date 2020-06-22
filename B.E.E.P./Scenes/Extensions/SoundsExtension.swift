@@ -14,7 +14,6 @@ extension GameScene {
     func startBackgroundSound() {
         backgroundSound.isPositional = false
         addChild(backgroundSound)
-        
         do {
             try backgroundSound.avAudioNode?.engine?.start() // Called when you want to play sound
         } catch {
