@@ -34,9 +34,6 @@ class ConfigScene:SKScene, UITextFieldDelegate {
         //Set Anchor
         configAnchor = CGPoint(x: size.width/2, y: size.height/2)
         
-        //Verifica teclado
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard(_:)))
-        self.view?.addGestureRecognizer(tapGesture)
         
         // cria uma instância do gerenciador de entidades
         entityManager = EntityManager(scene: self)
@@ -221,7 +218,6 @@ class ConfigScene:SKScene, UITextFieldDelegate {
         for touch in touches {
             let nodes = self.nodes(at: touch.location(in: self))
             let returnButtonOptional = self.childNode(withName: "return-button")
-            
             if let returnButton = returnButtonOptional {
                 if nodes.contains(returnButton) {
                     switch self.backName {
@@ -229,21 +225,18 @@ class ConfigScene:SKScene, UITextFieldDelegate {
                         textFieldName.removeFromSuperview()
                         let mapScene = MapScene(size: view!.bounds.size)
                         view!.presentScene(mapScene)
-                       
                     case "gameScene":
                         textFieldName.removeFromSuperview()
                         let gameScene = GameScene(size: view!.bounds.size)
                         view!.presentScene(gameScene)
-                       
                     default:
                         textFieldName.removeFromSuperview()
                         let mapScene = MapScene(size: view!.bounds.size)
                         view!.presentScene(mapScene)
-                       
                     }
                 }
+                removeNotification()
             }
-            removeNotification()
         }
     }
     
@@ -273,8 +266,9 @@ class ConfigScene:SKScene, UITextFieldDelegate {
             let keyboardFrame = (info[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
             let height = screenBounds.height - keyboardFrame.origin.y
         UIView.animate(withDuration: 0.2, delay: 0.0, animations: {
-
-               self.view?.frame.origin.y = -height/2
+            self.view?.frame.origin.y = -height/2
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard(_:)))
+            self.view?.addGestureRecognizer(tapGesture)
             })
 
     }
