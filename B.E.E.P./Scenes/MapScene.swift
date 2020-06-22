@@ -16,7 +16,7 @@ class MapScene:SKScene {
     var posicao:Int = 0
     var locationAnterior:CGPoint = CGPoint(x: 0, y: 0)
     var touchesBeganLocation = CGPoint(x: 0, y: 0)
-    let totalDeFases = 4
+    let totalDeFases = 6
     
     lazy var backName:String = {return self.userData?["backSaved"] as? String ?? "mapScene"}()
     
@@ -55,6 +55,10 @@ class MapScene:SKScene {
             self.posicao = 50
         case 4:
             self.posicao = 100
+        case 5:
+            self.posicao = 150
+        case 6:
+            self.posicao = 200
         default:
             self.posicao = 0
         }
