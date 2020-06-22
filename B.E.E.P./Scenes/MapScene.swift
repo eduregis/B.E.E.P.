@@ -52,15 +52,15 @@ class MapScene:SKScene {
         case 1:
             self.posicao = 0
         case 2:
-            self.posicao = 0
+            self.posicao = 20
         case 3:
-            self.posicao = 50
+            self.posicao = 70
         case 4:
-            self.posicao = 100
+            self.posicao = 160
         case 5:
-            self.posicao = 150
+            self.posicao = 230
         case 6:
-            self.posicao = 200
+            self.posicao = 250
         default:
             self.posicao = 0
         }
