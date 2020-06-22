@@ -75,13 +75,15 @@ class RobotMoveComponent: GKComponent {
             component.node.run(SKAction.fadeIn(withDuration: 0))
             
             for box in self.arrayPositionBox{
-                //if Int(box.x) == stage.dropZones[][0] && Int(box.y) == stage.dropZones[][1] {
-                if Int(box.x) == stage.dropZones[0] && Int(box.y) == stage.dropZones[1] {
-                    
-                    if let floor = self.boxFloor.component(ofType: SpriteComponent.self){
-                        floor.node.zPosition = self.node.zPosition - 0.2
-                        self.countBoxes -= 1
-                        self.game.startDropBoxSound()
+
+                for dropZone in stage.dropZones {
+                    print(Int(box.x), dropZone[0],Int(box.y), dropZone[1], dropZone.count)
+                    if Int(box.x) == dropZone[0] && Int(box.y) == dropZone[1] {
+                        if let floor = self.boxFloor.component(ofType: SpriteComponent.self){
+                            floor.node.zPosition = self.node.zPosition - 0.2
+                            self.countBoxes -= 1
+                            self.game.startDropBoxSound()
+                        }
                     }
                     
                 }

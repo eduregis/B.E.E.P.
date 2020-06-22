@@ -41,11 +41,15 @@ extension GameScene {
              spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(actualPosition.x + actualPosition.y + 1)
          }
         verificationBox = false
-        if !stage.boxes.isEmpty{
-            boxes = [CGPoint(x: stage.boxes[0], y: stage.boxes[1])]
-            if let addElement = robot.component(ofType: RobotMoveComponent.self){
-                addElement.countBoxes = boxes.count
+
+        if !stage.boxes[0].isEmpty{
+            boxes = []
+            for box in stage.boxes {
+                boxes.append(CGPoint(x: box[0], y: box[1]))
             }
+          if let addElement = robot.component(ofType: RobotMoveComponent.self){
+                addElement.countBoxes = boxes.count
+          }
         }
         //redesenhar os boxes
         var i = 0
@@ -75,7 +79,7 @@ extension GameScene {
             removeElement.arrayDirection.removeAll()
             removeElement.arrayClosures.removeAll()
         }
-        if !stage.infectedRobots.isEmpty{
+        if !stage.infectedRobots[0].isEmpty{
             if let spriteComponent = robotInfected.component(ofType: SpriteComponent.self) {
                 spriteComponent.node.run(SKAction.fadeIn(withDuration: 0))
             }
