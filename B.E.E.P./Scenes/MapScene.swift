@@ -16,8 +16,7 @@ class MapScene:SKScene {
     var posicao:Int = 0
     var locationAnterior:CGPoint = CGPoint(x: 0, y: 0)
     var touchesBeganLocation = CGPoint(x: 0, y: 0)
-    let totalDeFases = 4
-    let arrayNames = ["introduction","menu-stage-1","stage-1","menu-stage-2","stage-2","menu-stage-3","stage-3","menu-stage-4","stage-4","stage-replay","stage-complete"]
+    let totalDeFases = 6
     
     lazy var backName:String = {return self.userData?["backSaved"] as? String ?? "mapScene"}()
     
@@ -56,6 +55,10 @@ class MapScene:SKScene {
             self.posicao = 50
         case 4:
             self.posicao = 100
+        case 5:
+            self.posicao = 150
+        case 6:
+            self.posicao = 200
         default:
             self.posicao = 0
         }
@@ -120,9 +123,9 @@ class MapScene:SKScene {
     }
     
     func buildMap() {
-        let tilesetReferences = [CGPoint(x: frame.midX-280, y: frame.midY+170),CGPoint(x: frame.midX+101.5, y: frame.midY-28),CGPoint(x: frame.midX+393, y: frame.midY+155),CGPoint(x: frame.midX+741, y: frame.midY-59)]
+        let tilesetReferences = [CGPoint(x: frame.midX-280, y: frame.midY+170),CGPoint(x: frame.midX+101.5, y: frame.midY-28),CGPoint(x: frame.midX+393, y: frame.midY+155),CGPoint(x: frame.midX+741, y: frame.midY-59),CGPoint(x: frame.midX+1126, y: frame.midY+172),CGPoint(x: frame.midX+1446, y: frame.midY-62)]
         
-        let filamentReferences = [CGPoint(x: frame.midX-69, y: frame.midY+16),CGPoint(x: frame.midX+278, y: frame.midY+16), CGPoint(x: frame.midX+602, y: frame.midY+2)]
+        let filamentReferences = [CGPoint(x: frame.midX-69, y: frame.midY+16),CGPoint(x: frame.midX+278, y: frame.midY+16), CGPoint(x: frame.midX+602, y: frame.midY+2),CGPoint(x: frame.midX+914, y: frame.midY-14),CGPoint(x: frame.midX+1288, y: frame.midY-8)]
         
         for i in 1...totalDeFases {
             let stage = BaseOfStages.buscar(id: "\(i)")
@@ -149,7 +152,7 @@ class MapScene:SKScene {
     
     func moveMap(direction: Direction, x: CGFloat) {
         
-        self.enumerateChildNodes(withName: "stage-available[1-4]", using: ({
+        self.enumerateChildNodes(withName: "stage-available[1-\(totalDeFases)]", using: ({
             (node,error) in
             if direction == Direction.backward {
                 node.position.x += x
@@ -158,7 +161,7 @@ class MapScene:SKScene {
             }
         }))
         
-        self.enumerateChildNodes(withName: "stage-unavailable[1-4]", using: ({
+        self.enumerateChildNodes(withName: "stage-unavailable[1-\(totalDeFases)]", using: ({
             (node,error) in
             if direction == Direction.backward {
                 node.position.x += x
@@ -195,7 +198,7 @@ class MapScene:SKScene {
                     self.posicao -= 1
                 }
             } else {
-                if self.posicao < 105 {
+                if self.posicao < 260 {
                     moveMap(direction: Direction.forward, x: 5)
                     self.posicao += 1
                 }

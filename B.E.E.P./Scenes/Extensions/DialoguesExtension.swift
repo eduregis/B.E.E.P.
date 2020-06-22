@@ -65,7 +65,7 @@ extension GameScene {
             guard let stage = stageOptional else { return  }
             
             //gambiarra por causa do bug quando repete de fase
-            for i in 1...4 {
+            for i in 1...6 {
                 let stage = BaseOfStages.buscar(id: "\(i)")
                 stage?.isAtualFase = false
                 BaseOfStages.salvar(stage: stage!)
