@@ -179,10 +179,12 @@ class RobotMoveComponent: GKComponent {
         }
         
     }
+    
     func winner(){
         self.game.drawDialogues(won: true)
         self.identifier = self.arrayClosures.count
     }
+    
     func stop(){
         self.identifier = self.arrayClosures.count
         if let sprite = self.stopButton.component(ofType: SpriteComponent.self){
@@ -207,10 +209,10 @@ class RobotMoveComponent: GKComponent {
         if let floor = self.lightFloor.component(ofType: SpriteComponent.self){
             floor.node.run(SKAction.wait(forDuration: 0.6))
         }
+        
         /* vai ter uma if aqui para saber se pode ou nao ser ativado o efeito*/
-        node.run(SKAction.wait(forDuration: 0.3)){
-            self.game.startMoveSound()
-        }
+        self.game.startMoveSound()
+        
         node.run(animate){
             if self.identifier < self.arrayClosures.count{
                 self.arrayClosures[self.identifier](self.arrayDirection[self.identifier], self.arrayCheckerBox[self.identifier])

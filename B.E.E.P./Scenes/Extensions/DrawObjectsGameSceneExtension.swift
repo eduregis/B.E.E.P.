@@ -42,16 +42,6 @@ extension GameScene {
     
     // MARK: Draw Robots
     func drawRobot (xPosition: Int, yPosition: Int) {
-        // desenha o chão iluminado embaixo do robô
-        if let spriteComponent = lightFloor.component(ofType: SpriteComponent.self) {
-            let x = gameplayAnchor.x + CGFloat(32 * (xPosition)) - CGFloat(32 * (yPosition))
-            let y = gameplayAnchor.y + 200 - CGFloat(16 * (xPosition)) - CGFloat(16 * (yPosition))
-            spriteComponent.node.position = CGPoint(x: x, y: y)
-            spriteComponent.node.zPosition = CGFloat(xPosition + yPosition) + 3
-            spriteComponent.node.alpha = 0.6
-        }
-        entityManager.add(lightFloor)
-        
         // desenha o robô
         if let spriteComponent = robot.component(ofType: SpriteComponent.self) {
             let x = gameplayAnchor.x + CGFloat(32 * (xPosition)) - CGFloat(32 * (yPosition))
@@ -60,6 +50,19 @@ extension GameScene {
             spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(xPosition + yPosition + 1)
         }
         entityManager.add(robot)
+        
+        // desenha o chão iluminado embaixo do robô
+       if let spriteComponent = lightFloor.component(ofType: SpriteComponent.self) {
+           let x = gameplayAnchor.x + CGFloat(32 * (xPosition)) - CGFloat(32 * (yPosition))
+           let y = gameplayAnchor.y + 200 - CGFloat(16 * (xPosition)) - CGFloat(16 * (yPosition))
+           spriteComponent.node.position = CGPoint(x: x, y: y)
+           //spriteComponent.node.zPosition = CGFloat(xPosition + yPosition) + 3
+           if let robot = robot.component(ofType: SpriteComponent.self){
+               spriteComponent.node.zPosition = (robot.node.zPosition - 0.3)
+           }
+           spriteComponent.node.alpha = 0.6
+       }
+       entityManager.add(lightFloor)
     }
     
     // MARK: Draw Robots Infected
@@ -325,7 +328,10 @@ extension GameScene {
                 let x = gameplayAnchor.x + CGFloat(32 * (boxes[i].x - 1)) - CGFloat(32 * (boxes[i].y - 1))
                 let y = gameplayAnchor.y + 182 - CGFloat(16 * (boxes[i].x - 1)) - CGFloat(16 * (boxes[i].y - 1))
                 spriteComponent.node.position = CGPoint(x: x, y: y)
-                spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(boxes[i].x + boxes[i].y) + 1
+                    //spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(boxes[i].x + boxes[i].y) + 1
+                if let robot = robot.component(ofType: SpriteComponent.self){
+                    spriteComponent.node.zPosition = (robot.node.zPosition - 0.2)
+                }
             }
             boxesCopy.append(box)
             entityManager.add(box)
