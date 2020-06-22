@@ -5,6 +5,11 @@ class GameScene: SKScene {
     
     lazy var backName:String = {return self.userData?["backSaved"] as? String ?? "gameScene"}()
     
+    //progresso de fase
+    var indexStage: Int = 3
+    let defalts = UserDefaults.standard
+    
+    
     // variáveis que irão receber os valores da API
     var actualPosition = CGPoint(x: 1, y: 1)
     var stageDimensions = CGSize(width: 5, height: 3)
@@ -116,16 +121,23 @@ class GameScene: SKScene {
         stageDimensions = CGSize(width: stage.width, height: stage.height)
         actualDirection = stage.initialDirection
         tabStyle = stage.tabStyle
-        if !stage.boxes.isEmpty {
-            boxes = [CGPoint(x: stage.boxes[0], y: stage.boxes[1])]
+        if !stage.boxes[0].isEmpty {
+            for box in stage.boxes {
+                boxes.append(CGPoint(x: box[0], y: box[1]))
+            }
         }
         
-        if !stage.dropZones.isEmpty {
-            boxDropZones = [CGPoint(x: stage.dropZones[0], y: stage.dropZones[1])]
+        if !stage.dropZones[0].isEmpty {
+            for dropZone in stage.dropZones {
+                boxDropZones.append(CGPoint(x: dropZone[0], y: dropZone[1]))
+            }
+            
         }
         
-        if !stage.infectedRobots.isEmpty {
-            infectedRobots = [CGPoint(x: stage.infectedRobots[0], y: stage.infectedRobots[1])]
+        if !stage.infectedRobots[0].isEmpty {
+            for infectedRobot in stage.infectedRobots {
+                infectedRobots.append(CGPoint(x: infectedRobot[0], y: infectedRobot[1]))
+            }
         }
         
         // posiciona os elementos de acordo como tipo de fase
@@ -152,13 +164,21 @@ class GameScene: SKScene {
         // cria uma instância do gerenciador de entidades
         entityManager = EntityManager(scene: self)
         
+        //setup persistência de fases
+        if  defalts.object(forKey: "indexStage") != nil {
+            indexStage = defalts.integer(forKey: "indexStage")
+        }
+            defalts.set(indexStage, forKey: "indexStage")
+        
         drawnReturnButton()
         
         drawTilesets(width: Int(stageDimensions.width), height: Int(stageDimensions.height))
         drawRobot(xPosition: Int(actualPosition.x), yPosition: Int(actualPosition.y))
-        if !infectedRobots.isEmpty{
+        if !infectedRobots.isEmpty {
             countInfected = infectedRobots.count
-            drawRobotInfected(xPosition: Int(infectedRobots[0].x), yPosition: Int(infectedRobots[0].y))
+            for infectedRobot in infectedRobots {
+                drawRobotInfected(xPosition: Int(infectedRobot.x), yPosition: Int(infectedRobot.y))
+            }
         }
         drawTabs()
         drawAuxiliaryTab()
