@@ -7,7 +7,6 @@ class ConfigScene:SKScene, UITextFieldDelegate {
     lazy var backName:String = {return self.userData?["backSaved"] as? String ?? "configScene"}()
 
     let backgroundSound = SKAudioNode(fileNamed: "telecom-leeRosevere")
-
     
     let defalts = UserDefaults.standard
     var soundText = SKLabelNode()
@@ -35,7 +34,7 @@ class ConfigScene:SKScene, UITextFieldDelegate {
     
     override func didMove(to view: SKView) {
 
-        startBackgroundSound()
+        
 
         //Set Anchor
         configAnchor = CGPoint(x: size.width/2, y: size.height/2)
@@ -62,6 +61,9 @@ class ConfigScene:SKScene, UITextFieldDelegate {
             soundText.text = defalts.object(forKey: "SettingsSound") as? String
         } else {
             soundText.text = "Sim"
+        }
+        if soundText.text == "Sim" {
+            startBackgroundSound()
         }
         defalts.set(soundText.text, forKey: "SettingsSound")
         soundText.name = soundText.text
@@ -178,9 +180,11 @@ class ConfigScene:SKScene, UITextFieldDelegate {
                 case "Sim":
                     soundText.name = "Não"
                     soundText.text = "Não"
+                    self.pauseBackgroundSound()
                 default:
                     soundText.text = "Sim"
                     soundText.name = "Sim"
+                    self.startBackgroundSound()
                 }
                 defalts.set(soundText.text, forKey: "SettingsSound")
                 

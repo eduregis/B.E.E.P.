@@ -6,7 +6,7 @@ class GameScene: SKScene {
     lazy var backName:String = {return self.userData?["backSaved"] as? String ?? "gameScene"}()
     
 
-    let backgroundSound = SKAudioNode(fileNamed: "telecom-leeRosevere")
+    let backgroundSound = SKAudioNode(fileNamed: "garage-monplaisir")
 
     //progresso de fase
     var indexStage: Int = 3
@@ -109,8 +109,13 @@ class GameScene: SKScene {
     var draggingItem: SKSpriteNode?
     
     override func didMove(to view: SKView) {
-        
-        //startBackgroundSound()
+        if  UserDefaults.standard.object(forKey: "SettingsSound") != nil {
+            if (UserDefaults.standard.object(forKey: "SettingsSound") as? String) == "Sim"{
+                startBackgroundSound()
+            }
+        }else{
+            startBackgroundSound()
+        }
         
         let faseAtual = UserDefaults.standard.object(forKey: "selectedFase")
         let stageOptional = BaseOfStages.buscar(id: "\(faseAtual!)")
@@ -254,7 +259,15 @@ class GameScene: SKScene {
                 // caso não seja o objeto que queremos, esvaziamos o selectedItem
                 selectedItem = nil
                 if self.atPoint(location).name == "play-button" {
-                    startPlaySound()
+                    if  UserDefaults.standard.object(forKey: "SettingsSound") != nil {
+                        if (UserDefaults.standard.object(forKey: "SettingsSound") as? String) == "Sim"{
+                            startPlaySound()
+                        }
+                    }else{
+                        startPlaySound()
+                    }
+
+                    
                     /*verificar se o array commandBlocks está vazio
                      - Se tem algum block na dropZone*/
                     if !commandBlocks.isEmpty {

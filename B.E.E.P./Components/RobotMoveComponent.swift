@@ -82,7 +82,15 @@ class RobotMoveComponent: GKComponent {
                         if let floor = self.boxFloor.component(ofType: SpriteComponent.self){
                             floor.node.zPosition = self.node.zPosition - 0.2
                             self.countBoxes -= 1
-                            self.game.startDropBoxSound()
+                            
+                            if  UserDefaults.standard.object(forKey: "SettingsSound") != nil {
+                                if (UserDefaults.standard.object(forKey: "SettingsSound") as? String) == "Sim"{
+                                    self.game.startMoveSound()
+                                }
+                            }else{
+                                self.game.startDropBoxSound()
+                            }
+                            
                         }
                     }
                     
@@ -99,9 +107,6 @@ class RobotMoveComponent: GKComponent {
                 self.stop()
             }
         }
-        
-        
-        
     }
         
     
@@ -147,9 +152,18 @@ class RobotMoveComponent: GKComponent {
         if let floor = self.lightFloor.component(ofType: SpriteComponent.self){
             floor.node.run(SKAction.group([SKAction.wait(forDuration: 0.8), move]))
         }
-        /* vai ter uma if aqui para saber se pode ou nao ser ativado o efeito*/
-        node.run(SKAction.wait(forDuration: 0.4)){
-            self.game.startMoveSound()
+        
+        
+        if  UserDefaults.standard.object(forKey: "SettingsSound") != nil {
+            if (UserDefaults.standard.object(forKey: "SettingsSound") as? String) == "Sim"{
+                node.run(SKAction.wait(forDuration: 0.4)){
+                    self.game.startMoveSound()
+                }
+            }
+        }else{
+            node.run(SKAction.wait(forDuration: 0.4)){
+                self.game.startMoveSound()
+            }
         }
         
         node.run(SKAction.group([move, animate])){
@@ -210,8 +224,14 @@ class RobotMoveComponent: GKComponent {
             floor.node.run(SKAction.wait(forDuration: 0.6))
         }
         
-        /* vai ter uma if aqui para saber se pode ou nao ser ativado o efeito*/
-        self.game.startMoveSound()
+        if  UserDefaults.standard.object(forKey: "SettingsSound") != nil {
+           if (UserDefaults.standard.object(forKey: "SettingsSound") as? String) == "Sim"{
+               self.game.startMoveSound()
+           }
+        }else{
+           self.game.startMoveSound()
+        }
+        
         
         node.run(animate){
             if self.identifier < self.arrayClosures.count{
@@ -241,8 +261,13 @@ class RobotMoveComponent: GKComponent {
             }
         }
         if let infected = robotInfected.component(ofType: SpriteComponent.self){
-            /* vai ter uma if aqui para saber se pode ou nao ser ativado o efeito*/
-            self.game.startSaveSound()
+            if  UserDefaults.standard.object(forKey: "SettingsSound") != nil {
+               if (UserDefaults.standard.object(forKey: "SettingsSound") as? String) == "Sim"{
+                   self.game.startSaveSound()
+               }
+            }else{
+               self.game.startSaveSound()
+            }
             infected.node.run(SKAction.fadeOut(withDuration: 0.9))
         }
         

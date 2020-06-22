@@ -23,7 +23,14 @@ class MapScene:SKScene {
     lazy var backName:String = {return self.userData?["backSaved"] as? String ?? "mapScene"}()
     
     override func didMove(to view: SKView) {
-        startBackgroundSound()
+        if  UserDefaults.standard.object(forKey: "SettingsSound") != nil {
+            if (UserDefaults.standard.object(forKey: "SettingsSound") as? String) == "Sim"{
+                startBackgroundSound()
+            }
+        }else{
+            startBackgroundSound()
+        }
+        
         entityManager = EntityManager(scene: self)
         
         drawBackground()
