@@ -204,38 +204,32 @@ class ConfigScene:SKScene, UITextFieldDelegate {
                 }
          
             }
-            
-        }
+           
     }
-    
+    }
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
 
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-            
-        //verifica se clicou no botão voltar
         for touch in touches {
-            let nodes = self.nodes(at: touch.location(in: self))
-            let returnButtonOptional = self.childNode(withName: "return-button")
-            if let returnButton = returnButtonOptional {
-                if nodes.contains(returnButton) {
-                    switch self.backName {
-                    case "mapScene":
-                        textFieldName.removeFromSuperview()
-                        let mapScene = MapScene(size: view!.bounds.size)
-                        view!.presentScene(mapScene)
-                    case "gameScene":
-                        textFieldName.removeFromSuperview()
-                        let gameScene = GameScene(size: view!.bounds.size)
-                        view!.presentScene(gameScene)
-                    default:
-                        textFieldName.removeFromSuperview()
-                        let mapScene = MapScene(size: view!.bounds.size)
-                        view!.presentScene(mapScene)
-                    }
+            let location = touch.location(in: self)
+            if (self.atPoint(location).name == "return-button") {
+                switch self.backName {
+                case "mapScene":
+                    textFieldName.removeFromSuperview()
+                    let mapScene = MapScene(size: view!.bounds.size)
+                    view!.presentScene(mapScene)
+                case "gameScene":
+                    textFieldName.removeFromSuperview()
+                    let gameScene = GameScene(size: view!.bounds.size)
+                    view!.presentScene(gameScene)
+                default:
+                    textFieldName.removeFromSuperview()
+                    let mapScene = MapScene(size: view!.bounds.size)
+                    view!.presentScene(mapScene)
                 }
-                removeNotification()
+                //removeNotification()
             }
         }
     }
@@ -255,11 +249,7 @@ class ConfigScene:SKScene, UITextFieldDelegate {
         textField.resignFirstResponder()
         return true
     }
-    
-    @objc func dismissKeyboard (_ sender: UITapGestureRecognizer) {
-           textFieldName.resignFirstResponder()
-       }
-    
+  
     @objc func onKeyboardHide (notification: Notification ) {
         let screenBounds = UIScreen.main.bounds
             let info = notification.userInfo!
@@ -267,8 +257,10 @@ class ConfigScene:SKScene, UITextFieldDelegate {
             let height = screenBounds.height - keyboardFrame.origin.y
         UIView.animate(withDuration: 0.2, delay: 0.0, animations: {
             self.view?.frame.origin.y = -height/2
-            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard(_:)))
-            self.view?.addGestureRecognizer(tapGesture)
+            self.view?.layoutIfNeeded()
+            
+            
+            
             })
 
     }
@@ -280,6 +272,7 @@ class ConfigScene:SKScene, UITextFieldDelegate {
             let height = screenBounds.height - keyboardFrame.origin.y
         UIView.animate(withDuration: 0.2, delay: 0.0, animations: {
             self.view?.frame.origin.y = height/2
+            self.view?.layoutIfNeeded()
             })
        }
     
