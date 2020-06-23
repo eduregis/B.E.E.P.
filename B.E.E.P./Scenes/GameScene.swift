@@ -268,8 +268,6 @@ class GameScene: SKScene {
                     }else{
                         startPlaySound()
                     }
-
-                    
                     /*verificar se o array commandBlocks está vazio
                      - Se tem algum block na dropZone*/
                     if !commandBlocks.isEmpty {

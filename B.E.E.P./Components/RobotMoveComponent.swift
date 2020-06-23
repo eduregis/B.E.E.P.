@@ -148,6 +148,9 @@ class RobotMoveComponent: GKComponent {
                 textures = []
             }
         }
+        
+        
+        
         let animate = SKAction.animate(with: textures, timePerFrame: 0.2, resize: false, restore: false)
         if let floor = self.lightFloor.component(ofType: SpriteComponent.self){
             floor.node.run(SKAction.group([SKAction.wait(forDuration: 0.8), move]))

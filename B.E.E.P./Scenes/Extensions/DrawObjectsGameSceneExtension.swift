@@ -71,21 +71,25 @@ extension GameScene {
         print(xPosition, yPosition)
         //robotInfected = DefaultObject(name: "robotInfected", spriteName: "infected-right", size: CGSize(width: 64, height: 64))
        if let spriteComponent = robotInfected.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.texture = SKTexture(imageNamed: "infected-right")
+            spriteComponent.node.texture = SKTexture(imageNamed: "infected-left")
             spriteComponent.node.size = CGSize(width: 64, height: 64)
             let x = gameplayAnchor.x + CGFloat(32 * (xPosition)) - CGFloat(32 * (yPosition))
-            let y = gameplayAnchor.y + 236 - CGFloat(16 * (xPosition)) - CGFloat(16 * (yPosition))
+            let y = gameplayAnchor.y + 232 - CGFloat(16 * (xPosition)) - CGFloat(16 * (yPosition))
             spriteComponent.node.position = CGPoint(x: x, y: y)
-            spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(xPosition + yPosition + 1)
+            if let robot = robot.component(ofType: SpriteComponent.self){
+                spriteComponent.node.zPosition = (robot.node.zPosition - 0.3)
+            }
        }
         //robotCured = DefaultObject(name: "robotCured", spriteName: "robot-idle-right-2", size: CGSize(width: 64, height: 64))
         if let spriteComponent = robotCured.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.texture = SKTexture(imageNamed: "robot-idle-right-2")
+            spriteComponent.node.texture = SKTexture(imageNamed: "robot-idle-left-2")
             spriteComponent.node.size = CGSize(width: 64, height: 64)
             let x = gameplayAnchor.x + CGFloat(32 * (xPosition)) - CGFloat(32 * (yPosition))
-            let y = gameplayAnchor.y + 236 - CGFloat(16 * (xPosition)) - CGFloat(16 * (yPosition))
+            let y = gameplayAnchor.y + 232 - CGFloat(16 * (xPosition)) - CGFloat(16 * (yPosition))
             spriteComponent.node.position = CGPoint(x: x, y: y)
-            spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(xPosition + yPosition)
+            if let robot = robot.component(ofType: SpriteComponent.self){
+                spriteComponent.node.zPosition = (robot.node.zPosition - 0.4)
+            }
         }
         entityManager.add(robotCured)
         entityManager.add(robotInfected)
