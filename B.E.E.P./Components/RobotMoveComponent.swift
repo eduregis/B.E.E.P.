@@ -206,7 +206,7 @@ class RobotMoveComponent: GKComponent {
         self.identifier = self.arrayClosures.count
         if let sprite = self.stopButton.component(ofType: SpriteComponent.self){
             sprite.node.name = "stop"
-            node.run(SKAction.wait(forDuration: 0.8)){
+            node.run(SKAction.wait(forDuration: 0.7)){
                 sprite.node.zPosition = -1
                 sprite.node.name = "stop-button"
                 self.game.resetMoveRobot()
