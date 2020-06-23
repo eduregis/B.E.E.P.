@@ -82,8 +82,8 @@ extension GameScene {
                 BaseOfStages.salvar(stage: stage)
             }
             //fim do modelo
-            
-            dialogueText = SKLabelNode(text: "Perfeito! Sabia que  podia contar com você!")
+            let user = UserDefaults.standard.object(forKey: "userGame")
+            dialogueText = SKLabelNode(text: "Perfeito \(user!)! Sabia que podia contar com você!")
             dialogueText.fontSize = 14.0
         }
         dialogueText.fontName = "8bitoperator"
