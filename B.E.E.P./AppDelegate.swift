@@ -40,11 +40,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 case .success(let apiDesign):
                     for fase in apiDesign {
                         if fase.number == 1 {
-                            let stage = StageModel(isAtualFase: true, status: "available", number: fase.number, width: fase.width, height: fase.height, tabStyle: fase.tabStyle, initialDirection: fase.initialDirection, initialPosition: fase.initialPosition, boxes: fase.boxes, dropZones: fase.dropZones, infectedRobots: fase.infectedRobots)
+                            let stage = StageModel(isAtualFase: true, status: "available", number: fase.number, width: fase.width, height: fase.height, tabStyle: fase.tabStyle, initialDirection: fase.initialDirection, initialPosition: fase.initialPosition, boxes: fase.boxes, dropZones: fase.dropZones, infectedRobots: fase.infectedRobots,infectedDirections: fase.infectedDirections)
                             BaseOfStages.salvar(stage: stage)
                             
                         } else {
-                            let stage = StageModel(isAtualFase: false, status: "unavailable", number: fase.number, width: fase.width, height: fase.height, tabStyle: fase.tabStyle, initialDirection: fase.initialDirection, initialPosition: fase.initialPosition, boxes: fase.boxes, dropZones: fase.dropZones, infectedRobots: fase.infectedRobots)
+                            let stage = StageModel(isAtualFase: false, status: "unavailable", number: fase.number, width: fase.width, height: fase.height, tabStyle: fase.tabStyle, initialDirection: fase.initialDirection, initialPosition: fase.initialPosition, boxes: fase.boxes, dropZones: fase.dropZones, infectedRobots: fase.infectedRobots, infectedDirections: fase.infectedDirections)
                             BaseOfStages.salvar(stage: stage)
                         }
                     }
