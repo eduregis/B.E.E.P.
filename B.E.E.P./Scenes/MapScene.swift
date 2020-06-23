@@ -20,6 +20,16 @@ class MapScene:SKScene {
     var touchesBeganLocation = CGPoint(x: 0, y: 0)
     let totalDeFases = 6
     
+    
+    var dialogues: [String] = ["teste"]
+    var dialogueIndex = 0
+    var dialogueBackground: SKSpriteNode!
+    var beep: SKSpriteNode!
+    var dialogueTab: SKSpriteNode!
+    var dialogueText = SKLabelNode(text: "")
+    var dialogueButton: SKSpriteNode!
+    var dialogueSkip: SKSpriteNode!
+    
     lazy var backName:String = {return self.userData?["backSaved"] as? String ?? "mapScene"}()
     
     override func didMove(to view: SKView) {
@@ -99,9 +109,9 @@ class MapScene:SKScene {
                     if showRobot {
                         lightFloorPosition = CGPoint(x: x, y: y)
                         //desenhando o robo
-                        addEntity(entity:Robot(), nodeName: "stage-\(status)\(numberFase)", position: CGPoint(x: lightFloorPosition.x, y: lightFloorPosition.y+31), zPosition: 101, alpha: 1.0)
+                        addEntity(entity:Robot(), nodeName: "stage-\(status)\(numberFase)", position: CGPoint(x: lightFloorPosition.x, y: lightFloorPosition.y+31), zPosition: ZPositionsCategories.mapRobot, alpha: 1.0)
                         //desenhando o light floor
-                        addEntity(entity: DefaultObject(name: "light-floor"), nodeName: "stage-\(status)\(numberFase)", position: lightFloorPosition, zPosition: 100, alpha: 0.7)
+                        addEntity(entity: DefaultObject(name: "light-floor"), nodeName: "stage-\(status)\(numberFase)", position: lightFloorPosition, zPosition: ZPositionsCategories.mapLightFloor, alpha: 0.7)
                     } else {
                         stageUnavailablePosition = CGPoint(x: x, y: y+21)
                       }
@@ -109,7 +119,7 @@ class MapScene:SKScene {
             }
         }
         if status == "unavailable" {
-            addEntity(entity: StageUnavailable(), nodeName: "stage-\(status)\(numberFase)", position: stageUnavailablePosition, zPosition: 100, alpha: 1.0)
+            addEntity(entity: StageUnavailable(), nodeName: "stage-\(status)\(numberFase)", position: stageUnavailablePosition, zPosition: ZPositionsCategories.unavailableStage, alpha: 1.0)
         }
     }
     
@@ -240,7 +250,14 @@ class MapScene:SKScene {
                     configScene.userData = configScene.userData ?? NSMutableDictionary()
                     configScene.userData!["backSaved"] = backName
                     view!.presentScene(configScene)
+                } else if nodes[0].name?.contains("hint-button") ?? false {
+                    drawDialogues(won: false)
+                } else if nodes[0].name?.contains("play-dialogue") ?? false {
+                    updateText()
+                } else if nodes[0].name?.contains("skip-button") ?? false {
+                    skipText(next: false)
                 }
+                
             }
         }
         
