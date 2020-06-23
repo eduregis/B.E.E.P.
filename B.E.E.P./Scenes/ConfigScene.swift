@@ -12,6 +12,7 @@ class ConfigScene:SKScene, UITextFieldDelegate {
     var soundText = SKLabelNode()
     var userName: String? = ""
     var configAnchor: CGPoint!
+    let totalDeFases = 6
     
     //  UITextFild do Name
     private lazy  var textFieldName: UITextField = {
@@ -195,9 +196,23 @@ class ConfigScene:SKScene, UITextFieldDelegate {
                 let alert = UIAlertController(title: "Resetar progresso", message: "Você tem certeza?", preferredStyle: UIAlertController.Style.alert)
                 
                 alert.addAction(UIAlertAction(title: "Sim", style: .destructive, handler: .some({ (alert: UIAlertAction!) in
-                    self.defalts.set(0 , forKey: "indexStage")
-                    self.defalts.synchronize()
+                    
+                    for i in 1...self.totalDeFases {
+                        let stage = BaseOfStages.buscar(id: "\(i)")
+                        if i == 1 {
+                            stage?.status = "available"
+                            stage?.isAtualFase = true
+                            self.defalts.set(i, forKey: "selectedFase")
+                            self.defalts.synchronize()
+                        } else {
+                            stage?.status = "unavailable"
+                            stage?.isAtualFase = false
+                        }
+                        BaseOfStages.salvar(stage: stage!)
+                    }
+                    
                     print("estou aqui")
+                    
                 })))
                 
                 alert.addAction(UIAlertAction(title: "Não", style: .cancel, handler: nil))
@@ -241,6 +256,7 @@ class ConfigScene:SKScene, UITextFieldDelegate {
                 }
                 //removeNotification()
             }
+            
         }
     }
     
