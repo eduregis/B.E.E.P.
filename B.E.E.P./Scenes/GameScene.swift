@@ -8,12 +8,6 @@ class GameScene: SKScene {
 
     let backgroundSound = SKAudioNode(fileNamed: "garage-monplaisir")
 
-    //progresso de fase
-    var indexStage: Int = 3
-    let defalts = UserDefaults.standard
-    
-
-    
     // variáveis que irão receber os valores da API
     var actualPosition = CGPoint(x: 1, y: 1)
     var stageDimensions = CGSize(width: 5, height: 3)
@@ -173,11 +167,6 @@ class GameScene: SKScene {
         // cria uma instância do gerenciador de entidades
         entityManager = EntityManager(scene: self)
         
-        //setup persistência de fases
-        if  defalts.object(forKey: "indexStage") != nil {
-            indexStage = defalts.integer(forKey: "indexStage")
-        }
-            defalts.set(indexStage, forKey: "indexStage")
         
         drawnReturnButton()
         
