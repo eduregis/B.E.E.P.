@@ -9,7 +9,7 @@
 import SpriteKit
 import GameplayKit
 
-extension GameScene {
+extension GameScene{
 
     func drawDialogues(won: Bool) {
 
