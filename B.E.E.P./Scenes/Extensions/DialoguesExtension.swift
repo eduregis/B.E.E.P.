@@ -28,7 +28,12 @@ extension GameScene {
         entityManager.add(dialogueBackground)
         
         // adicionando B.E.E.P.
-        beep = DefaultObject(name: "beep", spriteName: "beep-1", size: CGSize(width: 256, height: 256))
+        if won {
+            beep = DefaultObject(name: "beep", spriteName: "beep-2", size: CGSize(width: 256, height: 256))
+        } else {
+            beep = DefaultObject(name: "beep", spriteName: "beep-1", size: CGSize(width: 256, height: 256))
+        }
+        
         if let spriteComponent = beep.component(ofType: SpriteComponent.self) {
             spriteComponent.node.position = CGPoint(x: frame.midX/3 - CGFloat(animateVector), y: frame.minY + spriteComponent.node.size.height/2)
             spriteComponent.node.zPosition = ZPositionsCategories.dialogueItems
