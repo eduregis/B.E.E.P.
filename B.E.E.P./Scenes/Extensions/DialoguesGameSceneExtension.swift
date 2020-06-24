@@ -28,7 +28,13 @@ extension GameScene {
         addChild(dialogueBackground)
         
         // adicionando B.E.E.P.
-        beep = SKSpriteNode(imageNamed: "beep-1")
+        
+        if won {
+            beep = SKSpriteNode(imageNamed: "beep-2")
+        } else {
+            beep = SKSpriteNode(imageNamed: "beep-1")
+        }
+        
         beep.name = "beep"
         beep.size = CGSize(width: 256, height: 256)
         beep.position = CGPoint(x: frame.midX/3 - CGFloat(animateVector), y: frame.minY + beep.size.height/2)
