@@ -197,6 +197,8 @@ class ConfigScene:SKScene, UITextFieldDelegate {
                 
                 alert.addAction(UIAlertAction(title: "Sim", style: .destructive, handler: .some({ (alert: UIAlertAction!) in
                     
+                    UserDefaults.standard.set(true, forKey: "isFirstTime")
+                    
                     for i in 1...self.totalDeFases {
                         let stage = BaseOfStages.buscar(id: "\(i)")
                         if i == 1 {

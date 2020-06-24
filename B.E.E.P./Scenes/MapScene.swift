@@ -21,7 +21,7 @@ class MapScene:SKScene {
     let totalDeFases = 6
     
     
-    var dialogues: [String] = ["teste"]
+    var dialogues: [String] = []
     var dialogueIndex = 0
     var dialogueBackground: SKSpriteNode!
     var beep: SKSpriteNode!
@@ -39,6 +39,27 @@ class MapScene:SKScene {
             }
         }else{
             startBackgroundSound()
+        }
+        
+        if let isFirstTime = UserDefaults.standard.object(forKey: "isFirstTime") {
+            if isFirstTime as! Bool {
+                let dialoguesInitial = BaseOfDialogues.buscar(id: "introduction")
+                guard let dialogues = dialoguesInitial else { return }
+                self.dialogues = dialogues.text
+                drawDialogues(won: false)
+                UserDefaults.standard.set(false, forKey: "isFirstTime")
+            } else {
+                let dialoguesInitial = BaseOfDialogues.buscar(id: "menu-stage-\(lastStageAvailable)")
+                guard let dialogues = dialoguesInitial else { return }
+                self.dialogues = dialogues.text
+            }
+        }
+        
+        if let newStageAvailable = UserDefaults.standard.object(forKey: "newStageAvailable") {
+            if newStageAvailable as! Bool {
+                drawDialogues(won: false)
+                UserDefaults.standard.set(false, forKey: "newStageAvailable")
+            }
         }
         
         entityManager = EntityManager(scene: self)

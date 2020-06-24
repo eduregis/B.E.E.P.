@@ -61,6 +61,7 @@ extension GameScene {
             let stageOptional = BaseOfStages.buscar(id: "\(faseAtual!)")
             let nextStageOptional = BaseOfStages.buscar(id: "\(faseAtual as! Int + 1)")
             
+            
             guard let stage = stageOptional else { return  }
             
             //gambiarra por causa do bug quando repete de fase
@@ -75,6 +76,8 @@ extension GameScene {
                 UserDefaults.standard.set(nextStage.number, forKey: "selectedFase")
                 nextStage.status = "available"
                 nextStage.isAtualFase = true
+                lastStageAvailable = nextStage.number
+                UserDefaults.standard.set(true, forKey: "newStageAvailable")
                 BaseOfStages.salvar(stage: nextStage)
             } else {
                 stage.isAtualFase = true
