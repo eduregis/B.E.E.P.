@@ -36,12 +36,12 @@ class GameScene: SKScene {
     var dialogues: [String] = []
     
     var dialogueIndex = 0
-    var dialogueBackground: DefaultObject!
-    var beep: DefaultObject!
-    var dialogueTab: DefaultObject!
+    var dialogueBackground: SKSpriteNode!
+    var beep: SKSpriteNode!
+    var dialogueTab: SKSpriteNode!
     var dialogueText = SKLabelNode(text: "")
-    var dialogueButton: DefaultObject!
-    var dialogueSkip: DefaultObject!
+    var dialogueButton: SKSpriteNode!
+    var dialogueSkip: SKSpriteNode!
     
     
     // criamos a referência o gerenciador de entidades
