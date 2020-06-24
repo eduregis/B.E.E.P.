@@ -42,25 +42,56 @@ extension GameScene {
     
     // MARK: Draw Robots
     func drawRobot (xPosition: Int, yPosition: Int) {
-        // desenha o chão iluminado embaixo do robô
-        if let spriteComponent = lightFloor.component(ofType: SpriteComponent.self) {
-            let x = gameplayAnchor.x + CGFloat(32 * (xPosition)) - CGFloat(32 * (yPosition))
-            let y = gameplayAnchor.y + 200 - CGFloat(16 * (xPosition)) - CGFloat(16 * (yPosition))
-            spriteComponent.node.position = CGPoint(x: x, y: y)
-            spriteComponent.node.zPosition = CGFloat(xPosition + yPosition) + 3
-            print(CGFloat(xPosition + yPosition) + 3)
-            spriteComponent.node.alpha = 0.6
-        }
-        entityManager.add(lightFloor)
-        
         // desenha o robô
         if let spriteComponent = robot.component(ofType: SpriteComponent.self) {
             let x = gameplayAnchor.x + CGFloat(32 * (xPosition)) - CGFloat(32 * (yPosition))
-            let y = gameplayAnchor.y + 236 - CGFloat(16 * (xPosition)) - CGFloat(16 * (yPosition))
+            let y = gameplayAnchor.y + 232 - CGFloat(16 * (xPosition)) - CGFloat(16 * (yPosition))
             spriteComponent.node.position = CGPoint(x: x, y: y)
             spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(xPosition + yPosition + 1)
         }
         entityManager.add(robot)
+        
+        // desenha o chão iluminado embaixo do robô
+       if let spriteComponent = lightFloor.component(ofType: SpriteComponent.self) {
+           let x = gameplayAnchor.x + CGFloat(32 * (xPosition)) - CGFloat(32 * (yPosition))
+           let y = gameplayAnchor.y + 200 - CGFloat(16 * (xPosition)) - CGFloat(16 * (yPosition))
+           spriteComponent.node.position = CGPoint(x: x, y: y)
+           //spriteComponent.node.zPosition = CGFloat(xPosition + yPosition) + 3
+           if let robot = robot.component(ofType: SpriteComponent.self){
+               spriteComponent.node.zPosition = (robot.node.zPosition - 0.3)
+           }
+           spriteComponent.node.alpha = 0.6
+       }
+       entityManager.add(lightFloor)
+    }
+    
+    // MARK: Draw Robots Infected
+    func drawRobotInfected (xPosition: Int, yPosition: Int) {
+        // desenha o robô infectado
+        print(xPosition, yPosition)
+        let robotInfected = DefaultObject(name: "robotInfected", spriteName: "infected-right", size: CGSize(width: 64, height: 64))
+       if let spriteComponent = robotInfected.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.texture = SKTexture(imageNamed: "infected-left")
+            spriteComponent.node.size = CGSize(width: 64, height: 64)
+            let x = gameplayAnchor.x + CGFloat(32 * (xPosition)) - CGFloat(32 * (yPosition))
+            let y = gameplayAnchor.y + 232 - CGFloat(16 * (xPosition)) - CGFloat(16 * (yPosition))
+            spriteComponent.node.position = CGPoint(x: x, y: y)
+            spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(xPosition + yPosition + 1)
+            
+       }
+        let robotCured = DefaultObject(name: "robotCured", spriteName: "robot-idle-right-2", size: CGSize(width: 64, height: 64))
+        if let spriteComponent = robotCured.component(ofType: SpriteComponent.self) {
+            spriteComponent.node.texture = SKTexture(imageNamed: "robot-idle-left-2")
+            spriteComponent.node.size = CGSize(width: 64, height: 64)
+            let x = gameplayAnchor.x + CGFloat(32 * (xPosition)) - CGFloat(32 * (yPosition))
+            let y = gameplayAnchor.y + 232 - CGFloat(16 * (xPosition)) - CGFloat(16 * (yPosition))
+            spriteComponent.node.position = CGPoint(x: x, y: y)
+            spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(xPosition + yPosition)
+            
+        }
+        entityManager.add(robotCured)
+        entityManager.add(robotInfected)
+        arrayInfectedRobot.append(robotInfected)
     }
     
     // MARK: Draw Tabs
@@ -126,7 +157,11 @@ extension GameScene {
         entityManager.add(actionTab)
         
         // adiciona os blocos de ações
-        for i in 1...blockTypes.count {
+        var blockTypesLength = blockTypes.count
+        if (tabStyle == "default") || (tabStyle == "function") {
+            blockTypesLength = blockTypesLength - 1
+        }
+        for i in 1...blockTypesLength {
             let block = DraggableBlock(name: blockTypes[i - 1])
             if let spriteComponent = block.component(ofType: SpriteComponent.self) {
                 spriteComponent.node.position = CGPoint(x: gameplayAnchor.x - 150 + CGFloat(i - 1)*75, y: gameplayAnchor.y - 255)
@@ -172,54 +207,6 @@ extension GameScene {
         }
     }
     
-    // MARK: Draw Function Tabs
-    func drawFunctionTab() {
-        // adiciona a aba de função
-        let functionTab = DefaultObject(name: "function-tab")
-        if let spriteComponent = functionTab.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x, y: auxiliaryAnchor.y + 225)
-            spriteComponent.node.zPosition = ZPositionsCategories.subTab
-        }
-        entityManager.add(functionTab)
-        
-        // adiciona a aba de limpar
-        let clearTab = ClearTab(name: "function-clear-tab", spriteName: "clear-auxiliary-tab")
-        if let spriteComponent = clearTab.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 10, y: auxiliaryAnchor.y + 260)
-            spriteComponent.node.zPosition = ZPositionsCategories.clearTabButton
-        }
-        entityManager.add(clearTab)
-        
-        // container de drop
-        let functionTabDropZone = DefaultObject(name: "auxiliary-tab-drop-zone")
-        if let spriteComponent = functionTabDropZone.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x + 50, y: auxiliaryAnchor.y + 210)
-            spriteComponent.node.zPosition = ZPositionsCategories.dropZone
-        }
-        entityManager.add(functionTabDropZone)
-        
-        // drop zones individuais
-        for i in 1...4 {
-            let block = EmptyBlock(name: "white-block")
-            if let spriteComponent = block.component(ofType: SpriteComponent.self) {
-                spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 25 + CGFloat(i - 1)*50, y: auxiliaryAnchor.y + 210)
-                spriteComponent.node.zPosition = ZPositionsCategories.emptyBlock
-                spriteComponent.node.alpha = 0.1
-                spriteComponent.node.size = CGSize(width: 60, height: 50)
-            }
-            emptyFunctionBlocks.append(block)
-            entityManager.add(block)
-        }
-        
-        let block = DraggableBlock(name: "function-block")
-        if let spriteComponent = block.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 127, y: auxiliaryAnchor.y + 210)
-            spriteComponent.node.zPosition = ZPositionsCategories.draggableBlock
-            spriteComponent.node.size = CGSize(width: 60, height: 50)
-        }
-        entityManager.add(block)
-    }
-    
     // MARK: Clear Tabs
     func clearTab (tabName: String) {
         switch tabName {
@@ -230,7 +217,6 @@ extension GameScene {
                 }
             }
             commandBlocks.removeAll()
-            resetMoveRobot()
         case "function":
             for block in functionBlocks {
                 if let spriteComponent = block.component(ofType: SpriteComponent.self) {
@@ -265,7 +251,7 @@ extension GameScene {
     
     // MARK: Draw Hud
     func drawnReturnButton() {
-        let returnButton = HubButton(name: "return-button")
+        let returnButton = HudButton(name: "return-button")
         if let spriteComponent = returnButton.component(ofType: SpriteComponent.self) {
             spriteComponent.node.position = CGPoint(x: frame.minX + 50, y: frame.maxY - 50)
             spriteComponent.node.zPosition = ZPositionsCategories.button
@@ -273,7 +259,7 @@ extension GameScene {
         entityManager.add(returnButton)
     }
     func drawnConfigButton() {
-        let configButton = HubButton(name: "config-button")
+        let configButton = HudButton(name: "config-button")
         if let spriteComponent = configButton.component(ofType: SpriteComponent.self) {
             spriteComponent.node.position = CGPoint(x: frame.maxX - 150, y: frame.maxY - 50)
             spriteComponent.node.zPosition = ZPositionsCategories.button
@@ -281,7 +267,7 @@ extension GameScene {
         entityManager.add(configButton)
     }
     func drawnHintButton() {
-        let hintButton = HubButton(name: "hint-button")
+        let hintButton = HudButton(name: "hint-button")
         if let spriteComponent = hintButton.component(ofType: SpriteComponent.self) {
             spriteComponent.node.position = CGPoint(x: frame.maxX - 100, y: frame.maxY - 50)
             spriteComponent.node.zPosition = ZPositionsCategories.button
@@ -297,11 +283,20 @@ extension GameScene {
                 let x = gameplayAnchor.x + CGFloat(32 * (boxes[i].x - 1)) - CGFloat(32 * (boxes[i].y - 1))
                 let y = gameplayAnchor.y + 182 - CGFloat(16 * (boxes[i].x - 1)) - CGFloat(16 * (boxes[i].y - 1))
                 spriteComponent.node.position = CGPoint(x: x, y: y)
-                spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(boxes[i].x + boxes[i].y) + 1
+                    //spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(boxes[i].x + boxes[i].y) + 1
+                if let robot = robot.component(ofType: SpriteComponent.self){
+                    spriteComponent.node.zPosition = (robot.node.zPosition - 0.2)
+                }
             }
+            boxesCopy.append(box)
             entityManager.add(box)
+    
         }
+        
+        
     }
+    
+    
     
     // MARK: Draw Box Drop zones
     func drawBoxDropZones () {
@@ -311,10 +306,20 @@ extension GameScene {
                 let x = gameplayAnchor.x + CGFloat(32 * (boxDropZones[i].x - 1)) - CGFloat(32 * (boxDropZones[i].y - 1))
                 let y = gameplayAnchor.y + 168 - CGFloat(16 * (boxDropZones[i].x - 1)) - CGFloat(16 * (boxDropZones[i].y - 1))
                 spriteComponent.node.position = CGPoint(x: x, y: y)
-                spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(boxDropZones[i].x + boxDropZones[i].y) + 1
+                spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat( Int(actualPosition.x) +  Int(actualPosition.y))  - 0.4
             }
             entityManager.add(boxDropZone)
         }
+        if let boxFloor = boxFloor.component(ofType: SpriteComponent.self){
+            let x = gameplayAnchor.x + CGFloat(32 * (boxDropZones[0].x - 1)) - CGFloat(32 * (boxDropZones[0].y - 1))
+            let y = gameplayAnchor.y + 168 - CGFloat(16 * (boxDropZones[0].x - 1)) - CGFloat(16 * (boxDropZones[0].y - 1))
+            boxFloor.node.position = CGPoint(x: x, y: y)
+            boxFloor.node.zPosition = -1
+        }
+        if let robot = robot.component(ofType: RobotMoveComponent.self){
+            robot.boxFloor = boxFloor
+        }
+        entityManager.add(boxFloor)
     }
     
     // MARK: Update Texts

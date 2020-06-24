@@ -12,7 +12,7 @@ import SpriteKit
 extension GameScene {
     
     // MARK: Add Element
-    func addElementConditional(){
+    func addElementConditional() {
         var conditionalBlocks: [DraggableBlock] = []
         switch conditionalValue {
         case 0:
@@ -53,19 +53,31 @@ extension GameScene {
                         print("nao deu")
                     }
                 case "turn-right-block":
-                    arrayMoveRobot.append(turnRobot(direction: "right"))
+                    turnRobot(direction: "right")
                 case "turn-left-block":
-                    arrayMoveRobot.append(turnRobot(direction: "left"))
-                    /*case "grab-block"
-                     
-                     case "save-block"
-                     
-                     */
+                    turnRobot(direction: "left")
+                case "function-block":
+                    addElementFunc()
+                case "grab-block":
+                    if verificationBox {
+                        if !putBox(){
+                             print("nao deu")
+                        }
+                    }else{
+                        if !grabBox(){
+                             print("nao deu")
+                        }
+                    }
+                case "save-block":
+                     if !save(){
+                         print("nao deu")
+                     }
                 default:
                     break;
                 }
             }
         }
+        
     }
     
     // MARK: Conditions
@@ -184,7 +196,7 @@ extension GameScene {
         conditionalText = SKLabelNode(text: conditions[conditionalValue])
         conditionalText.fontName = "8bitoperator"
         conditionalText.fontSize = 14.0
-        conditionalText.fontColor = .magenta
+        conditionalText.fontColor = .textRoyal
         conditionalText.zPosition = ZPositionsCategories.button
         conditionalText.position = CGPoint(x: auxiliaryAnchor.x + 54, y: auxiliaryAnchor.y - 103)
         conditionalText.numberOfLines = 2

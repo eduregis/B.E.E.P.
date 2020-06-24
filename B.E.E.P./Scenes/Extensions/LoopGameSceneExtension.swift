@@ -12,7 +12,8 @@ import SpriteKit
 extension GameScene {
     
     // MARK: Add Element
-    func addElementLoop(){
+    func addElementLoop() {
+        
         for _ in 1...loopValue {
             for block in loopBlocks{
                 if let spriteComponent = block.component(ofType: SpriteComponent.self) {
@@ -22,17 +23,26 @@ extension GameScene {
                     switch name![0] {
                     case "walk-block":
                         if !moveRobot() {
-                            print("nao deu")
+                            print("nao 000")
                         }
                     case "turn-right-block":
-                        arrayMoveRobot.append(turnRobot(direction: "right"))
+                        turnRobot(direction: "right")
                     case "turn-left-block":
-                        arrayMoveRobot.append(turnRobot(direction: "left"))
-                        /*case "grab-block"
-                         
-                         case "save-block"
-                         
-                         */
+                        turnRobot(direction: "left")
+                    case "grab-block":
+                        if verificationBox {
+                            if !putBox(){
+                                 print("nao deu")
+                            }
+                        }else{
+                            if !grabBox(){
+                                 print("nao deu")
+                            }
+                        }
+                    case "save-block":
+                         if !save(){
+                             print("nao deu")
+                         }
                     default:
                         break;
                     }
@@ -72,7 +82,7 @@ extension GameScene {
         loopText = SKLabelNode(text: "\(loopValue)x")
         loopText.fontName = "8bitoperator"
         loopText.fontSize = 30.0
-        loopText.fontColor = .magenta
+        loopText.fontColor = .textRoyal
         loopText.zPosition = ZPositionsCategories.button
         loopText.position = CGPoint(x: auxiliaryAnchor.x + 54, y: auxiliaryAnchor.y + 87)
         addChild(loopText)

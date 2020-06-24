@@ -36,6 +36,7 @@ func dialoguesApi(completion: @escaping (Result< [DialoguesModel], ApiError>)-> 
             if let data = data {
                 if let dialoguesList = try? JSONDecoder().decode([DialoguesModel].self, from: data) {
                     completion(.success(dialoguesList))
+                    UserDefaults.standard.set(true, forKey: "showDialogues")
                     print(dialoguesList.description)
                 } else {
                     completion(.failure(ApiError.couldNotDecode))
@@ -75,6 +76,7 @@ func designApi(completion: @escaping (Result< [StageDesignModel], ApiError>)-> V
                 if let designList = try? JSONDecoder().decode([StageDesignModel].self, from: data) {
                     completion(.success(designList))
                     print(designList.description)
+                    UserDefaults.standard.set(true, forKey: "buildMap")
                 } else {
                     completion(.failure(ApiError.couldNotDecode))
                 }

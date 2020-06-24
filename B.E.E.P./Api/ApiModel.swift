@@ -8,7 +8,8 @@
 
 import Foundation
 
-struct DialoguesModel: Codable {
+class DialoguesModel: NSObject, Codable, NSCoding {
+    
     let name: String
     let text: [String]
     
@@ -17,26 +18,27 @@ struct DialoguesModel: Codable {
         self.text = text
     }
     
-//    init(json: [Any : Any]) {
-//        self.name = json["name"] as? String? ?? ""
-//        self.text = json["text"] as? [String]? ?? []
-//    }
+    func encode(with coder: NSCoder) {
+        coder.encode(self.name, forKey: "name")
+        coder.encode(self.text, forKey: "text")
+    }
     
+    required init?(coder: NSCoder) {
+        self.name = coder.decodeObject(forKey: "name") as! String
+        self.text = coder.decodeObject(forKey: "text") as! [String]
+    }
     
 }
 
 struct StageDesignModel: Codable {
-    let number: Int
-    let width: Int
-    let height: Int
-    let tabStyle: String
-    let initialDirection: String
+    let dropZones, infectedRobots: [[Int]]
+    let initialDirection, tabStyle: String
+    let infectedDirections: [String]
     let initialPosition: [Int]
-    let boxes: [Int]
-    let dropZones: [Int]
-    let infectedRobots: [Int]
+    let boxes: [[Int]]
+    let number, height, width: Int
     
-    init(number: Int, width: Int, height: Int, tabStyle: String, initialDirection: String, initialPosition: [Int], boxes: [Int], dropZones: [Int], infectedRobots: [Int]){
+    init(number: Int, width: Int, height: Int, tabStyle: String, initialDirection: String, initialPosition: [Int], boxes: [[Int]], dropZones: [[Int]], infectedRobots: [[Int]], infectedDirections: [String]){
         self.number = number
         self.width = width
         self.height = height
@@ -46,8 +48,7 @@ struct StageDesignModel: Codable {
         self.boxes = boxes
         self.dropZones = dropZones
         self.infectedRobots = infectedRobots
+        self.infectedDirections = infectedDirections
     }
     
 }
-
-
