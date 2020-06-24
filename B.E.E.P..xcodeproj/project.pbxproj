@@ -19,6 +19,10 @@
 		2EEAEB2A2495C4C000501FBB /* 8bitoperator.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2EEAEB292495C4C000501FBB /* 8bitoperator.ttf */; };
 		2EEB11F9249684D500A997F7 /* ConditionalGameSceneExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEB11F8249684D500A997F7 /* ConditionalGameSceneExtension.swift */; };
 		2EEB11FB24968FF100A997F7 /* LoopGameSceneExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEB11FA24968FF100A997F7 /* LoopGameSceneExtension.swift */; };
+		2EEC961324A22F5C00408E9C /* TouchesBeganGameSceneExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEC961224A22F5C00408E9C /* TouchesBeganGameSceneExtension.swift */; };
+		2EEC961524A22FDB00408E9C /* TouchesMovedGameSceneExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEC961424A22FDB00408E9C /* TouchesMovedGameSceneExtension.swift */; };
+		2EEC961724A2309A00408E9C /* TouchesEndedGameSceneExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEC961624A2309A00408E9C /* TouchesEndedGameSceneExtension.swift */; };
+		2EEC961924A2318700408E9C /* FunctionGameSceneExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEC961824A2318700408E9C /* FunctionGameSceneExtension.swift */; };
 		2EEF855A2492EBE300C10CB2 /* AuxiliaryTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEF85592492EBE300C10CB2 /* AuxiliaryTab.swift */; };
 		2EEF855E2492F53A00C10CB2 /* DefaultObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEF855D2492F53A00C10CB2 /* DefaultObject.swift */; };
 		2EF44C07249848C1009B2D5B /* DialoguesExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF44C06249848C1009B2D5B /* DialoguesExtension.swift */; };
@@ -87,6 +91,10 @@
 		2EEAEB292495C4C000501FBB /* 8bitoperator.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = 8bitoperator.ttf; sourceTree = "<group>"; };
 		2EEB11F8249684D500A997F7 /* ConditionalGameSceneExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionalGameSceneExtension.swift; sourceTree = "<group>"; };
 		2EEB11FA24968FF100A997F7 /* LoopGameSceneExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopGameSceneExtension.swift; sourceTree = "<group>"; };
+		2EEC961224A22F5C00408E9C /* TouchesBeganGameSceneExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchesBeganGameSceneExtension.swift; sourceTree = "<group>"; };
+		2EEC961424A22FDB00408E9C /* TouchesMovedGameSceneExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchesMovedGameSceneExtension.swift; sourceTree = "<group>"; };
+		2EEC961624A2309A00408E9C /* TouchesEndedGameSceneExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchesEndedGameSceneExtension.swift; sourceTree = "<group>"; };
+		2EEC961824A2318700408E9C /* FunctionGameSceneExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionGameSceneExtension.swift; sourceTree = "<group>"; };
 		2EEF85592492EBE300C10CB2 /* AuxiliaryTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuxiliaryTab.swift; sourceTree = "<group>"; };
 		2EEF855D2492F53A00C10CB2 /* DefaultObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultObject.swift; sourceTree = "<group>"; };
 		2EF44C06249848C1009B2D5B /* DialoguesExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialoguesExtension.swift; sourceTree = "<group>"; };
@@ -183,10 +191,14 @@
 			children = (
 				2EE8D1EF249482030090F971 /* RobotMovementsGameSceneExtension.swift */,
 				2EE8D1F1249482AC0090F971 /* DrawObjectsGameSceneExtension.swift */,
-				2EEB11F8249684D500A997F7 /* ConditionalGameSceneExtension.swift */,
+				2EEC961824A2318700408E9C /* FunctionGameSceneExtension.swift */,
 				2EEB11FA24968FF100A997F7 /* LoopGameSceneExtension.swift */,
+				2EEB11F8249684D500A997F7 /* ConditionalGameSceneExtension.swift */,
 				2EF44C06249848C1009B2D5B /* DialoguesExtension.swift */,
 				39806A6A249EFBBF0046413C /* SoundsExtension.swift */,
+				2EEC961224A22F5C00408E9C /* TouchesBeganGameSceneExtension.swift */,
+				2EEC961424A22FDB00408E9C /* TouchesMovedGameSceneExtension.swift */,
+				2EEC961624A2309A00408E9C /* TouchesEndedGameSceneExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -477,14 +489,18 @@
 			files = (
 				7B07CF3D2497ED9200EAA181 /* ConfigViewController.swift in Sources */,
 				2EEF855A2492EBE300C10CB2 /* AuxiliaryTab.swift in Sources */,
+				2EEC961524A22FDB00408E9C /* TouchesMovedGameSceneExtension.swift in Sources */,
 				56B459D7249148C2007D82D2 /* Filament.swift in Sources */,
+				2EEC961924A2318700408E9C /* FunctionGameSceneExtension.swift in Sources */,
 				2EF6C514248C0DE00040F927 /* GameScene.swift in Sources */,
 				2EEA5F6724911BAC006452ED /* ClearTab.swift in Sources */,
 				56C7EBB2249E57ED009AABBE /* BaseOfDialogues.swift in Sources */,
 				2EEB11F9249684D500A997F7 /* ConditionalGameSceneExtension.swift in Sources */,
 				2EE8AAC8248C70F300B652E3 /* Constants.swift in Sources */,
 				2EF6C516248C0DE00040F927 /* GameViewController.swift in Sources */,
+				2EEC961324A22F5C00408E9C /* TouchesBeganGameSceneExtension.swift in Sources */,
 				56C9EE84249043A7007924BA /* MapScene.swift in Sources */,
+				2EEC961724A2309A00408E9C /* TouchesEndedGameSceneExtension.swift in Sources */,
 				2EEA8E2F248D6098008FE216 /* DraggableBlock.swift in Sources */,
 				2EF6C52C248C14FE0040F927 /* EntityManager.swift in Sources */,
 				2EEB11FB24968FF100A997F7 /* LoopGameSceneExtension.swift in Sources */,
