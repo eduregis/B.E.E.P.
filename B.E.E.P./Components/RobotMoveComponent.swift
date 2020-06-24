@@ -18,12 +18,14 @@ class RobotMoveComponent: GKComponent {
     var arrayCheckerBox:[Bool] = []
     var arrayBox: [DefaultObject] = []
     
-    var i = 0
+    var indexBox = 0
     var arrayActualPosition: [CGPoint] = []
     var arrayPositionBox: [CGPoint] = []
     var boxFloor: DefaultObject!
     
-    var robotInfected: DefaultObject!
+    var indexInfected = 0
+    var robotInfected: [DefaultObject] = []
+    var arrayInfectedId: [Int] = []
     var stopButton: HudButton!
     var lightFloor: DefaultObject!
     
@@ -70,7 +72,7 @@ class RobotMoveComponent: GKComponent {
         
         if let component = self.arrayBox[0].component(ofType: SpriteComponent.self){
             
-            component.node.position = self.arrayActualPosition[self.i]
+            component.node.position = self.arrayActualPosition[self.indexBox]
             component.node.zPosition = self.node.zPosition - 0.1
             component.node.run(SKAction.fadeIn(withDuration: 0))
             
@@ -85,7 +87,7 @@ class RobotMoveComponent: GKComponent {
                             
                             if  UserDefaults.standard.object(forKey: "SettingsSound") != nil {
                                 if (UserDefaults.standard.object(forKey: "SettingsSound") as? String) == "Sim"{
-                                    self.game.startMoveSound()
+                                    self.game.startDropBoxSound()
                                 }
                             }else{
                                 self.game.startDropBoxSound()
@@ -96,7 +98,7 @@ class RobotMoveComponent: GKComponent {
                     
                 }
             }
-            self.i += 1
+            self.indexBox += 1
         }
         node.run(animate){
             if self.countBoxes == 0 && self.countInfected == 0{
@@ -148,6 +150,9 @@ class RobotMoveComponent: GKComponent {
                 textures = []
             }
         }
+        
+        
+        
         let animate = SKAction.animate(with: textures, timePerFrame: 0.2, resize: false, restore: false)
         if let floor = self.lightFloor.component(ofType: SpriteComponent.self){
             floor.node.run(SKAction.group([SKAction.wait(forDuration: 0.8), move]))
@@ -165,7 +170,6 @@ class RobotMoveComponent: GKComponent {
                 self.game.startMoveSound()
             }
         }
-        
         node.run(SKAction.group([move, animate])){
             if self.identifier < self.arrayClosures.count{
                 self.arrayClosures[self.identifier](self.arrayDirection[self.identifier], self.arrayCheckerBox[self.identifier])
@@ -175,11 +179,10 @@ class RobotMoveComponent: GKComponent {
         }
     }
     
-    func moveComplete(game: GameScene, arrayBox: [DefaultObject], stopButton: HudButton, robotInfected: DefaultObject, lightFloor: DefaultObject){
+    func moveComplete(game: GameScene, arrayBox: [DefaultObject], stopButton: HudButton, lightFloor: DefaultObject){
         
         self.arrayBox = arrayBox
         self.stopButton = stopButton
-        self.robotInfected = robotInfected
         self.lightFloor = lightFloor
         self.game = game
         self.identifier = 0
@@ -203,7 +206,7 @@ class RobotMoveComponent: GKComponent {
         self.identifier = self.arrayClosures.count
         if let sprite = self.stopButton.component(ofType: SpriteComponent.self){
             sprite.node.name = "stop"
-            node.run(SKAction.wait(forDuration: 0.8)){
+            node.run(SKAction.wait(forDuration: 0.7)){
                 sprite.node.zPosition = -1
                 sprite.node.name = "stop-button"
                 self.game.resetMoveRobot()
@@ -246,9 +249,9 @@ class RobotMoveComponent: GKComponent {
         self.identifier += 1
         let textures: [SKTexture]
         textures = [SKTexture(imageNamed: "save-\(direction)")]
-        let animate = SKAction.animate(with: textures, timePerFrame: 0.6, resize: false, restore: false)
+        let animate = SKAction.animate(with: textures, timePerFrame: 0.9, resize: false, restore: false)
         if let floor = self.lightFloor.component(ofType: SpriteComponent.self){
-            floor.node.run(SKAction.wait(forDuration: 0.6))
+            floor.node.run(SKAction.wait(forDuration: 0.9))
         }
         self.countInfected -= 1
         node.run(animate){
@@ -260,7 +263,8 @@ class RobotMoveComponent: GKComponent {
                 self.stop()
             }
         }
-        if let infected = robotInfected.component(ofType: SpriteComponent.self){
+        
+        if let infected = robotInfected[self.indexInfected].component(ofType: SpriteComponent.self){
             if  UserDefaults.standard.object(forKey: "SettingsSound") != nil {
                if (UserDefaults.standard.object(forKey: "SettingsSound") as? String) == "Sim"{
                    self.game.startSaveSound()
@@ -270,8 +274,31 @@ class RobotMoveComponent: GKComponent {
             }
             infected.node.run(SKAction.fadeOut(withDuration: 0.9))
         }
+        self.indexInfected += 1
+    }
+    
+    func infectedRobot(direction: String, box: Bool){
+        self.identifier += 1
+        let robotInfected = DefaultObject(name: "infected-\(direction)")
+        if let robot = robotInfected.component(ofType: SpriteComponent.self){
+            robot.node.position = node.position
+            robot.node.zPosition = node.zPosition + 0.1
+            robot.node.size = node.size
+            self.game.entityManager.add(robotInfected)
+            robot.node.run(SKAction.fadeIn(withDuration: 0.8))
+        }
+        if let floor = self.lightFloor.component(ofType: SpriteComponent.self){
+            floor.node.run(SKAction.wait(forDuration: 0.4)){
+                self.stop()
+            }
+        }
+        node.run(SKAction.wait(forDuration: 0.9)){
+            self.game.entityManager.remove(robotInfected)
+            
+        }
         
     }
+
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
