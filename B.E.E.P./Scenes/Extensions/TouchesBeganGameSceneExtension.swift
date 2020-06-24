@@ -84,7 +84,7 @@ extension GameScene {
                     }
                 } else if (self.atPoint(location).name == "stop-button") {
                     if let stop = robot.component(ofType: RobotMoveComponent.self){
-                        stop.stop()
+                        stop.stopButtonAction()
                         /*if let pause = robot.component(ofType: SpriteComponent.self){
                             pause.node.run(SKAction.wait(forDuration: 0.8)){
                                 self.resetMoveRobot()
