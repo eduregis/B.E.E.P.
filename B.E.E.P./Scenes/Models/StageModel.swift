@@ -16,8 +16,9 @@ class StageModel: NSObject, NSCoding {
     let initialPosition: [Int]
     let boxes: [[Int]]
     let number, height, width: Int
+    let infectedDirections: [String]
 
-    init(isAtualFase: Bool, status: String, number: Int, width: Int, height: Int, tabStyle: String, initialDirection: String, initialPosition: [Int], boxes: [[Int]], dropZones: [[Int]], infectedRobots: [[Int]]) {
+    init(isAtualFase: Bool, status: String, number: Int, width: Int, height: Int, tabStyle: String, initialDirection: String, initialPosition: [Int], boxes: [[Int]], dropZones: [[Int]], infectedRobots: [[Int]], infectedDirections: [String]) {
     
         self.isAtualFase = isAtualFase
         self.status = status
@@ -30,6 +31,7 @@ class StageModel: NSObject, NSCoding {
         self.boxes = boxes
         self.dropZones = dropZones
         self.infectedRobots = infectedRobots
+        self.infectedDirections = infectedDirections
     }
 
     func encode(with coder: NSCoder) {
@@ -44,6 +46,7 @@ class StageModel: NSObject, NSCoding {
         coder.encode(self.boxes, forKey: "boxes")
         coder.encode(self.dropZones, forKey:  "dropZones")
         coder.encode(self.infectedRobots, forKey: "infectedRobots")
+        coder.encode(self.infectedDirections, forKey: "infectedDirections")
     }
 
     required init(coder: NSCoder) {
@@ -58,7 +61,7 @@ class StageModel: NSObject, NSCoding {
         self.boxes = coder.decodeObject(forKey: "boxes") as! [[Int]]
         self.dropZones = coder.decodeObject(forKey: "dropZones") as! [[Int]]
         self.infectedRobots = coder.decodeObject(forKey: "infectedRobots") as! [[Int]]
-
+        self.infectedDirections = coder.decodeObject(forKey: "infectedDirections") as! [String]
     }
 
 }

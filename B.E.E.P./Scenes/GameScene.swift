@@ -21,8 +21,6 @@ class GameScene: SKScene {
     // Os objetivoss do jogo o boxfloor é aciondo quando o box e clocado no lugar indicado
     // e robot infected e cured sao pera fazer a transicao quando o save for acionado
     let boxFloor = DefaultObject(name: "box-fill-floor")
-    let robotInfected = DefaultObject(name:  "robotInfected")
-    let robotCured = DefaultObject(name:  "robotCured")
     
     var identifierBox: Int?
     var verificationBox = false
@@ -31,16 +29,19 @@ class GameScene: SKScene {
 
     var boxDropZones: [CGPoint] = []
     var infectedRobots: [CGPoint] = []
+    var arrayInfectedRobot: [DefaultObject] = []
+    var infectedDirections: [String] = []
+    
     // array de falas do B.E.E.P.
     var dialogues: [String] = []
     
     var dialogueIndex = 0
-    var dialogueBackground: DefaultObject!
-    var beep: DefaultObject!
-    var dialogueTab: DefaultObject!
+    var dialogueBackground: SKSpriteNode!
+    var beep: SKSpriteNode!
+    var dialogueTab: SKSpriteNode!
     var dialogueText = SKLabelNode(text: "")
-    var dialogueButton: DefaultObject!
-    var dialogueSkip: DefaultObject!
+    var dialogueButton: SKSpriteNode!
+    var dialogueSkip: SKSpriteNode!
     
     
     // criamos a referência o gerenciador de entidades
@@ -138,6 +139,9 @@ class GameScene: SKScene {
         }
         
         if !stage.infectedRobots[0].isEmpty {
+            for infectedDirection in stage.infectedDirections{
+                infectedDirections.append(infectedDirection)
+            }
             for infectedRobot in stage.infectedRobots {
                 infectedRobots.append(CGPoint(x: infectedRobot[0], y: infectedRobot[1]))
             }
@@ -199,7 +203,7 @@ class GameScene: SKScene {
 
         drawDialogues(won: false)
     }
-    
+
     func returnToMap() {
         let mapScene = MapScene(size: view!.bounds.size)
         view!.presentScene(mapScene)
