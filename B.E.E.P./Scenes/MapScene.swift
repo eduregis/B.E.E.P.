@@ -42,7 +42,7 @@ class MapScene:SKScene {
         }
         //let dialoguesOpt = UserDefaults.standard.object(forKey: "")
         //guard let dialogues = dialoguesOpt else { return  }
-        dialogues = ["Obrigada!! Com a sua ajuda nossa rede foi restaurada!"]
+        dialogues = ["Obrigada!! Com a sua ajuda nossa rede foi restaurada!\nVocê pode percorrer os estágios novamente para treinar\ncaso algum problema ocorra novamente."]
         
 //        if let isFirstTime = UserDefaults.standard.object(forKey: "isFirstTime") {
 //            if isFirstTime as! Bool {
@@ -65,8 +65,6 @@ class MapScene:SKScene {
 //            }
 //        }
         
-        fillDialogue()
-        
         entityManager = EntityManager(scene: self)
         
         drawBackground()
@@ -78,8 +76,9 @@ class MapScene:SKScene {
         addEntity(entity: HudButton(name: "config-button"), nodeName: "config-button", position: CGPoint(x: frame.maxX-150, y: frame.maxY-50), zPosition: 2, alpha: 1.0)
 
         while true {
-            if UserDefaults.standard.bool(forKey: "buildMap") == true {
+            if UserDefaults.standard.bool(forKey: "buildMap") && UserDefaults.standard.bool(forKey: "showDialogues") {
                 buildMap()
+                fillDialogue()
                 break
             }
         }
@@ -89,16 +88,21 @@ class MapScene:SKScene {
     }
     
     func fillDialogue () {
-        //print(UserDefaults.standard.object(forKey: "isFirstTime") as! Bool )
-        if (UserDefaults.standard.object(forKey: "isFirstTime") as! Bool ) {
+        print(UserDefaults.standard.object(forKey: "isFirstTime") as! Bool )
+        if (UserDefaults.standard.bool(forKey: "isFirstTime")) {
             let dialoguesIntro = BaseOfDialogues.buscar(id: "introduction")
             guard let dialogues = dialoguesIntro else { return }
             self.dialogues = dialogues.text
             UserDefaults.standard.set(false, forKey: "isFirstTime")
+            drawDialogues(won: false)
         } else {
-            actualizeDialogue()
+            if  UserDefaults.standard.bool(forKey: "concluded") {
+                UserDefaults.standard.set(false, forKey: "concluded")
+                actualizeDialogue()
+                drawDialogues(won: false)
+            }
         }
-        drawDialogues(won: false)
+        
     }
     
     func actualizeDialogue () {
@@ -112,8 +116,8 @@ class MapScene:SKScene {
             let dialoguesMenustage = BaseOfDialogues.buscar(id: "menu-stage-\(lastStageAvailable)")
             guard let dialogues = dialoguesMenustage else { return }
             self.dialogues = dialogues.text
+            
         }
-        
     }
     
     func updatePosition () {
