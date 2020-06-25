@@ -209,12 +209,16 @@ extension GameScene {
     
     // MARK: Clear Tabs
     func clearTab (tabName: String) {
+        var soundVerification = false
         switch tabName {
         case "command":
             for block in commandBlocks {
                 if let spriteComponent = block.component(ofType: SpriteComponent.self) {
                     spriteComponent.node.removeFromParent()
                 }
+            }
+            if !commandBlocks.isEmpty{
+                soundVerification = true
             }
             commandBlocks.removeAll()
         case "function":
@@ -223,12 +227,18 @@ extension GameScene {
                     spriteComponent.node.removeFromParent()
                 }
             }
+            if !functionBlocks.isEmpty{
+                soundVerification = true
+            }
             functionBlocks.removeAll()
         case "loop":
             for block in loopBlocks {
                 if let spriteComponent = block.component(ofType: SpriteComponent.self) {
                     spriteComponent.node.removeFromParent()
                 }
+            }
+            if !loopBlocks.isEmpty{
+                soundVerification = true
             }
             loopBlocks.removeAll()
         case "conditional":
@@ -242,10 +252,23 @@ extension GameScene {
                 spriteComponent.node.removeFromParent()
             }
         }
+        if !conditionalIfBlocks.isEmpty || !conditionalElseBlocks.isEmpty{
+            soundVerification = true
+        }
         conditionalIfBlocks.removeAll()
         conditionalElseBlocks.removeAll()
         default:
             break
+        }
+        print(soundVerification)
+        if soundVerification {
+            if  UserDefaults.standard.object(forKey: "SettingsSound") != nil {
+                if (UserDefaults.standard.object(forKey: "SettingsSound") as? String) == "Sim"{
+                    startDumpSound()
+                }
+            }else{
+                startDumpSound()
+            }
         }
     }
     

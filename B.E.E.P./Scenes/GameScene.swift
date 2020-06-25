@@ -203,7 +203,7 @@ class GameScene: SKScene {
 
         drawDialogues(won: false)
     }
-    
+
     func returnToMap() {
         let mapScene = MapScene(size: view!.bounds.size)
         view!.presentScene(mapScene)

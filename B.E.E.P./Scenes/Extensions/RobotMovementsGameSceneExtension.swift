@@ -242,6 +242,7 @@ extension GameScene {
                 addElement.arrayActualPosition.append(CGPoint(x: x, y: y))
             }
         }
+        
         // volta a indicar que o robot nao está com box
         verificationBox = false
         return true
