@@ -192,6 +192,12 @@ class ConfigScene:SKScene, UITextFieldDelegate {
                 let alert = UIAlertController(title: "Resetar progresso", message: "Você tem certeza?", preferredStyle: UIAlertController.Style.alert)
                 
                 alert.addAction(UIAlertAction(title: "Sim", style: .destructive, handler: .some({ (alert: UIAlertAction!) in
+
+                    
+                    UserDefaults.standard.set(true, forKey: "isFirstTime")
+                    UserDefaults.standard.set(1, forKey: "lastStageAvailable")
+                    
+
                    
                     for i in 1...self.totalDeFases {
                         let stage = BaseOfStages.buscar(id: "\(i)")
