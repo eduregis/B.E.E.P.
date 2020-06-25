@@ -8,7 +8,7 @@ class ConfigScene:SKScene, UITextFieldDelegate {
 
     let backgroundSound = SKAudioNode(fileNamed: "telecom-leeRosevere")
     
-    let defalts = UserDefaults.standard
+    let defaults = UserDefaults.standard
     var soundText = SKLabelNode()
     var userName: String? = ""
     var configAnchor: CGPoint!
@@ -35,8 +35,6 @@ class ConfigScene:SKScene, UITextFieldDelegate {
     
     override func didMove(to view: SKView) {
 
-        
-
         //Set Anchor
         configAnchor = CGPoint(x: size.width/2, y: size.height/2)
         
@@ -45,28 +43,20 @@ class ConfigScene:SKScene, UITextFieldDelegate {
         entityManager = EntityManager(scene: self)
         
         //implementa persistência
-        
-        if  defalts.object(forKey: "userGame") != nil {
-            userName = defalts.object(forKey: "userGame") as? String
-            // add check
-            let checkName = HudButton(name: "confirm-checkmark")
-            if let spriteComponent = checkName.component(ofType: SpriteComponent.self) {
-                spriteComponent.node.position = CGPoint(x: configAnchor.x + 160, y: configAnchor.y - 18)
-                spriteComponent.node.zPosition = ZPositionsCategories.configOptions
-            }
-            entityManager.add(checkName)
-           
+        if  (defaults.object(forKey: "userGame") != nil) && (defaults.object(forKey: "userGame") as? String != ""){
+            userName = defaults.object(forKey: "userGame") as? String
+            drawCheck()
         }
         
-        if  defalts.object(forKey: "SettingsSound") != nil {
-            soundText.text = defalts.object(forKey: "SettingsSound") as? String
+        if  defaults.object(forKey: "SettingsSound") != nil {
+            soundText.text = defaults.object(forKey: "SettingsSound") as? String
         } else {
             soundText.text = "Sim"
         }
         if soundText.text == "Sim" {
             startBackgroundSound()
         }
-        defalts.set(soundText.text, forKey: "SettingsSound")
+        defaults.set(soundText.text, forKey: "SettingsSound")
         soundText.name = soundText.text
         
         drawView(configAnchor)
@@ -77,6 +67,12 @@ class ConfigScene:SKScene, UITextFieldDelegate {
         self.view!.addSubview(textFieldName)
         
         checkNotification()
+        
+        let checkName = SKSpriteNode(imageNamed: "confirm-checkmark")
+        checkName.name = "confirm-checkmark"
+        checkName.position = CGPoint(x: configAnchor.x + 160, y: configAnchor.y - 18)
+        checkName.zPosition = ZPositionsCategories.configOptions
+
 
  }
 
@@ -187,7 +183,7 @@ class ConfigScene:SKScene, UITextFieldDelegate {
                     soundText.name = "Sim"
                     self.startBackgroundSound()
                 }
-                defalts.set(soundText.text, forKey: "SettingsSound")
+                defaults.set(soundText.text, forKey: "SettingsSound")
                 
             }
             
@@ -196,30 +192,24 @@ class ConfigScene:SKScene, UITextFieldDelegate {
                 let alert = UIAlertController(title: "Resetar progresso", message: "Você tem certeza?", preferredStyle: UIAlertController.Style.alert)
                 
                 alert.addAction(UIAlertAction(title: "Sim", style: .destructive, handler: .some({ (alert: UIAlertAction!) in
-                    
-                    //UserDefaults.standard.set(true, forKey: "isFirstTime")
-                    
+                   
                     for i in 1...self.totalDeFases {
                         let stage = BaseOfStages.buscar(id: "\(i)")
                         if i == 1 {
                             stage?.status = "available"
                             stage?.isAtualFase = true
-                            self.defalts.set(i, forKey: "selectedFase")
-                            self.defalts.synchronize()
+                            self.defaults.set(i, forKey: "selectedFase")
+                            self.defaults.synchronize()
                         } else {
                             stage?.status = "unavailable"
                             stage?.isAtualFase = false
                         }
                         BaseOfStages.salvar(stage: stage!)
                     }
-                    
-                    print("estou aqui")
-                    
                 })))
                 
                 alert.addAction(UIAlertAction(title: "Não", style: .cancel, handler: nil))
-                
-                
+               
                 if let popoverController = alert.popoverPresentationController {
                     popoverController.sourceView = self.view
                     popoverController.sourceRect = CGRect(x: self.view?.bounds.midX ?? 17, y: self.view?.bounds.midY ?? 0, width: 0, height: 0)
@@ -231,8 +221,7 @@ class ConfigScene:SKScene, UITextFieldDelegate {
                 }
          
             }
-           
-    }
+        }
     }
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
 
@@ -256,44 +245,71 @@ class ConfigScene:SKScene, UITextFieldDelegate {
                     let mapScene = MapScene(size: view!.bounds.size)
                     view!.presentScene(mapScene)
                 }
-                //removeNotification()
+                removeNotification()
             }
             
         }
     }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        // aplico persitência de nome
-        let userName = textField.text
-        defalts.set(userName , forKey: "userGame")
-        
+    func drawCheck(){
         let checkName = HudButton(name: "confirm-checkmark")
         if let spriteComponent = checkName.component(ofType: SpriteComponent.self) {
             spriteComponent.node.position = CGPoint(x: configAnchor.x + 160, y: configAnchor.y - 18)
             spriteComponent.node.zPosition = ZPositionsCategories.configOptions
         }
         entityManager.add(checkName)
-        
+    }
+
+    func removeCheck() {
+        if (self.atPoint(CGPoint(x: configAnchor.x + 160, y: configAnchor.y - 18)).name == "confirm-checkmark") {
+            //self.atPoint(CGPoint(x: configAnchor.x + 160, y: configAnchor.y - 18)).removeFromParent() //.removeComponent(ofType: SpriteComponent.self)
+            let checkName = (self.atPoint(CGPoint(x: configAnchor.x + 160, y: configAnchor.y - 18)))
+            checkName.removeFromParent()
+        }
+ 
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        // aplico persitência de nome
+        let userName = textField.text
+        if userName != "" {
+            defaults.set(userName , forKey: "userGame")
+            drawCheck()
+        } else {
+            defaults.set("" , forKey: "userGame")
+             removeCheck()
+            self.reloadInputViews()
+        }
         textField.resignFirstResponder()
         return true
     }
-  
-    @objc func onKeyboardHide (notification: Notification ) {
-        let screenBounds = UIScreen.main.bounds
-            let info = notification.userInfo!
-            let keyboardFrame = (info[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-            let height = screenBounds.height - keyboardFrame.origin.y
-        UIView.animate(withDuration: 0.2, delay: 0.0, animations: {
-            self.view?.frame.origin.y = -height/2
-            self.view?.layoutIfNeeded()
-            
-            
-            
-            })
-
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        let checkFrame = CGRect(origin: CGPoint(x: self.configAnchor.x + 140, y: self.configAnchor.y - 3), size: CGSize(width: 40, height: 40))
+        let checkView = UIView(frame: checkFrame)
+        checkView.backgroundColor = .clear
+        self.view?.addSubview(checkView)
+        // add gesture
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard(_:)))
+        checkView.addGestureRecognizer(tapGesture)
     }
-
-    @objc func onKeyboardShow (notification: Notification ) {
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        let userName = textField.text
+        if userName != "" {
+            defaults.set(userName , forKey: "userGame")
+            drawCheck()
+        } else {
+            defaults.set("" , forKey: "userGame")
+            removeCheck()
+            self.reloadInputViews()
+        }
+    }
+   
+    @objc func dismissKeyboard (_ sender: UITapGestureRecognizer) {
+              textFieldName.resignFirstResponder()
+          }
+  
+    @objc func onKeyboardHide (notification: Notification) {
         let screenBounds = UIScreen.main.bounds
             let info = notification.userInfo!
             let keyboardFrame = (info[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
@@ -301,22 +317,32 @@ class ConfigScene:SKScene, UITextFieldDelegate {
         UIView.animate(withDuration: 0.2, delay: 0.0, animations: {
             self.view?.frame.origin.y = height/2
             self.view?.layoutIfNeeded()
-            })
+      })
+
+    }
+
+    @objc func onKeyboardShow (notification: Notification) {
+        let screenBounds = UIScreen.main.bounds
+            let info = notification.userInfo!
+            let keyboardFrame = (info[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+            let height = screenBounds.height - keyboardFrame.origin.y
+        UIView.animate(withDuration: 0.2, delay: 0.0, animations: {
+            self.view?.frame.origin.y = -height/2
+            self.view?.layoutIfNeeded()
+           })
        }
     
-
     func checkNotification(){
-        NotificationCenter.default.addObserver(self, selector: #selector(onKeyboardShow(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(onKeyboardHide(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-  
-    }
+        NotificationCenter.default.addObserver(self, selector: #selector(onKeyboardHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onKeyboardShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+   }
 
     func removeNotification() {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
     }
     
-    
-    
 }
+
+
 
