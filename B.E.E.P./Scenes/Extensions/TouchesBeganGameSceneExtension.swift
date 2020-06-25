@@ -98,7 +98,15 @@ extension GameScene {
                 } else if (self.atPoint(location).name == "next-button") {
                     skipText(next: true)
                 }else if (self.atPoint(location).name == "hint-button") {
-                    hintStage()
+                    if let stop = stopButton.component(ofType: SpriteComponent.self){
+                        if stop.node.zPosition != -1{
+                            if let robot = robot.component(ofType: RobotMoveComponent.self){
+                                robot.stopButtonAction()
+                            }
+                            hintStage()
+                        }
+                    }
+                    
                 } else if (self.atPoint(location).name == "command-clear-tab") {
                     if let stopButton = stopButton.component(ofType: SpriteComponent.self){
                         print(stopButton.node.zPosition)

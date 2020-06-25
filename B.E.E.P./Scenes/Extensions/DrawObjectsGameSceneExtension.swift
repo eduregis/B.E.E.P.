@@ -306,10 +306,10 @@ extension GameScene {
                 let x = gameplayAnchor.x + CGFloat(32 * (boxes[i].x - 1)) - CGFloat(32 * (boxes[i].y - 1))
                 let y = gameplayAnchor.y + 182 - CGFloat(16 * (boxes[i].x - 1)) - CGFloat(16 * (boxes[i].y - 1))
                 spriteComponent.node.position = CGPoint(x: x, y: y)
-                    //spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(boxes[i].x + boxes[i].y) + 1
-                if let robot = robot.component(ofType: SpriteComponent.self){
+                spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(boxes[i].x + boxes[i].y) + 1
+                /*if let robot = robot.component(ofType: SpriteComponent.self){
                     spriteComponent.node.zPosition = (robot.node.zPosition - 0.2)
-                }
+                }*/
             }
             boxesCopy.append(box)
             entityManager.add(box)

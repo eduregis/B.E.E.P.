@@ -61,9 +61,10 @@ extension GameScene {
                 let y = gameplayAnchor.y + 182 - CGFloat(16 * (boxes[i].x - 1)) - CGFloat(16 * (boxes[i].y - 1))
                 spriteComponent.node.position = CGPoint(x: x, y: y)
                 spriteComponent.node.name = "box (\(boxes[i].x) - \(boxes[i].y)"
-                if let robot = robot.component(ofType: SpriteComponent.self){
+                spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(boxes[i].x + boxes[i].y) + 1
+                /*if let robot = robot.component(ofType: SpriteComponent.self){
                     spriteComponent.node.zPosition = (robot.node.zPosition + 1)
-                }
+                }*/
                 spriteComponent.node.run(SKAction.fadeIn(withDuration: 0))
             }
             i += 1
