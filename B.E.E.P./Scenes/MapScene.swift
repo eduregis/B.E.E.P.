@@ -65,18 +65,21 @@ class MapScene:SKScene {
     }
     
     func fillDialogue () {
-        let dialoguesIntro = BaseOfDialogues.buscar(id: "introduction")
-        guard let dialogues = dialoguesIntro else { return }
-        self.dialogues = dialogues.text
         //print(UserDefaults.standard.object(forKey: "isFirstTime") as! Bool )
         if (UserDefaults.standard.object(forKey: "isFirstTime") as! Bool ) {
-            drawDialogues(won: false)
+            let dialoguesIntro = BaseOfDialogues.buscar(id: "introduction")
+            guard let dialogues = dialoguesIntro else { return }
+            self.dialogues = dialogues.text
             UserDefaults.standard.set(false, forKey: "isFirstTime")
+        } else {
+            actualizeDialogue()
         }
+        drawDialogues(won: false)
     }
     
     func actualizeDialogue () {
         let lastStageAvailable = UserDefaults.standard.object(forKey: "lastStageAvailable") as! Int
+        print(lastStageAvailable)
         let dialoguesMenustage = BaseOfDialogues.buscar(id: "menu-stage-\(lastStageAvailable)")
         guard let dialogues = dialoguesMenustage else { return }
         self.dialogues = dialogues.text
