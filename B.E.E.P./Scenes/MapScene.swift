@@ -65,17 +65,24 @@ class MapScene:SKScene {
     }
     
     func fillDialogue () {
-        print(UserDefaults.standard.object(forKey: "isFirstTime") as! Bool)
         let dialoguesIntro = BaseOfDialogues.buscar(id: "introduction")
         guard let dialogues = dialoguesIntro else { return }
         self.dialogues = dialogues.text
+        //print(UserDefaults.standard.object(forKey: "isFirstTime") as! Bool )
         if (UserDefaults.standard.object(forKey: "isFirstTime") as! Bool ) {
             drawDialogues(won: false)
             UserDefaults.standard.set(false, forKey: "isFirstTime")
         }
     }
     
-    func updatePosition() {
+    func actualizeDialogue () {
+        let lastStageAvailable = UserDefaults.standard.object(forKey: "lastStageAvailable") as! Int
+        let dialoguesMenustage = BaseOfDialogues.buscar(id: "menu-stage-\(lastStageAvailable)")
+        guard let dialogues = dialoguesMenustage else { return }
+        self.dialogues = dialogues.text
+    }
+    
+    func updatePosition () {
         let faseAtual = UserDefaults.standard.object(forKey: "selectedFase") as! Int
         
         switch faseAtual {
@@ -264,6 +271,7 @@ class MapScene:SKScene {
                     configScene.userData!["backSaved"] = backName
                     view!.presentScene(configScene)
                 } else if nodes[0].name?.contains("hint-button") ?? false {
+                    actualizeDialogue()
                     drawDialogues(won: false)
                 } else if nodes[0].name?.contains("play-dialogue") ?? false {
                     updateText()
