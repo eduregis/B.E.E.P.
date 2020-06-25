@@ -43,7 +43,7 @@ class ConfigScene:SKScene, UITextFieldDelegate {
         entityManager = EntityManager(scene: self)
         
         //implementa persistência
-        if  (defaults.object(forKey: "userGame") != nil) {
+        if  (defaults.object(forKey: "userGame") != nil) && (defaults.object(forKey: "userGame") as? String != ""){
             userName = defaults.object(forKey: "userGame") as? String
             drawCheck()
         }
@@ -262,7 +262,8 @@ class ConfigScene:SKScene, UITextFieldDelegate {
     func removeCheck() {
         if (self.atPoint(CGPoint(x: configAnchor.x + 160, y: configAnchor.y - 18)).name == "confirm-checkmark") {
             //self.atPoint(CGPoint(x: configAnchor.x + 160, y: configAnchor.y - 18)).removeFromParent() //.removeComponent(ofType: SpriteComponent.self)
-            if let spriteComponente = (self.atPoint(CGPoint(x: configAnchor.x + 160, y: configAnchor.y - 18)).c
+            let checkName = (self.atPoint(CGPoint(x: configAnchor.x + 160, y: configAnchor.y - 18)))
+            checkName.removeFromParent()
         }
  
     }
