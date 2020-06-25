@@ -42,7 +42,7 @@ class MapScene:SKScene {
         }
         //let dialoguesOpt = UserDefaults.standard.object(forKey: "")
         //guard let dialogues = dialoguesOpt else { return  }
-        dialogues = ["olaa"]
+        dialogues = ["Obrigada!! Com a sua ajuda nossa rede foi restaurada!"]
         
 //        if let isFirstTime = UserDefaults.standard.object(forKey: "isFirstTime") {
 //            if isFirstTime as! Bool {
@@ -104,9 +104,16 @@ class MapScene:SKScene {
     func actualizeDialogue () {
         let lastStageAvailable = UserDefaults.standard.object(forKey: "lastStageAvailable") as! Int
         print(lastStageAvailable)
-        let dialoguesMenustage = BaseOfDialogues.buscar(id: "menu-stage-\(lastStageAvailable)")
-        guard let dialogues = dialoguesMenustage else { return }
-        self.dialogues = dialogues.text
+        if lastStageAvailable == 4 {
+            let dialoguesMenustage = BaseOfDialogues.buscar(id: "menu- stage-\(lastStageAvailable)")
+            guard let dialogues = dialoguesMenustage else { return }
+            self.dialogues = dialogues.text
+        } else {
+            let dialoguesMenustage = BaseOfDialogues.buscar(id: "menu-stage-\(lastStageAvailable)")
+            guard let dialogues = dialoguesMenustage else { return }
+            self.dialogues = dialogues.text
+        }
+        
     }
     
     func updatePosition () {
