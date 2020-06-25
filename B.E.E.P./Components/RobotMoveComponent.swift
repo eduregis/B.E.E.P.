@@ -35,7 +35,7 @@ class RobotMoveComponent: GKComponent {
     var stopButtonPressed = false
     var dialogoDeErro = ["Seus movimentos não foram suficientes! Tente de novo."]
     var erroMovimento = "Seus movimentos não foram suficientes! Tente de novo."
-    var erroInfectado = "Você passou em frente ao robô e foi infectado!\nTente novamente!\nVocê pode curá-lo pelas laterais ou por trás.\nSerá infectado se passar na frente dele"
+    var erroInfectado = "Você passou em frente ao robô e foi infectado!\nVocê pode curá-lo pelas laterais ou por trás.\nSerá infectado se passar na frente dele.\nTente novamente!"
     
     override init() {
         super.init()
@@ -212,10 +212,10 @@ class RobotMoveComponent: GKComponent {
             self.stopButtonPressed = false
         } else {
             self.identifier = self.arrayClosures.count
-            let dialogoAnterior = self.game.dialogues
+            //let dialogoAnterior = self.game.dialogues
             self.game.dialogues = dialogoDeErro
             self.game.drawDialogues(won: false)
-            self.game.dialogues = dialogoAnterior
+            //self.game.dialogues = dialogoAnterior
             if let sprite = self.stopButton.component(ofType: SpriteComponent.self){
                 sprite.node.name = "stop"
                 node.run(SKAction.wait(forDuration: 0.7)){
