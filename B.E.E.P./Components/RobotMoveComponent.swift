@@ -32,6 +32,11 @@ class RobotMoveComponent: GKComponent {
     var countBoxes: Int = 0
     var countInfected: Int = 0
     
+    var stopButtonPressed = false
+    var dialogoDeErro = ["Seus movimentos não foram suficientes! Tente de novo."]
+    var erroMovimento = "Seus movimentos não foram suficientes! Tente de novo."
+    var erroInfectado = "Você passou em frente ao robô e foi infectado!\nVocê pode curá-lo pelas laterais ou por trás.\nSerá infectado se passar na frente dele.\nTente novamente!"
+    
     override init() {
         super.init()
     }
@@ -198,11 +203,40 @@ class RobotMoveComponent: GKComponent {
     }
     
     func winner(){
+        let faseAtual = UserDefaults.standard.object(forKey: "selectedFase") as! Int
+        let lastStageAvailable = UserDefaults.standard.object(forKey: "lastStageAvailable") as! Int
+        
+        if (faseAtual == lastStageAvailable) {
+            UserDefaults.standard.set(faseAtual + 1, forKey: "lastStageAvailable")
+        }
+        
         self.game.drawDialogues(won: true)
         self.identifier = self.arrayClosures.count
     }
     
     func stop(){
+        if self.stopButtonPressed {
+            self.stopButtonPressed = false
+        } else {
+            self.identifier = self.arrayClosures.count
+            //let dialogoAnterior = self.game.dialogues
+            self.game.dialogues = dialogoDeErro
+            self.game.drawDialogues(won: false)
+            //self.game.dialogues = dialogoAnterior
+            if let sprite = self.stopButton.component(ofType: SpriteComponent.self){
+                sprite.node.name = "stop"
+                node.run(SKAction.wait(forDuration: 0.7)){
+                    sprite.node.zPosition = -1
+                    sprite.node.name = "stop-button"
+                    self.game.resetMoveRobot()
+                }
+            }
+        }
+        
+    }
+    
+    func stopButtonAction(){
+        self.stopButtonPressed = true
         self.identifier = self.arrayClosures.count
         if let sprite = self.stopButton.component(ofType: SpriteComponent.self){
             sprite.node.name = "stop"
@@ -260,7 +294,9 @@ class RobotMoveComponent: GKComponent {
             } else if self.identifier < self.arrayClosures.count{
                 self.arrayClosures[self.identifier](self.arrayDirection[self.identifier], self.arrayCheckerBox[self.identifier])
             }else{
+                self.dialogoDeErro = [self.erroInfectado]
                 self.stop()
+                self.dialogoDeErro = [self.erroMovimento]
             }
         }
         
@@ -289,7 +325,9 @@ class RobotMoveComponent: GKComponent {
         }
         if let floor = self.lightFloor.component(ofType: SpriteComponent.self){
             floor.node.run(SKAction.wait(forDuration: 0.4)){
+                self.dialogoDeErro = [self.erroInfectado]
                 self.stop()
+                self.dialogoDeErro = [self.erroMovimento]
             }
         }
         node.run(SKAction.wait(forDuration: 0.9)){
