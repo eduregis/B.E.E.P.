@@ -104,6 +104,8 @@ extension GameScene {
                                 robot.stopButtonAction()
                             }
                             hintStage()
+                        } else {
+                            hintStage()
                         }
                     }
                     
