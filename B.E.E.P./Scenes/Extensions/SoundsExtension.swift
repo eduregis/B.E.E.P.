@@ -24,7 +24,7 @@ extension GameScene {
         backgroundSound.removeFromParent()
     }
     func startMoveSound() {
-        let sound = SKAudioNode(fileNamed: "robot-move")
+        let sound = SKAudioNode(fileNamed: "robot-move2")
         addChild(sound)
         do {
             try sound.avAudioNode?.engine?.start() // Called when you want to play sound
@@ -40,6 +40,23 @@ extension GameScene {
     }
     func startPlaySound() {
         let sound = SKAudioNode(fileNamed: "play-command-tab")
+        
+        addChild(sound)
+        do {
+            try sound.avAudioNode?.engine?.start() // Called when you want to play sound
+        } catch {
+            // Do something with the error
+        }
+       if let pause = robot.component(ofType: SpriteComponent.self){
+            pause.node.run(SKAction.wait(forDuration: 0.3)){
+                //sound.avAudioNode?.engine?.pause()
+                sound.removeFromParent()
+            }
+        }
+        
+    }
+    func startGrabSound() {
+        let sound = SKAudioNode(fileNamed: "grab_box")
         
         addChild(sound)
         do {
@@ -90,6 +107,40 @@ extension GameScene {
         }
     }
     
+
+    func startInfectedSound() {
+            let sound = SKAudioNode(fileNamed: "infected_robot")
+            
+            addChild(sound)
+            do {
+                try sound.avAudioNode?.engine?.start() // Called when you want to play sound
+            } catch {
+                // Do something with the error
+            }
+           if let pause = robot.component(ofType: SpriteComponent.self){
+                pause.node.run(SKAction.wait(forDuration: 0.9)){
+                    //sound.avAudioNode?.engine?.pause()
+                    sound.removeFromParent()
+                }
+            }
+        }
+    func startDumpSound() {
+        let sound = SKAudioNode(fileNamed: "dump")
+        
+        addChild(sound)
+        do {
+            try sound.avAudioNode?.engine?.start() // Called when you want to play sound
+        } catch {
+            // Do something with the error
+        }
+       if let pause = robot.component(ofType: SpriteComponent.self){
+            pause.node.run(SKAction.wait(forDuration: 0.5)){
+                //sound.avAudioNode?.engine?.pause()
+                sound.removeFromParent()
+            }
+        }
+    }
+        
 }
 
 extension MapScene {

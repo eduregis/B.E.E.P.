@@ -40,6 +40,30 @@ class MapScene:SKScene {
         }else{
             startBackgroundSound()
         }
+        //let dialoguesOpt = UserDefaults.standard.object(forKey: "")
+        //guard let dialogues = dialoguesOpt else { return  }
+        dialogues = ["olaa"]
+        
+//        if let isFirstTime = UserDefaults.standard.object(forKey: "isFirstTime") {
+//            if isFirstTime as! Bool {
+//                let dialoguesInitial = BaseOfDialogues.buscar(id: "introduction")
+//                guard let dialogues = dialoguesInitial else { return }
+//                self.dialogues = dialogues.text
+//                drawDialogues(won: false)
+//                UserDefaults.standard.set(false, forKey: "isFirstTime")
+//            } else {
+//                let dialoguesInitial = BaseOfDialogues.buscar(id: "menu-stage-\(lastStageAvailable)")
+//                guard let dialogues = dialoguesInitial else { return }
+//                self.dialogues = dialogues.text
+//            }
+//        }
+        
+//        if let newStageAvailable = UserDefaults.standard.object(forKey: "newStageAvailable") {
+//            if newStageAvailable as! Bool {
+//                drawDialogues(won: false)
+//                UserDefaults.standard.set(false, forKey: "newStageAvailable")
+//            }
+//        }
         
         fillDialogue()
         

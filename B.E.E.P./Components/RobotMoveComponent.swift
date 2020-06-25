@@ -42,11 +42,19 @@ class RobotMoveComponent: GKComponent {
     }
     
     func grabBox(direction: String, box: Bool){
+        //print("pegando box")
         self.identifier += 1
         let textures: [SKTexture] = [SKTexture(imageNamed: "robot-grab-box-\(direction)")]
-        let animate = SKAction.animate(with: textures, timePerFrame: 0.1, resize: false, restore: false)
+        let animate = SKAction.animate(with: textures, timePerFrame: 0.3, resize: false, restore: false)
         if let floor = self.lightFloor.component(ofType: SpriteComponent.self){
-            floor.node.run(SKAction.wait(forDuration: 0.1))
+            floor.node.run(SKAction.wait(forDuration: 0.3))
+        }
+        if  UserDefaults.standard.object(forKey: "SettingsSound") != nil {
+            if (UserDefaults.standard.object(forKey: "SettingsSound") as? String) == "Sim"{
+                    self.game.startGrabSound()
+            }
+        }else{
+            self.game.startGrabSound()
         }
         node.run(animate){
             if self.identifier < self.arrayClosures.count{
@@ -62,6 +70,7 @@ class RobotMoveComponent: GKComponent {
     }
     
     func putBox(direction: String, box: Bool){
+        //print("deixando box")
         self.identifier += 1
         let faseAtual = UserDefaults.standard.object(forKey: "selectedFase")
         let stageOptional = BaseOfStages.buscar(id: "\(faseAtual!)")
@@ -70,9 +79,16 @@ class RobotMoveComponent: GKComponent {
             return
         }
         let textures: [SKTexture] = [SKTexture(imageNamed: "robot-idle-\(direction)-2")]
-        let animate = SKAction.animate(with: textures, timePerFrame: 0.1, resize: false, restore: false)
+        let animate = SKAction.animate(with: textures, timePerFrame: 0.3, resize: false, restore: false)
         if let floor = self.lightFloor.component(ofType: SpriteComponent.self){
-            floor.node.run(SKAction.wait(forDuration: 0.1))
+            floor.node.run(SKAction.wait(forDuration: 0.3))
+        }
+        if  UserDefaults.standard.object(forKey: "SettingsSound") != nil {
+            if (UserDefaults.standard.object(forKey: "SettingsSound") as? String) == "Sim"{
+                    self.game.startGrabSound()
+            }
+        }else{
+            self.game.startGrabSound()
         }
         
         if let component = self.arrayBox[0].component(ofType: SpriteComponent.self){
@@ -81,11 +97,11 @@ class RobotMoveComponent: GKComponent {
             component.node.zPosition = self.node.zPosition - 0.1
             component.node.run(SKAction.fadeIn(withDuration: 0))
             
-            for box in self.arrayPositionBox{
+            //for box in self.arrayPositionBox{
 
                 for dropZone in stage.dropZones {
-                    print(Int(box.x), dropZone[0],Int(box.y), dropZone[1], dropZone.count)
-                    if Int(box.x) == dropZone[0] && Int(box.y) == dropZone[1] {
+                    //print(Int(self.arrayPositionBox[indexBox].x), dropZone[0],Int(self.arrayPositionBox[indexBox].y), dropZone[1], dropZone.count)
+                    if Int(self.arrayPositionBox[indexBox].x) == dropZone[0] && Int(self.arrayPositionBox[indexBox].y) == dropZone[1] {
                         if let floor = self.boxFloor.component(ofType: SpriteComponent.self){
                             floor.node.zPosition = self.node.zPosition - 0.2
                             self.countBoxes -= 1
@@ -102,8 +118,9 @@ class RobotMoveComponent: GKComponent {
                     }
                     
                 }
-            }
+            //}
             self.indexBox += 1
+            print(self.indexBox)
         }
         node.run(animate){
             if self.countBoxes == 0 && self.countInfected == 0{
@@ -119,6 +136,7 @@ class RobotMoveComponent: GKComponent {
     
     
     func move(direction: String, box: Bool) -> Void {
+        //print("andando")
         self.identifier += 1
         let move: SKAction
         let textures: [SKTexture]
@@ -322,6 +340,13 @@ class RobotMoveComponent: GKComponent {
             robot.node.size = node.size
             self.game.entityManager.add(robotInfected)
             robot.node.run(SKAction.fadeIn(withDuration: 0.8))
+        }
+        if  UserDefaults.standard.object(forKey: "SettingsSound") != nil {
+           if (UserDefaults.standard.object(forKey: "SettingsSound") as? String) == "Sim"{
+               self.game.startInfectedSound()
+           }
+        }else{
+           self.game.startInfectedSound()
         }
         if let floor = self.lightFloor.component(ofType: SpriteComponent.self){
             floor.node.run(SKAction.wait(forDuration: 0.4)){

@@ -36,8 +36,6 @@
 		2EF6C52A248C13EB0040F927 /* Tileset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF6C529248C13EB0040F927 /* Tileset.swift */; };
 		2EF6C52C248C14FE0040F927 /* EntityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF6C52B248C14FE0040F927 /* EntityManager.swift */; };
 		39806A6B249EFBBF0046413C /* SoundsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39806A6A249EFBBF0046413C /* SoundsExtension.swift */; };
-		39806A7624A103950046413C /* garage-monplaisir.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 39806A7524A103950046413C /* garage-monplaisir.mp3 */; };
-		39806A7824A104380046413C /* telecom-leeRosevere.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 39806A7724A104380046413C /* telecom-leeRosevere.mp3 */; };
 		39806A7A24A1046D0046413C /* drop-block.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 39806A7924A1046D0046413C /* drop-block.mp3 */; };
 		39806A7C24A1048B0046413C /* robot-move.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 39806A7B24A1048B0046413C /* robot-move.mp3 */; };
 		39806A7E24A104C40046413C /* save-infected.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 39806A7D24A104C40046413C /* save-infected.mp3 */; };
@@ -51,6 +49,11 @@
 		56B459D7249148C2007D82D2 /* Filament.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56B459D6249148C2007D82D2 /* Filament.swift */; };
 		56B459DB24925780007D82D2 /* StageUnavailable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56B459DA24925780007D82D2 /* StageUnavailable.swift */; };
 		56C7EBB2249E57ED009AABBE /* BaseOfDialogues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C7EBB1249E57ED009AABBE /* BaseOfDialogues.swift */; };
+		56C8107724A51A8300C63007 /* infected_robot.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 56C8107624A51A8300C63007 /* infected_robot.mp3 */; };
+		56C8107924A51AAD00C63007 /* grab_box.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 56C8107824A51AAC00C63007 /* grab_box.mp3 */; };
+		56C8107B24A51AF200C63007 /* garage-monplaisir.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 56C8107A24A51AF200C63007 /* garage-monplaisir.mp3 */; };
+		56C8107D24A51B1900C63007 /* telecom-leeRosevere.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 56C8107C24A51B1900C63007 /* telecom-leeRosevere.mp3 */; };
+		56C8107F24A51B4500C63007 /* dump.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 56C8107E24A51B4500C63007 /* dump.mp3 */; };
 		56C9EE84249043A7007924BA /* MapScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C9EE83249043A7007924BA /* MapScene.swift */; };
 		56C9EE862490459A007924BA /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C9EE852490459A007924BA /* MapViewController.swift */; };
 		56C9EE8824906479007924BA /* HudButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C9EE8724906479007924BA /* HudButton.swift */; };
@@ -111,8 +114,6 @@
 		2EF6C529248C13EB0040F927 /* Tileset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tileset.swift; sourceTree = "<group>"; };
 		2EF6C52B248C14FE0040F927 /* EntityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityManager.swift; sourceTree = "<group>"; };
 		39806A6A249EFBBF0046413C /* SoundsExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundsExtension.swift; sourceTree = "<group>"; };
-		39806A7524A103950046413C /* garage-monplaisir.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = "garage-monplaisir.mp3"; path = "B.E.E.P./Sounds/garage-monplaisir.mp3"; sourceTree = SOURCE_ROOT; };
-		39806A7724A104380046413C /* telecom-leeRosevere.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = "telecom-leeRosevere.mp3"; path = "B.E.E.P./telecom-leeRosevere.mp3"; sourceTree = SOURCE_ROOT; };
 		39806A7924A1046D0046413C /* drop-block.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "drop-block.mp3"; sourceTree = "<group>"; };
 		39806A7B24A1048B0046413C /* robot-move.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "robot-move.mp3"; sourceTree = "<group>"; };
 		39806A7D24A104C40046413C /* save-infected.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "save-infected.mp3"; sourceTree = "<group>"; };
@@ -130,6 +131,11 @@
 		56B459D6249148C2007D82D2 /* Filament.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filament.swift; sourceTree = "<group>"; };
 		56B459DA24925780007D82D2 /* StageUnavailable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StageUnavailable.swift; sourceTree = "<group>"; };
 		56C7EBB1249E57ED009AABBE /* BaseOfDialogues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseOfDialogues.swift; sourceTree = "<group>"; };
+		56C8107624A51A8300C63007 /* infected_robot.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = infected_robot.mp3; sourceTree = "<group>"; };
+		56C8107824A51AAC00C63007 /* grab_box.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = grab_box.mp3; sourceTree = "<group>"; };
+		56C8107A24A51AF200C63007 /* garage-monplaisir.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "garage-monplaisir.mp3"; sourceTree = "<group>"; };
+		56C8107C24A51B1900C63007 /* telecom-leeRosevere.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "telecom-leeRosevere.mp3"; sourceTree = "<group>"; };
+		56C8107E24A51B4500C63007 /* dump.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = dump.mp3; sourceTree = "<group>"; };
 		56C9EE83249043A7007924BA /* MapScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapScene.swift; sourceTree = "<group>"; };
 		56C9EE852490459A007924BA /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		56C9EE8724906479007924BA /* HudButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HudButton.swift; sourceTree = "<group>"; };
@@ -169,13 +175,16 @@
 		2EA00092249D98A200ADB3AF /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				56C8107624A51A8300C63007 /* infected_robot.mp3 */,
+				56C8107824A51AAC00C63007 /* grab_box.mp3 */,
 				39806A8124A105DB0046413C /* play-command-tab.mp3 */,
+				56C8107C24A51B1900C63007 /* telecom-leeRosevere.mp3 */,
 				39806A7F24A105C90046413C /* drop-box-in-zone.mp3 */,
 				39806A7D24A104C40046413C /* save-infected.mp3 */,
 				39806A7B24A1048B0046413C /* robot-move.mp3 */,
+				56C8107E24A51B4500C63007 /* dump.mp3 */,
 				39806A7924A1046D0046413C /* drop-block.mp3 */,
-				39806A7524A103950046413C /* garage-monplaisir.mp3 */,
-				39806A7724A104380046413C /* telecom-leeRosevere.mp3 */,
+				56C8107A24A51AF200C63007 /* garage-monplaisir.mp3 */,
 			);
 			path = Sounds;
 			sourceTree = "<group>";
@@ -456,15 +465,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				56C8107F24A51B4500C63007 /* dump.mp3 in Resources */,
 				2EF6C51B248C0DE50040F927 /* Assets.xcassets in Resources */,
 				39806A7A24A1046D0046413C /* drop-block.mp3 in Resources */,
-				39806A7824A104380046413C /* telecom-leeRosevere.mp3 in Resources */,
-				39806A7624A103950046413C /* garage-monplaisir.mp3 in Resources */,
+				56C8107724A51A8300C63007 /* infected_robot.mp3 in Resources */,
 				2EEAEB2A2495C4C000501FBB /* 8bitoperator.ttf in Resources */,
 				39806A7E24A104C40046413C /* save-infected.mp3 in Resources */,
+				56C8107924A51AAD00C63007 /* grab_box.mp3 in Resources */,
 				39806A8224A105DB0046413C /* play-command-tab.mp3 in Resources */,
 				39806A7C24A1048B0046413C /* robot-move.mp3 in Resources */,
+				56C8107D24A51B1900C63007 /* telecom-leeRosevere.mp3 in Resources */,
 				2EF6C51E248C0DE50040F927 /* LaunchScreen.storyboard in Resources */,
+				56C8107B24A51AF200C63007 /* garage-monplaisir.mp3 in Resources */,
 				39806A8024A105C90046413C /* drop-box-in-zone.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
