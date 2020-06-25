@@ -234,6 +234,7 @@ class RobotMoveComponent: GKComponent {
         
         if (faseAtual == lastStageAvailable) {
             UserDefaults.standard.set(faseAtual + 1, forKey: "lastStageAvailable")
+            UserDefaults.standard.set(true, forKey: "concluded")
         }
         
         self.game.drawDialogues(won: true)
