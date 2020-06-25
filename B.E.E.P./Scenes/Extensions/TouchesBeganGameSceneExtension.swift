@@ -100,8 +100,13 @@ extension GameScene {
                 }else if (self.atPoint(location).name == "hint-button") {
                     hintStage()
                 } else if (self.atPoint(location).name == "command-clear-tab") {
-                    if let stop = robot.component(ofType: RobotMoveComponent.self){
-                        stop.stopButtonAction()
+                    if let stopButton = stopButton.component(ofType: SpriteComponent.self){
+                        print(stopButton.node.zPosition)
+                        if !commandBlocks.isEmpty && stopButton.node.zPosition != -1 {
+                            if let stop = robot.component(ofType: RobotMoveComponent.self){
+                                stop.stopButtonAction()
+                            }
+                        }
                     }
                     clearTab(tabName: "command")
                 } else if (self.atPoint(location).name == "function-clear-tab") {

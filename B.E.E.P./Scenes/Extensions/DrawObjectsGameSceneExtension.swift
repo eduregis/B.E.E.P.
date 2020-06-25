@@ -144,7 +144,7 @@ extension GameScene {
         // botão de stop
         if let spriteComponent = stopButton.component(ofType: SpriteComponent.self) {
             spriteComponent.node.position = CGPoint(x: gameplayAnchor.x + 170, y: gameplayAnchor.y - 115)
-            spriteComponent.node.zPosition = 0
+            spriteComponent.node.zPosition = -1
         }
         entityManager.add(stopButton)
         
