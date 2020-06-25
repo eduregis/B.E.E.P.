@@ -201,7 +201,11 @@ class GameScene: SKScene {
         }
         if (boxDropZones.count > 0){ drawBoxDropZones() }
 
-        drawDialogues(won: false)
+        let lastStageAvailable = UserDefaults.standard.object(forKey: "lastStageAvailable") as! Int
+        
+        if (faseAtual as! Int == lastStageAvailable) {
+            drawDialogues(won: false)
+        }
     }
 
 
