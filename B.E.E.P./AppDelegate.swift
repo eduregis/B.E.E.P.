@@ -20,10 +20,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         if UserDefaults.standard.bool(forKey: "First Launch") == false {
             print("entrou aqui")
-
+            UserDefaults.standard.set(false, forKey: "concluded")
             UserDefaults.standard.set(1, forKey: "lastStageAvailable")
             UserDefaults.standard.set(true, forKey: "isFirstTime")
-
             UserDefaults.standard.set(false, forKey: "buildMap")
             UserDefaults.standard.set(1, forKey: "selectedFase")
             UserDefaults.standard.set(false, forKey: "showDialogues")
