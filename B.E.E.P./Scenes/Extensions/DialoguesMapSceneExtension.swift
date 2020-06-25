@@ -177,5 +177,6 @@ extension MapScene {
         dialogueText.run(backToRight) {
             self.dialogueText.removeFromParent()
         }
+        
     }
 }
