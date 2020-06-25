@@ -111,7 +111,7 @@ class GameScene: SKScene {
         
         let dialoguesOpt = BaseOfDialogues.buscar(id: "stage-\(faseAtual!)")
         
-        guard let dialogues = dialoguesOpt else { return  }
+        guard let dialogues = dialoguesOpt else { return }
         
         self.dialogues = dialogues.text
         
@@ -203,6 +203,10 @@ class GameScene: SKScene {
 
         drawDialogues(won: false)
     }
+
+
+    
+
 
     func returnToMap() {
         let mapScene = MapScene(size: view!.bounds.size)

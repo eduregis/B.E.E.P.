@@ -42,4 +42,4 @@ enum Direction {
     case forward
 }
 
-var lastStageAvailable: Int = 1
+

@@ -15,11 +15,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var api = ApiManager()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        Thread.sleep(forTimeInterval: 3.0)
         //inicio da configuração pra colocar a controller na tela (view code)
         
         if UserDefaults.standard.bool(forKey: "First Launch") == false {
             print("entrou aqui")
-            //UserDefaults.standard.set(true, forKey: "isFirstTime")
+
+            UserDefaults.standard.set(1, forKey: "lastStageAvailable")
+            UserDefaults.standard.set(true, forKey: "isFirstTime")
+
             UserDefaults.standard.set(false, forKey: "buildMap")
             UserDefaults.standard.set(1, forKey: "selectedFase")
             UserDefaults.standard.set(false, forKey: "showDialogues")

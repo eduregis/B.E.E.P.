@@ -37,7 +37,7 @@ extension GameScene {
         
         beep.name = "beep"
         beep.size = CGSize(width: 256, height: 256)
-        beep.position = CGPoint(x: frame.midX/3 - CGFloat(animateVector), y: frame.minY + beep.size.height/2)
+        beep.position = CGPoint(x: frame.midX/3 - CGFloat(animateVector)-15, y: frame.minY + beep.size.height/2)
         beep.zPosition = ZPositionsCategories.dialogueItems
         beep.alpha = 0
         let fadeToLeft = SKAction.group([
@@ -91,7 +91,9 @@ extension GameScene {
             }
             //fim do modelo
             let user = UserDefaults.standard.object(forKey: "userGame")
-            dialogueText = SKLabelNode(text: "Perfeito \(user ?? "")! Sabia que  podia contar com você!")
+
+            dialogueText = SKLabelNode(text: "Perfeito \(user ?? "")! Sabia que podia contar com você!")
+
             dialogueText.fontSize = 14.0
         }
         dialogueText.fontName = "8bitoperator"
@@ -146,7 +148,13 @@ extension GameScene {
     }
     
     func hintStage () {
+        let faseAtual = UserDefaults.standard.object(forKey: "selectedFase")
         
+        let dialoguesOpt = BaseOfDialogues.buscar(id: "stage-\(faseAtual!)")
+        
+        guard let dialogues = dialoguesOpt else { return  }
+        
+        self.dialogues = dialogues.text
         drawDialogues(won: false)
     }
     

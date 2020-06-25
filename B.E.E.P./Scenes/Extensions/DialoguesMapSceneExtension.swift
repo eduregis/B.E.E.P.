@@ -177,8 +177,10 @@ extension MapScene {
         dialogueText.run(backToRight) {
             self.dialogueText.removeFromParent()
         }
+
         //let dialoguesInitial = BaseOfDialogues.buscar(id: "menu-stage-\(lastStageAvailable)")
         //guard let dialogues = dialoguesInitial else { return }
         //self.dialogues = dialogues.text
+
     }
 }
