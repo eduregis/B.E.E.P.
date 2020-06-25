@@ -203,6 +203,13 @@ class RobotMoveComponent: GKComponent {
     }
     
     func winner(){
+        let faseAtual = UserDefaults.standard.object(forKey: "selectedFase") as! Int
+        let lastStageAvailable = UserDefaults.standard.object(forKey: "lastStageAvailable") as! Int
+        
+        if (faseAtual == lastStageAvailable) {
+            UserDefaults.standard.set(faseAtual + 1, forKey: "lastStageAvailable")
+        }
+        
         self.game.drawDialogues(won: true)
         self.identifier = self.arrayClosures.count
     }

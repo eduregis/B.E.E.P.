@@ -82,8 +82,6 @@ extension GameScene {
                 UserDefaults.standard.set(nextStage.number, forKey: "selectedFase")
                 nextStage.status = "available"
                 nextStage.isAtualFase = true
-                //lastStageAvailable = nextStage.number
-                UserDefaults.standard.set(true, forKey: "newStageAvailable")
                 BaseOfStages.salvar(stage: nextStage)
             } else {
                 stage.isAtualFase = true
@@ -91,7 +89,7 @@ extension GameScene {
             }
             //fim do modelo
             let user = UserDefaults.standard.object(forKey: "userGame")
-            dialogueText = SKLabelNode(text: "Perfeito \(user ?? "")! Sabia que  podia contar com você!")
+            dialogueText = SKLabelNode(text: "Perfeito \(user ?? "")! Sabia que podia contar com você!")
             dialogueText.fontSize = 14.0
         }
         dialogueText.fontName = "8bitoperator"
