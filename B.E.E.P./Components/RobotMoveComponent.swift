@@ -173,7 +173,15 @@ class RobotMoveComponent: GKComponent {
                 textures = []
             }
         }
-        
+        if let floor = self.lightFloor.component(ofType: SpriteComponent.self){
+            if "down" == direction || "right" == direction{
+                node.zPosition += 1
+                floor.node.zPosition += 1
+            }else{
+                node.zPosition -= 1
+                floor.node.zPosition -= 1
+            }
+        }
         
         
         let animate = SKAction.animate(with: textures, timePerFrame: 0.2, resize: false, restore: false)

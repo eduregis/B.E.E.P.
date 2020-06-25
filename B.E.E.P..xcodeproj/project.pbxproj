@@ -37,13 +37,12 @@
 		2EF6C52C248C14FE0040F927 /* EntityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF6C52B248C14FE0040F927 /* EntityManager.swift */; };
 		39806A6B249EFBBF0046413C /* SoundsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39806A6A249EFBBF0046413C /* SoundsExtension.swift */; };
 		39806A7A24A1046D0046413C /* drop-block.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 39806A7924A1046D0046413C /* drop-block.mp3 */; };
-		39806A7C24A1048B0046413C /* robot-move2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 39806A7B24A1048B0046413C /* robot-move2.mp3 */; };
+		39806A7C24A1048B0046413C /* robot-move.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 39806A7B24A1048B0046413C /* robot-move.mp3 */; };
 		39806A7E24A104C40046413C /* save-infected.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 39806A7D24A104C40046413C /* save-infected.mp3 */; };
 		39806A8024A105C90046413C /* drop-box-in-zone.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 39806A7F24A105C90046413C /* drop-box-in-zone.mp3 */; };
 		39806A8224A105DB0046413C /* play-command-tab.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 39806A8124A105DB0046413C /* play-command-tab.mp3 */; };
 		39AC775B24A3CBBB002F8D11 /* garage-monplaisir.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 39AC775A24A3CBBB002F8D11 /* garage-monplaisir.mp3 */; };
 		39AC775D24A3CDD0002F8D11 /* telecom-leeRosevere.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 39AC775C24A3CDD0002F8D11 /* telecom-leeRosevere.mp3 */; };
-		39AC775F24A3CE8C002F8D11 /* robot-move.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 39AC775E24A3CE8C002F8D11 /* robot-move.mp3 */; };
 		39AC776324A3D05A002F8D11 /* dump.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 39AC776224A3D05A002F8D11 /* dump.mp3 */; };
 		39CCC61124A4F42E003DDC86 /* grab_box.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 39CCC61024A4F42E003DDC86 /* grab_box.mp3 */; };
 		39CCC61324A4F4E1003DDC86 /* infected_robot.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 39CCC61224A4F4E1003DDC86 /* infected_robot.mp3 */; };
@@ -116,13 +115,12 @@
 		2EF6C52B248C14FE0040F927 /* EntityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityManager.swift; sourceTree = "<group>"; };
 		39806A6A249EFBBF0046413C /* SoundsExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundsExtension.swift; sourceTree = "<group>"; };
 		39806A7924A1046D0046413C /* drop-block.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "drop-block.mp3"; sourceTree = "<group>"; };
-		39806A7B24A1048B0046413C /* robot-move2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "robot-move2.mp3"; sourceTree = "<group>"; };
+		39806A7B24A1048B0046413C /* robot-move.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "robot-move.mp3"; sourceTree = "<group>"; };
 		39806A7D24A104C40046413C /* save-infected.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "save-infected.mp3"; sourceTree = "<group>"; };
 		39806A7F24A105C90046413C /* drop-box-in-zone.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "drop-box-in-zone.mp3"; sourceTree = "<group>"; };
 		39806A8124A105DB0046413C /* play-command-tab.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "play-command-tab.mp3"; sourceTree = "<group>"; };
 		39AC775A24A3CBBB002F8D11 /* garage-monplaisir.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = "garage-monplaisir.mp3"; path = "../../../Downloads/garage-monplaisir.mp3"; sourceTree = "<group>"; };
 		39AC775C24A3CDD0002F8D11 /* telecom-leeRosevere.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = "telecom-leeRosevere.mp3"; path = "../../../Downloads/telecom-leeRosevere.mp3"; sourceTree = "<group>"; };
-		39AC775E24A3CE8C002F8D11 /* robot-move.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = "robot-move.mp3"; path = "../../../Downloads/robot-move.mp3"; sourceTree = "<group>"; };
 		39AC776224A3D05A002F8D11 /* dump.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = dump.mp3; path = ../../../Downloads/dump.mp3; sourceTree = "<group>"; };
 		39CCC61024A4F42E003DDC86 /* grab_box.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = grab_box.mp3; path = ../../../Downloads/grab_box.mp3; sourceTree = "<group>"; };
 		39CCC61224A4F4E1003DDC86 /* infected_robot.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = infected_robot.mp3; path = ../../../Downloads/infected_robot.mp3; sourceTree = "<group>"; };
@@ -184,8 +182,7 @@
 				39806A7F24A105C90046413C /* drop-box-in-zone.mp3 */,
 				39AC776224A3D05A002F8D11 /* dump.mp3 */,
 				39806A7D24A104C40046413C /* save-infected.mp3 */,
-				39806A7B24A1048B0046413C /* robot-move2.mp3 */,
-				39AC775E24A3CE8C002F8D11 /* robot-move.mp3 */,
+				39806A7B24A1048B0046413C /* robot-move.mp3 */,
 				39806A7924A1046D0046413C /* drop-block.mp3 */,
 				39AC775A24A3CBBB002F8D11 /* garage-monplaisir.mp3 */,
 			);
@@ -471,14 +468,13 @@
 				39AC775D24A3CDD0002F8D11 /* telecom-leeRosevere.mp3 in Resources */,
 				2EF6C51B248C0DE50040F927 /* Assets.xcassets in Resources */,
 				39806A7A24A1046D0046413C /* drop-block.mp3 in Resources */,
-				39AC775F24A3CE8C002F8D11 /* robot-move.mp3 in Resources */,
 				39AC775B24A3CBBB002F8D11 /* garage-monplaisir.mp3 in Resources */,
 				39CCC61324A4F4E1003DDC86 /* infected_robot.mp3 in Resources */,
 				2EEAEB2A2495C4C000501FBB /* 8bitoperator.ttf in Resources */,
 				39806A7E24A104C40046413C /* save-infected.mp3 in Resources */,
 				39CCC61124A4F42E003DDC86 /* grab_box.mp3 in Resources */,
 				39806A8224A105DB0046413C /* play-command-tab.mp3 in Resources */,
-				39806A7C24A1048B0046413C /* robot-move2.mp3 in Resources */,
+				39806A7C24A1048B0046413C /* robot-move.mp3 in Resources */,
 				2EF6C51E248C0DE50040F927 /* LaunchScreen.storyboard in Resources */,
 				39806A8024A105C90046413C /* drop-box-in-zone.mp3 in Resources */,
 				39AC776324A3D05A002F8D11 /* dump.mp3 in Resources */,
