@@ -108,16 +108,11 @@ class MapScene:SKScene {
     func actualizeDialogue () {
         let lastStageAvailable = UserDefaults.standard.object(forKey: "lastStageAvailable") as! Int
         print(lastStageAvailable)
-        if lastStageAvailable == 4 {
-            let dialoguesMenustage = BaseOfDialogues.buscar(id: "menu- stage-\(lastStageAvailable)")
-            guard let dialogues = dialoguesMenustage else { return }
-            self.dialogues = dialogues.text
-        } else {
-            let dialoguesMenustage = BaseOfDialogues.buscar(id: "menu-stage-\(lastStageAvailable)")
-            guard let dialogues = dialoguesMenustage else { return }
-            self.dialogues = dialogues.text
+        let dialoguesMenustage = BaseOfDialogues.buscar(id: "menu-stage-\(lastStageAvailable)")
+        guard let dialogues = dialoguesMenustage else { return }
+        self.dialogues = dialogues.text
             
-        }
+        
     }
     
     func updatePosition () {
