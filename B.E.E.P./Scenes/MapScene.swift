@@ -15,7 +15,7 @@ class MapScene:SKScene, UITextFieldDelegate {
     
     private lazy  var textFieldNameMap: UITextField = {
         let textArchor = CGPoint(x: frame.midX, y: frame.midY)
-        let textFieldFrame = CGRect(origin:.init(x: textArchor.x + 25, y: textArchor.y + 280), size: CGSize(width: 110, height: 30))
+        let textFieldFrame = CGRect(origin:.init(x: textArchor.x + 25, y: textArchor.y + 265), size: CGSize(width: 110, height: 30))
         let textFieldNameMap = UITextField(frame: textFieldFrame)
         textFieldNameMap.borderStyle = UITextField.BorderStyle.roundedRect
         textFieldNameMap.backgroundColor = UIColor(displayP3Red: 116/255, green: 255/255, blue: 234/255, alpha: 1.0)
