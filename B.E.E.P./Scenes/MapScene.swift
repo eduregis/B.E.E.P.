@@ -13,9 +13,9 @@ class MapScene:SKScene, UITextFieldDelegate {
     
     let backgroundSound = SKAudioNode(fileNamed: "telecom-leeRosevere")
     
-    private lazy  var textFieldNameMap: UITextField = {
-        let textArchor = CGPoint(x: frame.midX, y: frame.midY)
-        let textFieldFrame = CGRect(origin:.init(x: textArchor.x + 25, y: textArchor.y + 265), size: CGSize(width: 110, height: 30))
+    public lazy  var textFieldNameMap: UITextField = {
+        let textArchor = CGPoint(x: frame.midX - 64, y: frame.midY/3 + 50)
+        let textFieldFrame = CGRect(origin:.init(x: textArchor.x + 40, y: textArchor.y + 450), size: CGSize(width: 110, height: 30))
         let textFieldNameMap = UITextField(frame: textFieldFrame)
         textFieldNameMap.borderStyle = UITextField.BorderStyle.roundedRect
         textFieldNameMap.backgroundColor = UIColor(displayP3Red: 116/255, green: 255/255, blue: 234/255, alpha: 1.0)
@@ -47,6 +47,7 @@ class MapScene:SKScene, UITextFieldDelegate {
     var dialogueText = SKLabelNode(text: "")
     var dialogueButton: SKSpriteNode!
     var dialogueSkip: SKSpriteNode!
+    let introducao = ["Ufa, ainda bem que você está aqui!","Ficou tudo uma bagunça de repente. Um malware \ninvadiu a rede e contaminou todos os robozinhos, só eu \ne esse aqui escapamos!","Ah, a propósito, meu nome é B.E.E.P. (Bot de Estudo e \nEnsino de Programação)!\n\nQual o seu nome?","Costumo ser o instrutor dos robozinhos que\noperam por aqui.","Geralmente eu coloco os comandos neles, mas fiquei \ncom pouca energia e não consigo me mexer!","Meu amigo aqui tem pouca memória, você poderia me \najudar a passar as informações para ele?","Você tem alguns blocos de comandos aqui, ele irá \nexecutar na ordem que você colocar. ‘Andar’, ‘Girar \npara a esquerda’, ‘Girar para a direita’ e \n‘Pegar-Soltar caixas’","Essas caixas contêm informações da nossa rede, \nporém ficaram fora de lugar, você pode fazer ele \ncolocá-las de volta no lugar certo?"]
     
     lazy var backName:String = {return self.userData?["backSaved"] as? String ?? "mapScene"}()
     
@@ -123,14 +124,15 @@ class MapScene:SKScene, UITextFieldDelegate {
     func fillDialogue () {
         print(UserDefaults.standard.object(forKey: "isFirstTime") as! Bool )
         if (UserDefaults.standard.bool(forKey: "isFirstTime")) {
-            let dialoguesIntro = BaseOfDialogues.buscar(id: "introduction")
-            guard let dialogues = dialoguesIntro else { return }
-            self.dialogues = dialogues.text
-            self.view!.addSubview(textFieldNameMap)
-            UserDefaults.standard.set(false, forKey: "isFirstTime")
+            //let dialoguesIntro = BaseOfDialogues.buscar(id: "introduction")
+            //guard let dialogues = dialoguesIntro else { return }
+            //self.dialogues = dialogues.text
+            self.dialogues = introducao
+            //self.view!.addSubview(textFieldNameMap)
             drawDialogues(won: false)
+            
         } else {
-            textFieldNameMap.removeFromSuperview()
+            //textFieldNameMap.removeFromSuperview()
             if  UserDefaults.standard.bool(forKey: "concluded") {
                 UserDefaults.standard.set(false, forKey: "concluded")
                 actualizeDialogue()

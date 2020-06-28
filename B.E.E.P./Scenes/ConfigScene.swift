@@ -198,8 +198,10 @@ class ConfigScene:SKScene, UITextFieldDelegate {
                     UserDefaults.standard.set(true, forKey: "isFirstTime")
                     UserDefaults.standard.set(1, forKey: "lastStageAvailable")
                     
-
-                   
+                    UserDefaults.standard.set("", forKey: "userGame")
+                    
+                    self.textFieldName.text = ""
+                    self.reloadInputViews()
 
                     for i in 1...self.totalDeFases {
                         let stage = BaseOfStages.buscar(id: "\(i)")

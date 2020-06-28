@@ -129,6 +129,13 @@ extension MapScene {
         if dialogueIndex < dialogues.count - 1 {
             dialogueIndex = dialogueIndex + 1
             dialogueText.text = dialogues[dialogueIndex]
+            print(dialogueIndex)
+            if UserDefaults.standard.bool(forKey: "isFirstTime") && dialogueIndex == 2 {
+                self.view!.addSubview(textFieldNameMap)
+            } else if UserDefaults.standard.bool(forKey: "isFirstTime") && dialogueIndex == 3 {
+                textFieldNameMap.removeFromSuperview()
+                UserDefaults.standard.set(false, forKey: "isFirstTime")
+            }
         } else {
             
             skipText(next: false)
@@ -149,6 +156,11 @@ extension MapScene {
         
         dialogueBackground.run(SKAction.fadeAlpha(to: 0, duration: animateDuration)) {
             self.dialogueBackground.removeFromParent()
+        }
+        
+        if UserDefaults.standard.bool(forKey: "isFirstTime") && dialogueIndex == 2 {
+            textFieldNameMap.removeFromSuperview()
+            UserDefaults.standard.set(false, forKey: "isFirstTime")
         }
         
         let backToLeft = SKAction.group([
