@@ -132,6 +132,15 @@ extension MapScene {
             print(dialogueIndex)
             if UserDefaults.standard.bool(forKey: "isFirstTime") && dialogueIndex == 2 {
                 self.view!.addSubview(textFieldNameMap)
+                textFieldNameMap.translatesAutoresizingMaskIntoConstraints = false
+                NSLayoutConstraint(item: textFieldNameMap, attribute: NSLayoutConstraint.Attribute.leading, relatedBy: NSLayoutConstraint.Relation.lessThanOrEqual, toItem: view, attribute: NSLayoutConstraint.Attribute.leading, multiplier: 1.0, constant:frame.midX ).isActive = true
+                NSLayoutConstraint(item: textFieldNameMap, attribute: NSLayoutConstraint.Attribute.trailing, relatedBy: NSLayoutConstraint.Relation.lessThanOrEqual, toItem: view, attribute: NSLayoutConstraint.Attribute.trailing, multiplier: 1.0, constant: frame.midX ).isActive = true
+                NSLayoutConstraint(item: textFieldNameMap, attribute: NSLayoutConstraint.Attribute.bottomMargin, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.bottomMargin, multiplier: 1.0, constant: frame.midY/2).isActive = true
+                NSLayoutConstraint(item: textFieldNameMap, attribute: NSLayoutConstraint.Attribute.top, relatedBy: NSLayoutConstraint.Relation.lessThanOrEqual, toItem: view, attribute: NSLayoutConstraint.Attribute.top, multiplier: 1.0, constant: frame.midY + 260).isActive = true
+             
+                NSLayoutConstraint(item: textFieldNameMap, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 110).isActive = true
+                NSLayoutConstraint(item: textFieldNameMap, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 30).isActive = true
+            
             } else if UserDefaults.standard.bool(forKey: "isFirstTime") && dialogueIndex == 3 {
                 textFieldNameMap.removeFromSuperview()
                 UserDefaults.standard.set(false, forKey: "isFirstTime")

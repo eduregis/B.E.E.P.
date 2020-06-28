@@ -14,8 +14,8 @@ class MapScene:SKScene, UITextFieldDelegate {
     let backgroundSound = SKAudioNode(fileNamed: "telecom-leeRosevere")
     
     public lazy  var textFieldNameMap: UITextField = {
-        let textArchor = CGPoint(x: frame.midX - 64, y: frame.midY/3 + 50)
-        let textFieldFrame = CGRect(origin:.init(x: textArchor.x + 40, y: textArchor.y + 450), size: CGSize(width: 110, height: 30))
+        let textAnchor = CGPoint(x: frame.midX - 64, y: frame.midY/3 + 50)
+        let textFieldFrame = CGRect(origin:.init(x: textAnchor.x + 40, y: textAnchor.y + 490), size: CGSize(width: 110, height: 30))
         let textFieldNameMap = UITextField(frame: textFieldFrame)
         textFieldNameMap.borderStyle = UITextField.BorderStyle.roundedRect
         textFieldNameMap.backgroundColor = UIColor(displayP3Red: 116/255, green: 255/255, blue: 234/255, alpha: 1.0)
