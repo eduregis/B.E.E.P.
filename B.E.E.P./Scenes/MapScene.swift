@@ -9,9 +9,27 @@
 import SpriteKit
 import GameplayKit
 
-class MapScene:SKScene {
+class MapScene:SKScene, UITextFieldDelegate {
     
     let backgroundSound = SKAudioNode(fileNamed: "telecom-leeRosevere")
+    
+    private lazy  var textFieldNameMap: UITextField = {
+        let textArchor = CGPoint(x: frame.midX, y: frame.midY)
+        let textFieldFrame = CGRect(origin:.init(x: textArchor.x + 25, y: textArchor.y + 280), size: CGSize(width: 110, height: 30))
+        let textFieldNameMap = UITextField(frame: textFieldFrame)
+        textFieldNameMap.borderStyle = UITextField.BorderStyle.roundedRect
+        textFieldNameMap.backgroundColor = UIColor(displayP3Red: 116/255, green: 255/255, blue: 234/255, alpha: 1.0)
+        textFieldNameMap.textColor = UIColor(displayP3Red: 73/255, green: 64/255, blue: 115/255, alpha: 1.0)
+        textFieldNameMap.placeholder = "Name"
+        textFieldNameMap.font = UIFont(name: "8bitoperator", size: 14)
+        textFieldNameMap.autocorrectionType = UITextAutocorrectionType.yes
+        textFieldNameMap.keyboardType = UIKeyboardType.alphabet
+        textFieldNameMap.autocapitalizationType = UITextAutocapitalizationType.allCharacters
+        return textFieldNameMap
+    }()
+    var userName: String?
+    var defaults = UserDefaults.standard
+    
     
     var entityManager:EntityManager!
     var filamentScale:CGFloat = -1
@@ -40,6 +58,21 @@ class MapScene:SKScene {
         }else{
             startBackgroundSound()
         }
+        
+        //implementa persistência
+        if  (defaults.object(forKey: "userGame") != nil) && (defaults.object(forKey: "userGame") as? String != ""){
+            userName = defaults.object(forKey: "userGame") as? String
+        } else {
+            userName = ""
+        }
+        
+        textFieldNameMap.delegate = self
+        textFieldNameMap.text = userName
+        
+        
+        checkNotification()
+        
+        
         //let dialoguesOpt = UserDefaults.standard.object(forKey: "")
         //guard let dialogues = dialoguesOpt else { return  }
         dialogues = ["Obrigada!! Com a sua ajuda nossa rede foi restaurada!\nVocê pode percorrer os estágios novamente para treinar\ncaso algum problema ocorra novamente."]
@@ -93,9 +126,11 @@ class MapScene:SKScene {
             let dialoguesIntro = BaseOfDialogues.buscar(id: "introduction")
             guard let dialogues = dialoguesIntro else { return }
             self.dialogues = dialogues.text
+            self.view!.addSubview(textFieldNameMap)
             UserDefaults.standard.set(false, forKey: "isFirstTime")
             drawDialogues(won: false)
         } else {
+            textFieldNameMap.removeFromSuperview()
             if  UserDefaults.standard.bool(forKey: "concluded") {
                 UserDefaults.standard.set(false, forKey: "concluded")
                 actualizeDialogue()
@@ -295,10 +330,12 @@ class MapScene:SKScene {
                         }
                         BaseOfStages.salvar(stage: stage!)
                     }
+                    textFieldNameMap.removeFromSuperview()
                     let gameScene = GameScene(size: view!.bounds.size)
                     view!.presentScene(gameScene)
                 }
                 if nodes[0].name?.contains("config-button") ?? false {
+                    textFieldNameMap.removeFromSuperview()
                     let configScene = ConfigScene(size: view!.bounds.size)
                     configScene.userData = configScene.userData ?? NSMutableDictionary()
                     configScene.userData!["backSaved"] = backName
@@ -316,6 +353,62 @@ class MapScene:SKScene {
         }
         
     }
+    
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        // aplico persitência de nome
+        let userName = textField.text
+        if userName != "" {
+            defaults.set(userName , forKey: "userGame")
+       } else {
+            defaults.set("" , forKey: "userGame")
+            self.reloadInputViews()
+        }
+        textField.resignFirstResponder()
+        return true
+    }
+    
+  func textFieldDidEndEditing(_ textField: UITextField) {
+        let userName = textField.text
+        if userName != "" {
+            defaults.set(userName , forKey: "userGame")
+           
+        } else {
+            defaults.set("" , forKey: "userGame")
+            
+            self.reloadInputViews()
+        }
+    }
+    
+
+    @objc func onKeyboardHide (notification: Notification) {
+        let screenBounds = UIScreen.main.bounds
+        let info = notification.userInfo!
+        let keyboardFrame = (info[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        let height = screenBounds.height - keyboardFrame.origin.y
+        UIView.animate(withDuration: 0.2, delay: 0.0, animations: {
+            self.view?.frame.origin.y = height
+            self.view?.layoutIfNeeded()
+        })
+        
+    }
+    
+    @objc func onKeyboardShow (notification: Notification) {
+        let screenBounds = UIScreen.main.bounds
+        let info = notification.userInfo!
+        let keyboardFrame = (info[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        let height = screenBounds.height - keyboardFrame.origin.y
+        UIView.animate(withDuration: 0.2, delay: 0.0, animations: {
+            self.view?.frame.origin.y = -height
+            self.view?.layoutIfNeeded()
+        })
+    }
+    
+    func checkNotification(){
+        NotificationCenter.default.addObserver(self, selector: #selector(onKeyboardHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onKeyboardShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+    }
+    
     
 }
 

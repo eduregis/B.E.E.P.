@@ -269,7 +269,6 @@ class ConfigScene:SKScene, UITextFieldDelegate {
 
     func removeCheck() {
         if (self.atPoint(CGPoint(x: configAnchor.x + 160, y: configAnchor.y - 18)).name == "confirm-checkmark") {
-            //self.atPoint(CGPoint(x: configAnchor.x + 160, y: configAnchor.y - 18)).removeFromParent() //.removeComponent(ofType: SpriteComponent.self)
             let checkName = (self.atPoint(CGPoint(x: configAnchor.x + 160, y: configAnchor.y - 18)))
             checkName.removeFromParent()
         }
