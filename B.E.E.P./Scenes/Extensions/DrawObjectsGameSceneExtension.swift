@@ -42,16 +42,6 @@ extension GameScene {
     
     // MARK: Draw Robots
     func drawRobot (xPosition: Int, yPosition: Int) {
-        // desenha o chão iluminado embaixo do robô
-        if let spriteComponent = lightFloor.component(ofType: SpriteComponent.self) {
-            let x = gameplayAnchor.x + CGFloat(32 * (xPosition)) - CGFloat(32 * (yPosition))
-            let y = gameplayAnchor.y + 200 - CGFloat(16 * (xPosition)) - CGFloat(16 * (yPosition))
-            spriteComponent.node.position = CGPoint(x: x, y: y)
-            spriteComponent.node.zPosition = CGFloat(xPosition + yPosition) + 3
-            spriteComponent.node.alpha = 0.6
-        }
-        entityManager.add(lightFloor)
-        
         // desenha o robô
         if let spriteComponent = robot.component(ofType: SpriteComponent.self) {
             let x = gameplayAnchor.x + CGFloat(32 * (xPosition)) - CGFloat(32 * (yPosition))
@@ -60,32 +50,48 @@ extension GameScene {
             spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(xPosition + yPosition + 1)
         }
         entityManager.add(robot)
+        
+        // desenha o chão iluminado embaixo do robô
+       if let spriteComponent = lightFloor.component(ofType: SpriteComponent.self) {
+           let x = gameplayAnchor.x + CGFloat(32 * (xPosition)) - CGFloat(32 * (yPosition))
+           let y = gameplayAnchor.y + 200 - CGFloat(16 * (xPosition)) - CGFloat(16 * (yPosition))
+           spriteComponent.node.position = CGPoint(x: x, y: y)
+           //spriteComponent.node.zPosition = CGFloat(xPosition + yPosition) + 3
+           if let robot = robot.component(ofType: SpriteComponent.self){
+               spriteComponent.node.zPosition = (robot.node.zPosition - 0.3)
+           }
+           spriteComponent.node.alpha = 0.6
+       }
+       entityManager.add(lightFloor)
     }
     
     // MARK: Draw Robots Infected
     func drawRobotInfected (xPosition: Int, yPosition: Int) {
         // desenha o robô infectado
         print(xPosition, yPosition)
-        //robotInfected = DefaultObject(name: "robotInfected", spriteName: "infected-right", size: CGSize(width: 64, height: 64))
+        let robotInfected = DefaultObject(name: "robotInfected", spriteName: "infected-right", size: CGSize(width: 64, height: 64))
        if let spriteComponent = robotInfected.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.texture = SKTexture(imageNamed: "infected-right")
+            spriteComponent.node.texture = SKTexture(imageNamed: "infected-left")
             spriteComponent.node.size = CGSize(width: 64, height: 64)
             let x = gameplayAnchor.x + CGFloat(32 * (xPosition)) - CGFloat(32 * (yPosition))
-            let y = gameplayAnchor.y + 236 - CGFloat(16 * (xPosition)) - CGFloat(16 * (yPosition))
+            let y = gameplayAnchor.y + 232 - CGFloat(16 * (xPosition)) - CGFloat(16 * (yPosition))
             spriteComponent.node.position = CGPoint(x: x, y: y)
             spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(xPosition + yPosition + 1)
+            
        }
-        //robotCured = DefaultObject(name: "robotCured", spriteName: "robot-idle-right-2", size: CGSize(width: 64, height: 64))
+        let robotCured = DefaultObject(name: "robotCured", spriteName: "robot-idle-right-2", size: CGSize(width: 64, height: 64))
         if let spriteComponent = robotCured.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.texture = SKTexture(imageNamed: "robot-idle-right-2")
+            spriteComponent.node.texture = SKTexture(imageNamed: "robot-idle-left-2")
             spriteComponent.node.size = CGSize(width: 64, height: 64)
             let x = gameplayAnchor.x + CGFloat(32 * (xPosition)) - CGFloat(32 * (yPosition))
-            let y = gameplayAnchor.y + 236 - CGFloat(16 * (xPosition)) - CGFloat(16 * (yPosition))
+            let y = gameplayAnchor.y + 232 - CGFloat(16 * (xPosition)) - CGFloat(16 * (yPosition))
             spriteComponent.node.position = CGPoint(x: x, y: y)
             spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(xPosition + yPosition)
+            
         }
         entityManager.add(robotCured)
         entityManager.add(robotInfected)
+        arrayInfectedRobot.append(robotInfected)
     }
     
     // MARK: Draw Tabs
@@ -138,7 +144,7 @@ extension GameScene {
         // botão de stop
         if let spriteComponent = stopButton.component(ofType: SpriteComponent.self) {
             spriteComponent.node.position = CGPoint(x: gameplayAnchor.x + 170, y: gameplayAnchor.y - 115)
-            spriteComponent.node.zPosition = 0
+            spriteComponent.node.zPosition = -1
         }
         entityManager.add(stopButton)
         
@@ -201,62 +207,18 @@ extension GameScene {
         }
     }
     
-    // MARK: Draw Function Tabs
-    func drawFunctionTab() {
-        // adiciona a aba de função
-        let functionTab = DefaultObject(name: "function-tab")
-        if let spriteComponent = functionTab.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x, y: auxiliaryAnchor.y + 225)
-            spriteComponent.node.zPosition = ZPositionsCategories.subTab
-        }
-        entityManager.add(functionTab)
-        
-        // adiciona a aba de limpar
-        let clearTab = ClearTab(name: "function-clear-tab", spriteName: "clear-auxiliary-tab")
-        if let spriteComponent = clearTab.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 10, y: auxiliaryAnchor.y + 260)
-            spriteComponent.node.zPosition = ZPositionsCategories.clearTabButton
-        }
-        entityManager.add(clearTab)
-        
-        // container de drop
-        let functionTabDropZone = DefaultObject(name: "auxiliary-tab-drop-zone")
-        if let spriteComponent = functionTabDropZone.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x + 50, y: auxiliaryAnchor.y + 210)
-            spriteComponent.node.zPosition = ZPositionsCategories.dropZone
-        }
-        entityManager.add(functionTabDropZone)
-        
-        // drop zones individuais
-        for i in 1...4 {
-            let block = EmptyBlock(name: "white-block")
-            if let spriteComponent = block.component(ofType: SpriteComponent.self) {
-                spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 25 + CGFloat(i - 1)*50, y: auxiliaryAnchor.y + 210)
-                spriteComponent.node.zPosition = ZPositionsCategories.emptyBlock
-                spriteComponent.node.alpha = 0.1
-                spriteComponent.node.size = CGSize(width: 60, height: 50)
-            }
-            emptyFunctionBlocks.append(block)
-            entityManager.add(block)
-        }
-        
-        let block = DraggableBlock(name: "function-block")
-        if let spriteComponent = block.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.position = CGPoint(x: auxiliaryAnchor.x - 127, y: auxiliaryAnchor.y + 210)
-            spriteComponent.node.zPosition = ZPositionsCategories.draggableBlock
-            spriteComponent.node.size = CGSize(width: 60, height: 50)
-        }
-        entityManager.add(block)
-    }
-    
     // MARK: Clear Tabs
     func clearTab (tabName: String) {
+        var soundVerification = false
         switch tabName {
         case "command":
             for block in commandBlocks {
                 if let spriteComponent = block.component(ofType: SpriteComponent.self) {
                     spriteComponent.node.removeFromParent()
                 }
+            }
+            if !commandBlocks.isEmpty{
+                soundVerification = true
             }
             commandBlocks.removeAll()
         case "function":
@@ -265,12 +227,18 @@ extension GameScene {
                     spriteComponent.node.removeFromParent()
                 }
             }
+            if !functionBlocks.isEmpty{
+                soundVerification = true
+            }
             functionBlocks.removeAll()
         case "loop":
             for block in loopBlocks {
                 if let spriteComponent = block.component(ofType: SpriteComponent.self) {
                     spriteComponent.node.removeFromParent()
                 }
+            }
+            if !loopBlocks.isEmpty{
+                soundVerification = true
             }
             loopBlocks.removeAll()
         case "conditional":
@@ -284,10 +252,23 @@ extension GameScene {
                 spriteComponent.node.removeFromParent()
             }
         }
+        if !conditionalIfBlocks.isEmpty || !conditionalElseBlocks.isEmpty{
+            soundVerification = true
+        }
         conditionalIfBlocks.removeAll()
         conditionalElseBlocks.removeAll()
         default:
             break
+        }
+        print(soundVerification)
+        if soundVerification {
+            if  UserDefaults.standard.object(forKey: "SettingsSound") != nil {
+                if (UserDefaults.standard.object(forKey: "SettingsSound") as? String) == "Sim"{
+                    startDumpSound()
+                }
+            }else{
+                startDumpSound()
+            }
         }
     }
     
@@ -326,12 +307,16 @@ extension GameScene {
                 let y = gameplayAnchor.y + 182 - CGFloat(16 * (boxes[i].x - 1)) - CGFloat(16 * (boxes[i].y - 1))
                 spriteComponent.node.position = CGPoint(x: x, y: y)
                 spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(boxes[i].x + boxes[i].y) + 1
+                /*if let robot = robot.component(ofType: SpriteComponent.self){
+                    spriteComponent.node.zPosition = (robot.node.zPosition - 0.2)
+                }*/
             }
             boxesCopy.append(box)
             entityManager.add(box)
     
         }
-        countBoxes = boxes.count
+        
+        
     }
     
     

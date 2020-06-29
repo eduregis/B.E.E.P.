@@ -11,18 +11,60 @@ import GameplayKit
 
 class MapScene:SKScene {
     
+    let backgroundSound = SKAudioNode(fileNamed: "telecom-leeRosevere")
+    
     var entityManager:EntityManager!
     var filamentScale:CGFloat = -1
     var posicao:Int = 0
     var locationAnterior:CGPoint = CGPoint(x: 0, y: 0)
     var touchesBeganLocation = CGPoint(x: 0, y: 0)
-    let totalDeFases = 4
-    let arrayNames = ["introduction","menu-stage-1","stage-1","menu-stage-2","stage-2","menu-stage-3","stage-3","menu-stage-4","stage-4","stage-replay","stage-complete"]
+    let totalDeFases = 6
+    
+    
+    var dialogues: [String] = []
+    var dialogueIndex = 0
+    var dialogueBackground: SKSpriteNode!
+    var beep: SKSpriteNode!
+    var dialogueTab: SKSpriteNode!
+    var dialogueText = SKLabelNode(text: "")
+    var dialogueButton: SKSpriteNode!
+    var dialogueSkip: SKSpriteNode!
     
     lazy var backName:String = {return self.userData?["backSaved"] as? String ?? "mapScene"}()
     
     override func didMove(to view: SKView) {
-
+        if  UserDefaults.standard.object(forKey: "SettingsSound") != nil {
+            if (UserDefaults.standard.object(forKey: "SettingsSound") as? String) == "Sim"{
+                startBackgroundSound()
+            }
+        }else{
+            startBackgroundSound()
+        }
+        //let dialoguesOpt = UserDefaults.standard.object(forKey: "")
+        //guard let dialogues = dialoguesOpt else { return  }
+        dialogues = ["Obrigada!! Com a sua ajuda nossa rede foi restaurada!\nVocê pode percorrer os estágios novamente para treinar\ncaso algum problema ocorra novamente."]
+        
+//        if let isFirstTime = UserDefaults.standard.object(forKey: "isFirstTime") {
+//            if isFirstTime as! Bool {
+//                let dialoguesInitial = BaseOfDialogues.buscar(id: "introduction")
+//                guard let dialogues = dialoguesInitial else { return }
+//                self.dialogues = dialogues.text
+//                drawDialogues(won: false)
+//                UserDefaults.standard.set(false, forKey: "isFirstTime")
+//            } else {
+//                let dialoguesInitial = BaseOfDialogues.buscar(id: "menu-stage-\(lastStageAvailable)")
+//                guard let dialogues = dialoguesInitial else { return }
+//                self.dialogues = dialogues.text
+//            }
+//        }
+        
+//        if let newStageAvailable = UserDefaults.standard.object(forKey: "newStageAvailable") {
+//            if newStageAvailable as! Bool {
+//                drawDialogues(won: false)
+//                UserDefaults.standard.set(false, forKey: "newStageAvailable")
+//            }
+//        }
+        
         entityManager = EntityManager(scene: self)
         
         drawBackground()
@@ -34,8 +76,9 @@ class MapScene:SKScene {
         addEntity(entity: HudButton(name: "config-button"), nodeName: "config-button", position: CGPoint(x: frame.maxX-150, y: frame.maxY-50), zPosition: 2, alpha: 1.0)
 
         while true {
-            if UserDefaults.standard.bool(forKey: "buildMap") == true {
+            if UserDefaults.standard.bool(forKey: "buildMap") && UserDefaults.standard.bool(forKey: "showDialogues") {
                 buildMap()
+                fillDialogue()
                 break
             }
         }
@@ -44,18 +87,50 @@ class MapScene:SKScene {
         
     }
     
-    func updatePosition() {
+    func fillDialogue () {
+        print(UserDefaults.standard.object(forKey: "isFirstTime") as! Bool )
+        if (UserDefaults.standard.bool(forKey: "isFirstTime")) {
+            let dialoguesIntro = BaseOfDialogues.buscar(id: "introduction")
+            guard let dialogues = dialoguesIntro else { return }
+            self.dialogues = dialogues.text
+            UserDefaults.standard.set(false, forKey: "isFirstTime")
+            drawDialogues(won: false)
+        } else {
+            if  UserDefaults.standard.bool(forKey: "concluded") {
+                UserDefaults.standard.set(false, forKey: "concluded")
+                actualizeDialogue()
+                drawDialogues(won: false)
+            }
+        }
+        
+    }
+    
+    func actualizeDialogue () {
+        let lastStageAvailable = UserDefaults.standard.object(forKey: "lastStageAvailable") as! Int
+        print(lastStageAvailable)
+        let dialoguesMenustage = BaseOfDialogues.buscar(id: "menu-stage-\(lastStageAvailable)")
+        guard let dialogues = dialoguesMenustage else { return }
+        self.dialogues = dialogues.text
+            
+        
+    }
+    
+    func updatePosition () {
         let faseAtual = UserDefaults.standard.object(forKey: "selectedFase") as! Int
         
         switch faseAtual {
         case 1:
             self.posicao = 0
         case 2:
-            self.posicao = 0
+            self.posicao = 20
         case 3:
-            self.posicao = 50
+            self.posicao = 70
         case 4:
-            self.posicao = 100
+            self.posicao = 160
+        case 5:
+            self.posicao = 230
+        case 6:
+            self.posicao = 250
         default:
             self.posicao = 0
         }
@@ -87,9 +162,9 @@ class MapScene:SKScene {
                     if showRobot {
                         lightFloorPosition = CGPoint(x: x, y: y)
                         //desenhando o robo
-                        addEntity(entity:Robot(), nodeName: "stage-\(status)\(numberFase)", position: CGPoint(x: lightFloorPosition.x, y: lightFloorPosition.y+31), zPosition: 101, alpha: 1.0)
+                        addEntity(entity:Robot(), nodeName: "stage-\(status)\(numberFase)", position: CGPoint(x: lightFloorPosition.x, y: lightFloorPosition.y+31), zPosition: ZPositionsCategories.mapRobot, alpha: 1.0)
                         //desenhando o light floor
-                        addEntity(entity: DefaultObject(name: "light-floor"), nodeName: "stage-\(status)\(numberFase)", position: lightFloorPosition, zPosition: 100, alpha: 0.7)
+                        addEntity(entity: DefaultObject(name: "light-floor"), nodeName: "stage-\(status)\(numberFase)", position: lightFloorPosition, zPosition: ZPositionsCategories.mapLightFloor, alpha: 0.7)
                     } else {
                         stageUnavailablePosition = CGPoint(x: x, y: y+21)
                       }
@@ -97,7 +172,7 @@ class MapScene:SKScene {
             }
         }
         if status == "unavailable" {
-            addEntity(entity: StageUnavailable(), nodeName: "stage-\(status)\(numberFase)", position: stageUnavailablePosition, zPosition: 100, alpha: 1.0)
+            addEntity(entity: StageUnavailable(), nodeName: "stage-\(status)\(numberFase)", position: stageUnavailablePosition, zPosition: ZPositionsCategories.unavailableStage, alpha: 1.0)
         }
     }
     
@@ -120,9 +195,9 @@ class MapScene:SKScene {
     }
     
     func buildMap() {
-        let tilesetReferences = [CGPoint(x: frame.midX-280, y: frame.midY+170),CGPoint(x: frame.midX+101.5, y: frame.midY-28),CGPoint(x: frame.midX+393, y: frame.midY+155),CGPoint(x: frame.midX+741, y: frame.midY-59)]
+        let tilesetReferences = [CGPoint(x: frame.midX-280, y: frame.midY+170),CGPoint(x: frame.midX+101.5, y: frame.midY-28),CGPoint(x: frame.midX+393, y: frame.midY+155),CGPoint(x: frame.midX+741, y: frame.midY-59),CGPoint(x: frame.midX+1126, y: frame.midY+172),CGPoint(x: frame.midX+1446, y: frame.midY-62)]
         
-        let filamentReferences = [CGPoint(x: frame.midX-69, y: frame.midY+16),CGPoint(x: frame.midX+278, y: frame.midY+16), CGPoint(x: frame.midX+602, y: frame.midY+2)]
+        let filamentReferences = [CGPoint(x: frame.midX-69, y: frame.midY+16),CGPoint(x: frame.midX+278, y: frame.midY+16), CGPoint(x: frame.midX+602, y: frame.midY+2),CGPoint(x: frame.midX+914, y: frame.midY-14),CGPoint(x: frame.midX+1288, y: frame.midY-8)]
         
         for i in 1...totalDeFases {
             let stage = BaseOfStages.buscar(id: "\(i)")
@@ -149,7 +224,7 @@ class MapScene:SKScene {
     
     func moveMap(direction: Direction, x: CGFloat) {
         
-        self.enumerateChildNodes(withName: "stage-available[1-4]", using: ({
+        self.enumerateChildNodes(withName: "stage-available[1-\(totalDeFases)]", using: ({
             (node,error) in
             if direction == Direction.backward {
                 node.position.x += x
@@ -158,7 +233,7 @@ class MapScene:SKScene {
             }
         }))
         
-        self.enumerateChildNodes(withName: "stage-unavailable[1-4]", using: ({
+        self.enumerateChildNodes(withName: "stage-unavailable[1-\(totalDeFases)]", using: ({
             (node,error) in
             if direction == Direction.backward {
                 node.position.x += x
@@ -195,7 +270,7 @@ class MapScene:SKScene {
                     self.posicao -= 1
                 }
             } else {
-                if self.posicao < 105 {
+                if self.posicao < 260 {
                     moveMap(direction: Direction.forward, x: 5)
                     self.posicao += 1
                 }
@@ -228,7 +303,15 @@ class MapScene:SKScene {
                     configScene.userData = configScene.userData ?? NSMutableDictionary()
                     configScene.userData!["backSaved"] = backName
                     view!.presentScene(configScene)
+                } else if nodes[0].name?.contains("hint-button") ?? false {
+                    actualizeDialogue()
+                    drawDialogues(won: false)
+                } else if nodes[0].name?.contains("play-dialogue") ?? false {
+                    updateText()
+                } else if nodes[0].name?.contains("skip-button") ?? false {
+                    skipText(next: false)
                 }
+                
             }
         }
         

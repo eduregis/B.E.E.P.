@@ -24,14 +24,6 @@ extension GameScene {
          actualPosition = CGPoint(x: stage.initialPosition[0], y: stage.initialPosition[1])
          actualDirection = stage.initialDirection
          
-         // redesenhar o lightFloor
-         if let spriteComponent = lightFloor.component(ofType: SpriteComponent.self) {
-             let x = gameplayAnchor.x + CGFloat(32 * (actualPosition.x)) - CGFloat(32 * (actualPosition.y))
-             let y = gameplayAnchor.y + 200 - CGFloat(16 * (actualPosition.x)) - CGFloat(16 * (actualPosition.y))
-             spriteComponent.node.position = CGPoint(x: x, y: y)
-             spriteComponent.node.zPosition = CGFloat(actualPosition.x + actualPosition.y) + 3
-        }
-         
          // redesenhar o robot
          if let spriteComponent = robot.component(ofType: SpriteComponent.self) {
              spriteComponent.node.texture = SKTexture(imageNamed: "robot-idle-\(actualDirection)-2")
@@ -40,9 +32,26 @@ extension GameScene {
              spriteComponent.node.position = CGPoint(x: x, y: y)
              spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(actualPosition.x + actualPosition.y + 1)
          }
+        // redesenhar o lightFloor
+         if let spriteComponent = lightFloor.component(ofType: SpriteComponent.self) {
+             let x = gameplayAnchor.x + CGFloat(32 * (actualPosition.x)) - CGFloat(32 * (actualPosition.y))
+             let y = gameplayAnchor.y + 200 - CGFloat(16 * (actualPosition.x)) - CGFloat(16 * (actualPosition.y))
+             spriteComponent.node.position = CGPoint(x: x, y: y)
+             //spriteComponent.node.zPosition = CGFloat(actualPosition.x + actualPosition.y) + 3
+            if let robot = robot.component(ofType: SpriteComponent.self){
+                spriteComponent.node.zPosition = (robot.node.zPosition - 0.3)
+            }
+        }
         verificationBox = false
-        if !stage.boxes.isEmpty{
-            boxes = [CGPoint(x: stage.boxes[0], y: stage.boxes[1])]
+
+        if !stage.boxes[0].isEmpty{
+            boxes = []
+            for box in stage.boxes {
+                boxes.append(CGPoint(x: box[0], y: box[1]))
+            }
+          if let addElement = robot.component(ofType: RobotMoveComponent.self){
+                addElement.countBoxes = boxes.count
+          }
         }
         //redesenhar os boxes
         var i = 0
@@ -53,6 +62,9 @@ extension GameScene {
                 spriteComponent.node.position = CGPoint(x: x, y: y)
                 spriteComponent.node.name = "box (\(boxes[i].x) - \(boxes[i].y)"
                 spriteComponent.node.zPosition = stageDimensions.width + stageDimensions.height + CGFloat(boxes[i].x + boxes[i].y) + 1
+                /*if let robot = robot.component(ofType: SpriteComponent.self){
+                    spriteComponent.node.zPosition = (robot.node.zPosition + 1)
+                }*/
                 spriteComponent.node.run(SKAction.fadeIn(withDuration: 0))
             }
             i += 1
@@ -63,20 +75,25 @@ extension GameScene {
             boxFloor.node.zPosition = -1
         }
         
-        countBoxes = boxes.count
+        
         if let removeElement = robot.component(ofType: RobotMoveComponent.self){
             removeElement.arrayPositionBox.removeAll()
             removeElement.arrayActualPosition.removeAll()
-            removeElement.i = 0
+            removeElement.indexBox = 0
+            removeElement.indexInfected = 0
             removeElement.arrayCheckerBox.removeAll()
             removeElement.arrayDirection.removeAll()
             removeElement.arrayClosures.removeAll()
         }
-        if !stage.infectedRobots.isEmpty{
-            if let spriteComponent = robotInfected.component(ofType: SpriteComponent.self) {
-                spriteComponent.node.run(SKAction.fadeIn(withDuration: 0))
+        if !stage.infectedRobots[0].isEmpty{
+            for infectedRobot in arrayInfectedRobot{
+                if let spriteComponent = infectedRobot.component(ofType: SpriteComponent.self) {
+                    spriteComponent.node.run(SKAction.fadeIn(withDuration: 0))
+                }
             }
-            countInfected = stage.infectedRobots.count/2
+            if let addElement = robot.component(ofType: RobotMoveComponent.self){
+                addElement.countInfected = infectedRobots.count
+            }
         }
         
      }
@@ -126,32 +143,41 @@ extension GameScene {
          }
      }
     // MARK: Save
-    func save(countMove: Double) -> Bool{
+    func save() -> Bool{
+        let positionInfected: CGPoint
         switch actualDirection {
         case "up":
            if !infectedRobots.contains(CGPoint(x: actualPosition.x, y: actualPosition.y - 1)){
                 return false
+           }else{
+            positionInfected = CGPoint(x: actualPosition.x, y: actualPosition.y - 1)
             }
         case "left":
            if !infectedRobots.contains(CGPoint(x: actualPosition.x - 1, y: actualPosition.y)){
                 return false
+            }else{
+            positionInfected = CGPoint(x: actualPosition.x - 1, y: actualPosition.y)
             }
         case "down":
            if !infectedRobots.contains(CGPoint(x: actualPosition.x, y: actualPosition.y + 1)){
                 return false
+            }else{
+            positionInfected = CGPoint(x: actualPosition.x, y: actualPosition.y + 1)
             }
         case "right":
            if !infectedRobots.contains(CGPoint(x: actualPosition.x + 1, y: actualPosition.y)){
                 return false
+            }else{
+            positionInfected = CGPoint(x: actualPosition.x + 1, y: actualPosition.y)
             }
         default:
+            positionInfected = CGPoint.zero
             return false
         }
-        countInfected -= 1
-        if countInfected == 0{
-            if let sprite = robot.component(ofType: SpriteComponent.self){
-                sprite.node.run(SKAction.wait(forDuration: countMove + 0.5)){
-                    self.drawDialogues(won: true)
+        for i in 0..<infectedRobots.count {
+            if infectedRobots[i] == positionInfected {
+                if let addElement = robot.component(ofType: RobotMoveComponent.self){
+                    addElement.robotInfected.append(arrayInfectedRobot[i])
                 }
             }
         }
@@ -164,7 +190,7 @@ extension GameScene {
         return true
     }
     // MARK: Put Box
-    func putBox(countMove: Double) -> Bool{
+    func putBox() -> Bool{
         let positionBox: CGPoint
         switch actualDirection {
         // sabendo a direcao do robot
@@ -207,16 +233,6 @@ extension GameScene {
             
             //box.node.position = CGPoint(x: x, y: y)
             box.node.name = "box (\(positionBox.x) - \(positionBox.y)"
-            for drop in boxDropZones{
-               if drop == positionBox {
-                    countBoxes -= 1
-                }
-            }
-            if countBoxes == 0{
-                box.node.run(SKAction.wait(forDuration: countMove)){
-                    self.drawDialogues(won: true)
-                }
-            }
             
             // posiciona o box no local indicado
             if let addElement = robot.component(ofType: RobotMoveComponent.self){
@@ -227,13 +243,14 @@ extension GameScene {
                 addElement.arrayActualPosition.append(CGPoint(x: x, y: y))
             }
         }
+        
         // volta a indicar que o robot nao está com box
         verificationBox = false
         return true
     }
     
     // MARK: Grab Box
-    func grabBox(countMove: Double) -> Bool{
+    func grabBox() -> Bool{
         let positionBox: CGPoint
         
         switch actualDirection {
@@ -292,40 +309,36 @@ extension GameScene {
     
      // MARK: Move Robot
      func moveRobot() -> Bool {
-        var newZPosition: CGFloat = 0
          // checa se o robô pode andar para a posição apontada
          switch actualDirection {
          case "up":
             if (actualPosition.y == 0) || boxes.contains(CGPoint(x: actualPosition.x, y: actualPosition.y - 1)) || boxDropZones.contains(CGPoint(x: actualPosition.x, y: actualPosition.y - 1)) || infectedRobots.contains(CGPoint(x: actualPosition.x, y: actualPosition.y - 1)) {
                  return false
              } else {
-                 actualPosition = CGPoint(x: actualPosition.x, y: actualPosition.y - 1)
-                 newZPosition = -1
-             }
+                 actualPosition = CGPoint(x: actualPosition.x, y: actualPosition.y - 1)             }
          case "left":
              if (actualPosition.x == 0) || boxes.contains(CGPoint(x: actualPosition.x - 1, y: actualPosition.y)) || boxDropZones.contains(CGPoint(x: actualPosition.x - 1, y: actualPosition.y)) || infectedRobots.contains(CGPoint(x: actualPosition.x - 1, y: actualPosition.y)) {
                  return false
              } else {
                  actualPosition = CGPoint(x: actualPosition.x - 1, y: actualPosition.y)
-                 newZPosition = -1
              }
          case "down":
              if (actualPosition.y == stageDimensions.height - 1) || boxes.contains(CGPoint(x: actualPosition.x, y: actualPosition.y + 1)) || boxDropZones.contains(CGPoint(x: actualPosition.x, y: actualPosition.y + 1)) || infectedRobots.contains(CGPoint(x: actualPosition.x, y: actualPosition.y + 1)){
                  return false
              } else {
                  actualPosition = CGPoint(x: actualPosition.x, y: actualPosition.y + 1)
-                 newZPosition = 1
              }
          case "right":
              if (actualPosition.x == stageDimensions.width - 1) || boxes.contains(CGPoint(x: actualPosition.x + 1, y: actualPosition.y)) || boxDropZones.contains(CGPoint(x: actualPosition.x + 1, y: actualPosition.y)) || infectedRobots.contains(CGPoint(x: actualPosition.x + 1, y: actualPosition.y)) {
                 return false
              } else {
                  actualPosition = CGPoint(x: actualPosition.x + 1, y: actualPosition.y)
-                 newZPosition = 1
              }
          default:
              actualPosition = CGPoint(x: actualPosition.x, y: actualPosition.y)
          }
+       
+        
         // caso o robot esteja com um box
         // a position do box deve ser igual a do robot
         if let addElement = robot.component(ofType: RobotMoveComponent.self){
@@ -339,21 +352,48 @@ extension GameScene {
             addElement.arrayClosures.append(addElement.move)
         }
         
-        // ajustamos sua zPosition
-        if let spriteComponent = robot.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.zPosition = spriteComponent.node.zPosition + newZPosition
-        }
-        
-        // ajustamos sua zPosition
-        if let spriteComponent = lightFloor.component(ofType: SpriteComponent.self) {
-            spriteComponent.node.zPosition = spriteComponent.node.zPosition + newZPosition
+        for i in 0..<infectedRobots.count{
+            var xComparator: CGFloat = -1.0
+            var yComparator: CGFloat = -1.0
+            
+            switch infectedDirections[i]{
+            case "right":
+                    xComparator = infectedRobots[i].x + 1
+                    yComparator = infectedRobots[i].y
+            case "left":
+                    xComparator = infectedRobots[i].x - 1
+                    yComparator = infectedRobots[i].y
+            case "up":
+                    xComparator = infectedRobots[i].x
+                    yComparator = infectedRobots[i].y - 1
+            case "down":
+                    xComparator = infectedRobots[i].x
+                    yComparator = infectedRobots[i].y + 1
+            default:
+                break
+            }
+            
+            print(xComparator, yComparator, actualPosition)
+            if xComparator == actualPosition.x && yComparator == actualPosition.y {
+               if let addElement = robot.component(ofType: RobotMoveComponent.self){
+                if verificationBox {
+                    boxes[identifierBox!] = actualPosition
+                    addElement.arrayCheckerBox.append(true)
+                }else{
+                    addElement.arrayCheckerBox.append(false)
+                }
+                addElement.arrayDirection.append(actualDirection)
+                addElement.arrayClosures.append(addElement.infectedRobot)
+               }
+           }
         }
          return true
      }
     // MARK: Move Light floor
      func moveCompleteRobotLightFloor(){
+        
          if let robotMoveComponent = robot.component(ofType: RobotMoveComponent.self) {
-            robotMoveComponent.moveComplete(arrayBox: boxesCopy, stopButton: stopButton, robotInfected: robotInfected, lightFloor: lightFloor)
+            robotMoveComponent.moveComplete(game: self, arrayBox: boxesCopy, stopButton: stopButton, lightFloor: lightFloor)
          }
      }
 }

@@ -23,6 +23,9 @@ enum ZPositionsCategories {
     static let configOptions:      CGFloat = 7
     static let emptyBlock:         CGFloat = 15
     static let draggableBlock:     CGFloat = 20
+    static let unavailableStage:   CGFloat = 46
+    static let mapLightFloor:      CGFloat = 47
+    static let mapRobot:           CGFloat = 48
     static let dialogueBackground: CGFloat = 50
     static let dialogueTab:        CGFloat = 51
     static let dialogueItems:      CGFloat = 52
@@ -38,4 +41,5 @@ enum Direction {
     case backward
     case forward
 }
+
 
